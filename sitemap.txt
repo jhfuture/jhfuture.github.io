@@ -6,8 +6,8 @@ https://jhfuture.github.io/2022/07/23/vue/05-object%E6%96%B9%E6%B3%95/
 https://jhfuture.github.io/about/index.html
 https://jhfuture.github.io/tags/index.html
 https://jhfuture.github.io/categories/index.html
-https://jhfuture.github.io/links/index.html
 https://jhfuture.github.io/repository/index.html
+https://jhfuture.github.io/links/index.html
 https://jhfuture.github.io/books/index.html
 https://jhfuture.github.io/404.html
 https://jhfuture.github.io/2022/07/23/hexo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/
