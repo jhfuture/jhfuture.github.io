@@ -11,8 +11,8 @@ https://jhfuture.github.io/2022/07/23/a/
 https://jhfuture.github.io/2022/07/22/vue/02.%E8%AF%AD%E6%B3%95/
 https://jhfuture.github.io/tags/index.html
 https://jhfuture.github.io/categories/index.html
-https://jhfuture.github.io/repository/index.html
 https://jhfuture.github.io/links/index.html
+https://jhfuture.github.io/repository/index.html
 https://jhfuture.github.io/books/index.html
 https://jhfuture.github.io/404.html
 https://jhfuture.github.io/
