@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://jhfuture.github.io/2022/07/23/hexo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    
+    <lastmod>2022-07-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jhfuture.github.io/2022/07/22/vue/02.Vue%E7%9A%84%E8%AF%AD%E6%B3%95/</loc>
     
     <lastmod>2022-07-23</lastmod>
@@ -21,15 +30,6 @@
   
   <url>
     <loc>https://jhfuture.github.io/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/</loc>
-    
-    <lastmod>2022-07-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jhfuture.github.io/2022/07/20/hexo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
     
     <lastmod>2022-07-23</lastmod>
     
@@ -156,6 +156,13 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://jhfuture.github.io/categories/hexo/</loc>
+    <lastmod>2022-07-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://jhfuture.github.io/categories/Vue/</loc>
