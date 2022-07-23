@@ -11,6 +11,15 @@
   </url>
   
   <url>
+    <loc>https://jhfuture.github.io/2022/07/22/vue/01.%E5%88%9D%E8%AF%86Vue/</loc>
+    
+    <lastmod>2022-07-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jhfuture.github.io/about/index.html</loc>
     
     <lastmod>2022-07-23</lastmod>
@@ -75,15 +84,6 @@
   
   <url>
     <loc>https://jhfuture.github.io/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/</loc>
-    
-    <lastmod>2022-07-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jhfuture.github.io/2022/07/22/vue/01.%E5%88%9D%E8%AF%86Vue/</loc>
     
     <lastmod>2022-07-22</lastmod>
     
