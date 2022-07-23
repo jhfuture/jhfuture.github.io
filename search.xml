@@ -44,6 +44,19 @@
     
     
     <entry>
+      <title>Vue中的MVVM设计模式</title>
+      <link href="/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/"/>
+      <url>/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/</url>
+      
+        <content type="html"><![CDATA[<p>Vue中的MVVM设计模式</p><span id="more"></span><h1 id="Mvvw"><a href="#Mvvw" class="headerlink" title="Mvvw"></a>Mvvw</h1><p><img src="http://rfa2kzh9o.hn-bkt.clouddn.com/img/image-20220721001442128.png" alt="image-20220721001442128"></p><p><img src="http://rfa2kzh9o.hn-bkt.clouddn.com/img/image-20220721001558095.png" alt="image-20220721001558095"></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul><li>M：模型(Model) ：data中的数据</li><li>V：视图(View) ：模板代码</li><li>VM：视图模型(ViewModel)：Vue实例</li></ul><h3 id="观察发现"><a href="#观察发现" class="headerlink" title="观察发现"></a>观察发现</h3><p>​MVM模型：</p><ol><li>data上的所有属性，最终都会出现在vm身上。</li><li>vm身上所有的属性，及vue原型上所有属性，在vue模块上都可以直接使用</li></ol>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>el与data的两种写法+vue实例</title>
       <link href="/2022/07/22/vue/03.el%E4%B8%8Edata%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95/"/>
       <url>/2022/07/22/vue/03.el%E4%B8%8Edata%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95/</url>
@@ -59,19 +72,6 @@
             <tag> vue </tag>
             
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Vue中的MVVM设计模式</title>
-      <link href="/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/"/>
-      <url>/2022/07/22/vue/04.Vue%E4%B8%AD%E7%9A%84MVVM/</url>
-      
-        <content type="html"><![CDATA[<p>Vue中的MVVM设计模式</p><span id="more"></span><h1 id="Mvvw"><a href="#Mvvw" class="headerlink" title="Mvvw"></a>Mvvw</h1><p><img src="http://rfa2kzh9o.hn-bkt.clouddn.com/img/image-20220721001442128.png" alt="image-20220721001442128"></p><p><img src="http://rfa2kzh9o.hn-bkt.clouddn.com/img/image-20220721001558095.png" alt="image-20220721001558095"></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul><li>M：模型(Model) ：data中的数据</li><li>V：视图(View) ：模板代码</li><li>VM：视图模型(ViewModel)：Vue实例</li></ul><h3 id="观察发现"><a href="#观察发现" class="headerlink" title="观察发现"></a>观察发现</h3><p>​MVM模型：</p><ol><li>data上的所有属性，最终都会出现在vm身上。</li><li>vm身上所有的属性，及vue原型上所有属性，在vue模块上都可以直接使用</li></ol>]]></content>
-      
-      
       
     </entry>
     
