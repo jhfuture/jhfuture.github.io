@@ -6,7 +6,7 @@
   <link href="https://jhfuture.github.io/atom.xml" rel="self"/>
   
   <link href="https://jhfuture.github.io/"/>
-  <updated>2022-09-13T12:00:07.575Z</updated>
+  <updated>2022-09-13T13:14:05.505Z</updated>
   <id>https://jhfuture.github.io/</id>
   
   <author>
@@ -15,6 +15,19 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://jhfuture.github.io/2022/09/13/vue/21-%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82/1%E9%80%9A%E8%BF%87anxious%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82/"/>
+    <id>https://jhfuture.github.io/2022/09/13/vue/21-%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82/1%E9%80%9A%E8%BF%87anxious%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82/</id>
+    <published>2022-09-13T13:14:05.505Z</published>
+    <updated>2022-09-13T13:14:05.505Z</updated>
+    
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Vue组件中的通讯方式</title>
@@ -69,11 +82,11 @@
   </entry>
   
   <entry>
-    <title></title>
+    <title>Vue中使用本地存储</title>
     <link href="https://jhfuture.github.io/2022/09/03/vue/20-%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/localstorage/"/>
     <id>https://jhfuture.github.io/2022/09/03/vue/20-%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/localstorage/</id>
     <published>2022-09-03T13:16:37.559Z</published>
-    <updated>2022-09-03T13:40:59.374Z</updated>
+    <updated>2022-09-13T12:06:50.491Z</updated>
     
     <content type="html"><![CDATA[<h2 id="webStorage"><a href="#webStorage" class="headerlink" title="webStorage"></a>webStorage</h2><ol><li><p>存储内容大小一般支持5MB左右（不同浏览器可能还不一样）</p></li><li><p>浏览器端通过 Window.sessionStorage 和 Window.localStorage 属性来实现本地存储机制。</p></li><li><p>相关API：</p><ol><li><p><code>localxlocalStorage.setItem(&#39;key&#39;, &#39;value&#39;);</code><br>             该方法接受一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值。</p></li><li><p><code>localStorage.getItem(&#39;person&#39;);</code></p><pre><code>     该方法接受一个键名作为参数，返回键名对应的值。</code></pre></li><li><p><code>localStorage.removeItem(&#39;key&#39;);</code></p><pre><code>     该方法接受一个键名作为参数，并把该键名从存储中删除。</code></pre></li><li><p><code> localStorage.clear()</code></p><pre><code>     该方法会清空存储中的所有数据。</code></pre></li></ol></li><li><p>备注：</p><ol><li><code>SessionStorage存储的内容会随着浏览器窗口关闭而消失。</code></li><li>LocalStorage存储的内容，需要<code>手动清除</code>才会消失。</li><li><code>localStorage.getItem(xxx)</code>如果xxx对应的value获取不到，那么getItem的返回值是null。</li><li><code>JSON.parse(null)</code>的结果依然是null。</li></ol></li></ol><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol><li><p>session————&gt; 对话，网页结束后就消失了，而localstorage————&gt; 不删除就不会消失</p></li><li><p>如果是一个对象，那需要使用<code>JSON.stringfy()</code>转换为字符串，然后再<code>储存</code>，</p><p>同时，在<code>读取</code>时，需要使用<code>JSON.parse()</code>进行解析，然后再使用，否则会发生<code>类型问题</code></p><p><img src="/2022/09/03/vue/20-%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/localstorage/image-20220903213957106.png" alt="image-20220903213957106"></p></li></ol><blockquote><p>这里 ‘test’本来应该是object类型，但储存的时候进行了转换，而读取时没有进行转换，则最终读取的数据，类型为 ‘String’</p></blockquote>]]></content>
     
@@ -86,6 +99,10 @@
     
     
     
+    <category term="Vue" scheme="https://jhfuture.github.io/categories/Vue/"/>
+    
+    
+    <category term="本地储存" scheme="https://jhfuture.github.io/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/"/>
     
   </entry>
   
@@ -114,11 +131,11 @@
   </entry>
   
   <entry>
-    <title></title>
+    <title>rem适配方案</title>
     <link href="https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/"/>
     <id>https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/</id>
     <published>2022-08-20T13:11:26.970Z</published>
-    <updated>2022-08-20T15:28:06.574Z</updated>
+    <updated>2022-09-13T12:16:21.624Z</updated>
     
     <content type="html"><![CDATA[<hr><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/image-20220820211218623.png" alt="image-20220820211218623"></p><p>自适应</p><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/image-20220820211524694.png" alt="image-20220820211524694"></p><h2 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h2><h3 id="技术方案一："><a href="#技术方案一：" class="headerlink" title="技术方案一："></a>技术方案一：</h3><pre><code>- less- 媒体查询- 人</code></pre><p>技术方案2（推荐）</p><pre><code>- flexible.js- rem</code></pre><p>总结：</p><pre><code>1. 两种方案都存在1. 方案二更加简单</code></pre><p>动态设置html标签font-size大小</p><p>​<img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/image-20220820215730239.png" alt="image-20220820215730239"></p><p>rem实际开发的适配方案</p><p>rem&#x3D; 页面元素值(px)&#x2F;(屏幕宽度&#x2F;划分的分数)</p><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/image-20220820221718183.png" alt="image-20220820221718183"></p><h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/image-20220820232329513.png" alt="image-20220820232329513"></p>]]></content>
     
@@ -131,15 +148,19 @@
     
     
     
+    <category term="前端三剑客" scheme="https://jhfuture.github.io/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/"/>
+    
+    
+    <category term="rem适配" scheme="https://jhfuture.github.io/tags/rem%E9%80%82%E9%85%8D/"/>
     
   </entry>
   
   <entry>
-    <title></title>
+    <title>Less的使用</title>
     <link href="https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/less/"/>
     <id>https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/less/</id>
     <published>2022-08-20T12:31:32.369Z</published>
-    <updated>2022-08-20T15:47:01.035Z</updated>
+    <updated>2022-09-13T12:18:10.913Z</updated>
     
     <content type="html"><![CDATA[<p>一、 Less是什么</p><p>​css的扩展语言</p><p>二、less的使用</p><pre><code>1. 变量    1. 变量时没有固定的值，可以改变的。    &gt; 1.书写less文件：    &gt;    &gt; ​@变量名 ：值    &gt;    &gt; 2.    2. 命名规范    1. ==**必须有@前嘴==**    2. 不能包含特殊字符    3. 不能以数字开头    4. 大小写敏感    3. 案例    <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@color:pink</span><br><span class="line"></span><br><span class="line">.p&#123;</span><br><span class="line">color:@color</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>2. Less嵌套</code></pre><p>​    </p><pre><code><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 1.子元素的样式直接写在父元素里面就好--&gt;</span></span><br><span class="line">.header&#123;</span><br><span class="line">color:red;</span><br><span class="line">a&#123;</span><br><span class="line">background-color:pink;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">添加伪类选择器</span><br><span class="line"><span class="comment">&lt;!--  如果有伪类选择器、交集选择器、伪类选择器 使用**==&amp;==**---&gt;</span> 内层选择器的前面需要加 ==&amp;==</span><br><span class="line">.header&#123;</span><br><span class="line">a&#123;</span><br><span class="line">&amp;:hover&#123;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>![image-20220820210222137](less/image-20220820210222137.png)3. ==**Less运算**==☆   1. \+ \- \*  /    2. 运算顺序与四则运算相同，都是先乘数，后加减   ![image-20220820210628143](less/image-20220820210628143.png)   **注意：**   1. ==**运算符中间有空格隔开 1 px + 5**==   2. 对于不同的单位直接的运算，运算结果取==第一个值==的单位   ​![image-20220820210724170](less/image-20220820210724170.png)</code></pre><ol start="4"><li><p>@import 导入另一个样式文件（less）文件</p><p><strong>最后一定要加&#x3D;&#x3D;;&#x3D;&#x3D;</strong></p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&quot;css文件&quot;</span> ;   //把一个样式文件导入到本样式文件中</span><br><span class="line">//link  将一个样式文件引入到<span class="selector-tag">html</span>页面</span><br></pre></td></tr></table></figure></li><li><p>编译less</p></li><li><p>Vscode 的easy less插件</p><ol><li>安装</li></ol></li></ol><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/less/image-20220820204947984.png" alt="image-20220820204947984"></p><p>​2. 插件会自动将less编译成一个css文件</p>]]></content>
     
@@ -160,15 +181,21 @@
     
     
     
+    <category term="前端三剑客" scheme="https://jhfuture.github.io/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/"/>
+    
+    
+    <category term="Less" scheme="https://jhfuture.github.io/tags/Less/"/>
+    
+    <category term="css扩展" scheme="https://jhfuture.github.io/tags/css%E6%89%A9%E5%B1%95/"/>
     
   </entry>
   
   <entry>
-    <title></title>
+    <title>电脑像素比的知识</title>
     <link href="https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&amp;%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/"/>
     <id>https://jhfuture.github.io/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&amp;%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/</id>
     <published>2022-08-20T12:08:34.932Z</published>
-    <updated>2022-08-20T12:27:10.989Z</updated>
+    <updated>2022-09-13T12:17:23.705Z</updated>
     
     <content type="html"><![CDATA[<ol><li>物理像素比</li></ol><blockquote><p>电脑上当缩放比例为100%时，1px（css像素）则为电脑屏幕上的1个像素大小</p><blockquote><p>Windows10会自动将缩放比例调整为100%以上，例如125%</p><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/image-20220820201143115.png" alt="image-20220820201143115"><br>而手机上使用了视网膜技术。</p><p>1px(css像素)，在手机上显示的结果&#x3D;1px*像素缩放比</p><p>iphone8 : 1px(css像素)*2&#x3D;2</p><p>Tip:相当于直接把图片、文字这些放大两倍</p></blockquote></blockquote><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/image-20220820200923907.png" alt="image-20220820200923907"></p><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/image-20220820201423812.png" alt="image-20220820201423812"></p><ol start="2"><li><p>二倍图</p><p>如果直接将图片放大两倍，那可能就会变模糊，那怎么解决这个问题？</p><p>我们放一个100*100的，然后手动将这个图片缩小为50*50(css像素)，最终显示在屏幕上的是50(css像素)*2，显示的结果就是实际图片的效果</p></li></ol><p><img src="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0&%E7%89%A9%E7%90%86%E5%83%8F%E7%B4%A0%E6%AF%94/image-20220820202429008.png" alt="image-20220820202429008"></p><ol start="3"><li>背景的缩放<ol><li>background-size: 图片的宽度 图片的高度</li><li>background-size: 图片宽度 (auto，默认)</li></ol></li></ol>]]></content>
     
@@ -187,15 +214,19 @@
     
     
     
+    <category term="软/硬件知识" scheme="https://jhfuture.github.io/categories/%E8%BD%AF-%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/"/>
+    
+    
+    <category term="像素比大小" scheme="https://jhfuture.github.io/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/"/>
     
   </entry>
   
   <entry>
-    <title></title>
+    <title>Javascript中的原型链</title>
     <link href="https://jhfuture.github.io/2022/07/30/JavaScript/%E5%8E%9F%E5%9E%8B%E9%93%BE/%E5%8E%9F%E5%9E%8B%E9%93%BE/"/>
     <id>https://jhfuture.github.io/2022/07/30/JavaScript/%E5%8E%9F%E5%9E%8B%E9%93%BE/%E5%8E%9F%E5%9E%8B%E9%93%BE/</id>
     <published>2022-07-30T14:13:23.353Z</published>
-    <updated>2022-09-03T12:37:38.097Z</updated>
+    <updated>2022-09-13T12:19:07.575Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一、何为原型链？"><a href="#一、何为原型链？" class="headerlink" title="一、何为原型链？"></a>一、何为原型链？</h1><p>JavaScript中的原型关系</p><h1 id="二、原型链的解释"><a href="#二、原型链的解释" class="headerlink" title="二、原型链的解释"></a>二、原型链的解释</h1><ol><li><p>对象可以由a构造函数、b对象方法创建</p></li><li><p>来看下图。</p><p><img src="/2022/07/30/JavaScript/%E5%8E%9F%E5%9E%8B%E9%93%BE/%E5%8E%9F%E5%9E%8B%E9%93%BE/image-20220903202726634.png" alt="image-20220903202726634"></p><ol><li>f1和f2是function foo创建的对象。</li></ol></li></ol><p><img src="/2022/07/30/JavaScript/%E5%8E%9F%E5%9E%8B%E9%93%BE/%E5%8E%9F%E5%9E%8B%E9%93%BE/%E5%8E%9F%E5%9E%8B%E9%93%BE.png" alt="原型链"></p><p>1. </p>]]></content>
     
@@ -208,15 +239,21 @@
     
     
     
+    <category term="前端三剑客" scheme="https://jhfuture.github.io/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/"/>
+    
+    <category term="javascript进阶知识" scheme="https://jhfuture.github.io/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/javascript%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/"/>
+    
+    
+    <category term="原型链" scheme="https://jhfuture.github.io/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/"/>
     
   </entry>
   
   <entry>
-    <title></title>
+    <title>Vue中组件入门</title>
     <link href="https://jhfuture.github.io/2022/07/29/vue/19-%E7%BB%84%E4%BB%B6/1.%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90/"/>
     <id>https://jhfuture.github.io/2022/07/29/vue/19-%E7%BB%84%E4%BB%B6/1.%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90/</id>
     <published>2022-07-29T11:30:12.409Z</published>
-    <updated>2022-09-03T13:50:37.350Z</updated>
+    <updated>2022-09-13T13:13:44.054Z</updated>
     
     <content type="html"><![CDATA[<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p><img src="/2022/07/29/vue/19-%E7%BB%84%E4%BB%B6/1.%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90/image-20220729200851143.png" alt="image-20220729200851143"></p><p><img src="/2022/07/29/vue/19-%E7%BB%84%E4%BB%B6/1.%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90/image-20220729193042248.png" alt="image-20220729193042248"></p><h2 id="单文件组件与非单文件组件"><a href="#单文件组件与非单文件组件" class="headerlink" title="单文件组件与非单文件组件"></a>单文件组件与非单文件组件</h2><h3 id="1-单文件组件："><a href="#1-单文件组件：" class="headerlink" title="1.单文件组件："></a>1.单文件组件：</h3><p>​一个文件只包含一个组件  ——&gt;a.html</p><h3 id="2-非单文件组件"><a href="#2-非单文件组件" class="headerlink" title="2. 非单文件组件"></a>2. 非单文件组件</h3><p>​一个文件中包含n个组件 ——&gt;a.vue</p><h2 id="Vuecomponent构造器的生成过程"><a href="#Vuecomponent构造器的生成过程" class="headerlink" title="Vuecomponent构造器的生成过程"></a>Vuecomponent构造器的生成过程</h2><p>​创建vue组件时，cost componentName &#x3D;Vue.extend()  ——————————&gt;调用了Vue.extend这个方法,而这个方法的源码每次调用都生成了一个新的VueComponent</p><p><img src="/2022/07/29/vue/19-%E7%BB%84%E4%BB%B6/1.%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E6%88%90/image-20220729223553810.png" alt="image-20220729223553810"></p>]]></content>
     
@@ -228,6 +265,10 @@
     
     
     
+    <category term="Vue" scheme="https://jhfuture.github.io/categories/Vue/"/>
+    
+    
+    <category term="vue组件" scheme="https://jhfuture.github.io/tags/vue%E7%BB%84%E4%BB%B6/"/>
     
   </entry>
   
@@ -439,35 +480,6 @@
     <title>Vue的技巧</title>
     <link href="https://jhfuture.github.io/2022/07/26/vue/08-%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/vue%E6%8A%80%E5%B7%A7/"/>
     <id>https://jhfuture.github.io/2022/07/26/vue/08-%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/vue%E6%8A%80%E5%B7%A7/</id>
-    <published>2022-07-26T04:54:14.000Z</published>
-    <updated>2022-09-04T10:42:21.074Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Vue中的坑"><a href="#Vue中的坑" class="headerlink" title="Vue中的坑"></a>Vue中的坑</h2><ol><li>如果Vue模块中没有使用data中的数据，那data中的数据发生改变时，vue的浏览器插件 Vue tool不会刷新</li><li>使用了定时器settimeout()的话，定时器是由浏览器直接调用的，所以它的this指向的是 **&#x3D;&#x3D;Windows&#x3D;&#x3D;**，而不是&#x3D;&#x3D;vue&#x3D;&#x3D;</li><li>Vue的绑定样式，使用style绑定要<code>注意的点</code><ol><li>如果是两个单词，类似background-color这种，要去掉中间的<code>“-”</code>,写成一个组合词backgroundColor</li><li></li></ol></li></ol><h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><ol><li>Vue上简单的操作可以直接写在Vue模块里，因为<strong>Vue模块可以直接访问Vue实例上的所有属性</strong></li></ol><p>eg: </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;div id=&quot;root&quot;&gt;</span><br><span class="line">    &lt;div&gt; &#123;&#123;file&#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;!- @xxx=&quot;yyyy&quot; xxx是事件名,yyy可以写一些简单的语句--&gt;</span><br><span class="line">    &lt;button @click=&quot;file=&#x27;炎热&#x27;&quot;&gt;&lt;/button&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    Vue.config.productionTip = false //阻止vue在启动时生成生产提示</span><br><span class="line">    new Vue(&#123;</span><br><span class="line">        el: &#x27;#root&#x27;,</span><br><span class="line">        data: &#123;</span><br><span class="line">                file:&#x27;helloworld&#x27;</span><br><span class="line">            &#125;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;Vue中的坑&quot;&gt;&lt;a href=&quot;#Vue中的坑&quot; class=&quot;headerlink&quot; title=&quot;Vue中的坑&quot;&gt;&lt;/a&gt;Vue中的坑&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;如果Vue模块中没有使用data中的数据，那data中的数据发生改变时，vue的浏览器插件 Vu</summary>
-      
-    
-    
-    
-    <category term="Vue" scheme="https://jhfuture.github.io/categories/Vue/"/>
-    
-    
-    <category term="Vue" scheme="https://jhfuture.github.io/tags/Vue/"/>
-    
-    <category term="Vue中的技巧" scheme="https://jhfuture.github.io/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/"/>
-    
-    <category term="Vue中的坑" scheme="https://jhfuture.github.io/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Vue的技巧</title>
-    <link href="https://jhfuture.github.io/2022/07/26/vue/Top0-Vue%E4%B8%AD%E7%9A%84%E5%9D%91/vue%E6%8A%80%E5%B7%A7/"/>
-    <id>https://jhfuture.github.io/2022/07/26/vue/Top0-Vue%E4%B8%AD%E7%9A%84%E5%9D%91/vue%E6%8A%80%E5%B7%A7/</id>
     <published>2022-07-26T04:54:14.000Z</published>
     <updated>2022-09-04T10:42:21.074Z</updated>
     
