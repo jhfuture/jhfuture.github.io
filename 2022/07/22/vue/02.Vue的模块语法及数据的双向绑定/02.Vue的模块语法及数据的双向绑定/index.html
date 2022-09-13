@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Vue的模块语法及数据的双向绑定 | jhfuture</title>
+  <meta name="description" content="VUe的的基本语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue的模块语法及数据的双向绑定">
+<meta property="og:url" content="https://jhfuture.github.io/2022/07/22/vue/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/index.html">
+<meta property="og:site_name" content="jhfuture">
+<meta property="og:description" content="VUe的的基本语法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-22T15:09:14.000Z">
+<meta property="article:modified_time" content="2022-07-25T06:40:50.027Z">
+<meta property="article:author" content="jhfuture">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://jhfuture.github.io/2022/07/22/vue/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="jhfuture" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/jhfuture" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">jhfuture</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%93%8D%E5%BA%94%E5%BC%8F/">响应式</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" rel="tag">Vue中的坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="tag">Vue中的技巧</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E6%96%B9%E6%B3%95/" rel="tag">Vue方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E7%BB%84%E4%BB%B6/" rel="tag">Vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" rel="tag">vue绑定样式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" rel="tag">前段三剑客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" rel="tag">响应式开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" rel="tag">硬核知识</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" style="font-size: 13.25px;">Vue中的坑</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" style="font-size: 13.25px;">Vue中的技巧</a> <a href="/tags/Vue%E6%96%B9%E6%B3%95/" style="font-size: 13.25px;">Vue方法</a> <a href="/tags/Vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">Vue组件</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">vue绑定样式</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13.5px;">个人博客</a> <a href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" style="font-size: 13px;">前段三剑客</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13.75px;">前端</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" style="font-size: 13px;">响应式开发</a> <a href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">硬核知识</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">34</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Vue/">Vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/06/vue/19-%E7%BB%84%E4%BB%B6/2-%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1/" class="title">Vue组件中的通讯方式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-06T13:52:51.000Z" itemprop="datePublished">2022-09-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Vue/">Vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/04/vue/08-%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" class="title">Vue绑定样式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-04T10:58:14.000Z" itemprop="datePublished">2022-09-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/03/vue/20-%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/localstorage/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-03T13:16:37.559Z" itemprop="datePublished">2022-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/21/%E9%83%A8%E9%97%A8%E6%8B%9B%E6%96%B0/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-21T07:12:50.568Z" itemprop="datePublished">2022-08-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/20/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/rem%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-20T13:11:26.970Z" itemprop="datePublished">2022-08-20</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-2%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E3%80%81%E6%95%B0%E6%8D%AE%E5%8D%95-%E5%8F%8C-%E5%90%91%E7%BB%91%E5%AE%9A"><span class="toc-number">1.</span> <span class="toc-text">1.2模块语法、数据单(双)向绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">一、模块语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.1.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8F%8C%E5%90%91%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A"><span class="toc-number">1.2.</span> <span class="toc-text">二、双向数据绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">总结：</span></a></li></ol></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-vue/02.Vue的模块语法及数据的双向绑定/02.Vue的模块语法及数据的双向绑定" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue的模块语法及数据的双向绑定
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/22/vue/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" class="article-date">
+	  <time datetime="2022-07-22T15:09:14.000Z" itemprop="datePublished">2022-07-22</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Vue/">Vue</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Vue/" rel="tag">Vue</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/22/vue/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 697(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>VUe的的基本语法</p>
+<span id="more"></span>
+<h1 id="1-2模块语法、数据单-双-向绑定"><a href="#1-2模块语法、数据单-双-向绑定" class="headerlink" title="1.2模块语法、数据单(双)向绑定"></a>1.2模块语法、数据单(双)向绑定</h1><h2 id="一、模块语法"><a href="#一、模块语法" class="headerlink" title="一、模块语法"></a>一、模块语法</h2><blockquote>
+<p>可分为：1.插值语法、2.指令语法</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  &lt;div id=&quot;root&quot;&gt;</span><br><span class="line">      &lt;!-- 插值语法--&gt;</span><br><span class="line">      &lt;h1&gt;插值语法&lt;/h1&gt;</span><br><span class="line">      &lt;p&gt;&#123;&#123;name&#125;&#125;&lt;/p&gt;</span><br><span class="line">      </span><br><span class="line">      &lt;!-- 指令语法--&gt;</span><br><span class="line">      &lt;h1&gt;指令语法&lt;/h1&gt;</span><br><span class="line">      &lt;a v-bind:href=&quot;url&quot;&gt;点我进入百度&lt;/a&gt;</span><br><span class="line">      &lt;!--简写--&gt;</span><br><span class="line">      &lt;a :href=&quot;school.url&quot;&gt;点我进入bing&lt;/a&gt;</span><br><span class="line">  	&lt;br&gt;</span><br><span class="line">      </span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  new Vue(&#123;</span><br><span class="line">      el:&#x27;#root&#x27;,</span><br><span class="line">      data:&#123;</span><br><span class="line">          name:&#x27;helloworld&#x27;,</span><br><span class="line">          url:&#x27;www.baidu.com&#x27;,</span><br><span class="line">          school:&#123;</span><br><span class="line">              url:&#x27;www.bing.com&#x27;</span><br><span class="line">          &#125;,</span><br><span class="line">          input:&#x27;value&#x27;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Vue模块语法有2大类：</p>
+<ol>
+<li><p>插值语法</p>
+<ul>
+<li><p>功能：用于解析&#x3D;&#x3D;标签体内容&#x3D;&#x3D;</p>
+</li>
+<li><p>写法：，xxx是&#x3D;&#x3D;js表达式&#x3D;&#x3D;,且可以&#x3D;&#x3D;直接读取&#x3D;&#x3D;(如果是date里面对象的值则需要使用object.propertyName访问)到data中的所有属性</p>
+</li>
+<li><p>备注：</p>
+<ul>
+<li>如果同一个变量在同一级中进行了多次赋值，则以&#x3D;&#x3D;最后一次赋值&#x3D;&#x3D;为准</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>指令语法</p>
+<ul>
+<li>功能：用于解析标签（包括标签属性、标签体内容、绑定时间……）</li>
+<li>写法举例：<ul>
+<li>绑定标签属性：v-bind:href&#x3D;’xxx’, <strong>xxx直接为名字</strong></li>
+<li>或简写为 :href&#x3D;’xxx’,xxx同样要写&#x3D;&#x3D;js表达式&#x3D;&#x3D;</li>
+</ul>
+</li>
+<li>备注：<ul>
+<li><ol>
+<li>Vue中有许多的指令，且形式都是 v-??，这里只是一个举例</li>
+<li>v-bind是&#x3D;&#x3D;<strong>单向数据绑定</strong>&#x3D;&#x3D;</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>这里需要注意一下，微信小程序中的指令语法写法与插值语法相同</p>
+<p>eg: <view width> </view></p>
+</blockquote>
+</li>
+</ol>
+<h2 id="二、双向数据绑定"><a href="#二、双向数据绑定" class="headerlink" title="二、双向数据绑定"></a>二、双向数据绑定</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&#x27;text&#x27;</span> <span class="attr">v-mode</span>=<span class="string">&#x27;name&#x27;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;root&quot;</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 普通写法 单向数据绑定 --&gt;</span></span><br><span class="line">    单向数据绑定：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-bind:value</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    双向数据绑定：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model:value</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 简写 v-model:value 可以简写为 v-model，因为v-model默认收集的就是value值--&gt;</span></span><br><span class="line">    单向数据绑定：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    双向数据绑定：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">		<span class="attr">el</span>:<span class="string">&#x27;#root&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">		<span class="attr">data</span>:&#123;</span></span><br><span class="line"><span class="language-javascript">			<span class="attr">name</span>:<span class="string">&#x27;jack&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">	&#125;)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>Vue中有2种数据绑定的方式：</p>
+<ol>
+<li><p>单向绑定(v-bind)：数据只能从data流向页面</p>
+</li>
+<li><p>双向绑定(v-model)：数据不仅能从data流向页面，还可以从&#x3D;&#x3D;页面流向data&#x3D;&#x3D;</p>
+</li>
+</ol>
+<blockquote>
+<p>1.双向绑定一般都应用在表单类元素上（如：input、select等）</p>
+</blockquote>
+<blockquote>
+<p>2.v-model:value 可以简写为 v-model，因为v-model默认收集的就是value值</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://jhfuture.github.io/2022/07/22/vue/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/02.Vue%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AF%AD%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/" title="Vue的模块语法及数据的双向绑定" target="_blank" rel="external">https://jhfuture.github.io/2022/07/22/vue/02.Vue的模块语法及数据的双向绑定/02.Vue的模块语法及数据的双向绑定/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/jhfuture" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/jhfuture" target="_blank"><span class="text-dark">jhfuture</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>一个记录技术分享的网站。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/23/vue/16-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/" title="hexo+github搭建个人博客"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/22/vue/01-%E5%88%9D%E5%A7%8Bvue/01.%E5%88%9D%E8%AF%86Vue/" title="Vue的开始"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2022 jhfuture
+        
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        </div>
+            
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="/css/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>
