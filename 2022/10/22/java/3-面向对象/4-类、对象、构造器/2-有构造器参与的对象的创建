@@ -1,0 +1,28 @@
+
+
+
+
+### 一、对象的创建过程;
+
+1. 在方法区进行类信息和方法信息的初始化
+2. 在堆中开辟空间
+3. 对类的属性进行初始化
+   1. 默认初始化(int i=0,double i=0.0,String s=null这类)===> age=0,name=null
+   2. 显式初始化，如果有。(age=90,name=null)
+4. 构造器初始化(this.age=a; this.name=n)
+5. 对象在堆中的地址，返回给p
+
+```java
+Person p= new Person();
+class Person{
+    int age=90;
+    String name;
+    Person(String n,int a){
+        this.age=a;
+        this.name=n,
+    }
+```
+
+
+
+![ad521398e0d2aee833d67c241b2475d](C:/Users/Legion/Desktop/ad521398e0d2aee833d67c241b2475d.png)

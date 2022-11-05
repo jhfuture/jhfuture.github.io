@@ -1,0 +1,132 @@
+<hr>
+<p>title: 多态数组<br>toc: true<br>tags:</p>
+<ul>
+<li>多态数组<br>categories:</li>
+<li>java<br>date: 2022-07-20 17:54:56</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<p><img src="/1-%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/image-20220720180345157.png" alt="image-20220720180345157"></p>
+<pre><code class="java">package com.jhfuture.poly._polyarr__;
+
+public class PloyArray {
+    public static void main(String[] args) {
+        Person person[]=new Person[3];
+        person[0]=new Person(&quot;这是个人&quot;);
+        person[1]=new Student(&quot;小明&quot;,15);
+        person[2]=new Teacher(&quot;李老师&quot;,1000);
+        for (int i = 0; i &lt;person.length ; i++) {
+            //调用每一个say
+            //输出结果由每一个运行类型决定
+            person[i].say();
+            if (person[i] instanceof  Student){
+                ((Student)person[i]).Study();
+            }else if (person[i] instanceof  Teacher){
+                ((Teacher)person[i]).teacher();
+            }
+
+
+        }
+    }
+}
+//应用实例：现有一个
+
+class Person{
+    String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public void say(){
+        System.out.println(&quot;here is Person&quot;+getName());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    Person(){
+
+    }
+}
+class Student extends  Person{
+    String name;
+    int age;
+    public void say(){
+        System.out.println(&quot;here is Student&quot;+getName());
+    }
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    public void Study(){
+        System.out.println(&quot;可以学习&quot;);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+class Teacher extends  Person{
+    String name;
+    double salery;
+    public void say(){
+        System.out.println(&quot;here is Teacher&quot;+getName());
+    }
+
+    public Teacher( String name1, double salery) {
+        this.name = name1;
+        this.salery = salery;
+    }
+    public void teacher(){
+        System.out.println(&quot;可以教书&quot;);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getSalery() {
+        return salery;
+    }
+
+    public void setSalery(double salery) {
+        this.salery = salery;
+    }
+}
+</code></pre>
+<pre><code class="java">//输出
+here is Person这是个人
+here is Student小明
+可以学习
+here is Teacher李老师
+可以教书
+</code></pre>

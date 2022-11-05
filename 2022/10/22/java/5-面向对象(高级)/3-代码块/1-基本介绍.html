@@ -1,0 +1,163 @@
+<hr>
+<p>title: 代码块<br>toc: true<br>tags:</p>
+<ul>
+<li>Java<br>categories:</li>
+<li>Java<br>date: 2022-11-03 10:31:33</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h3><p>​	a) 代码块又称为&#x3D;&#x3D;初始化快&#x3D;&#x3D;，属于类中的成员(即 是类的一部分)，类似于方法，讲逻辑语句封装在方法体重，通过 {} 包裹起来。<br>但和方法不一样，其没有方法名，没有返回值，没有参数，只有方法体，而且不用通过对象或类显示调用，而是&#x3D;&#x3D;<strong>加载类</strong>&#x3D;&#x3D;时，或在<strong>创建对象时隐私调用</strong>。</p>
+<p>​	b)能干嘛：</p>
+<ol>
+<li>相当于另一种形式的构造器(对构造器的补充)，可以加入初始化的代码。<br>场景：多个构造器中都有重复的语句，可以将其抽取出来，放到 &#x3D;&#x3D;<strong>代码块</strong>&#x3D;&#x3D;中，提高代码的复用性</li>
+</ol>
+<h3 id="二、基本语法"><a href="#二、基本语法" class="headerlink" title="二、基本语法"></a>二、基本语法</h3><pre><code class="java">[修饰符]{
+    
+    方法体
+};
+</code></pre>
+<p><strong>注意:</strong><br>    1)修饰符 可选，只能写static<br>    2)代码块分为两类，使用 static 修饰的称为静态代码块，没有static 修饰的，称为 普通代码块&#x2F;非静态代码块。<br>    3)逻辑语句可以为任何语句 (输入、输出、方法调用、循环、判断等)<br>    4);号可选</p>
+<h3 id="三、代码块的使用注意事项"><a href="#三、代码块的使用注意事项" class="headerlink" title="三、代码块的使用注意事项"></a>三、代码块的使用注意事项</h3><ol>
+<li><p><strong>static</strong> <strong>代码块也叫</strong> &#x3D;&#x3D;静态代码块&#x3D;&#x3D;，它随 &#x3D;&#x3D;<strong>类的加载</strong>&#x3D;&#x3D;而执行，并且&#x3D;&#x3D;<strong>只会执行一次</strong>&#x3D;&#x3D;,如果是普通代码块(即没有 static 修饰)，则每创建一个对象，就会执行一次。</p>
+</li>
+<li><p>类什么时候被加载</p>
+<ol>
+<li><p>创建对象实例时(即 使用 new )</p>
+</li>
+<li><p>创建子类对象实例时，父类也会被加载！—-&gt;</p>
+<ol>
+<li>首先加载类信息&#x3D;&#x3D;从父类开始逐级向下&#x3D;&#x3D;&gt;GrandPa信息–&gt;  Father—-&gt;son</li>
+<li>在堆中开辟 内存空间 —-&gt; 储存GrandPa—&gt;储存 Father—&gt;储存son</li>
+</ol>
+<p><img src="/1-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/image-20221103111308639.png" alt="image-20221103111308639"></p>
+</li>
+<li><p>使用类的 &#x3D;&#x3D;<strong>静态成员</strong>&#x3D;&#x3D;(静态属性、静态方法)</p>
+</li>
+</ol>
+</li>
+<li><p>普通代码块：<br>在创建对象实例时，会被&#x3D;&#x3D;<strong>隐式的调用</strong>&#x3D;&#x3D;，对象实例被创建一次，就会创建一次。(每一个new的出现，都会有一个普通代码块被拉出来毒打)。但如果是 &#x3D;&#x3D;使用类的静态成员&#x3D;&#x3D;，则它不会干活。</p>
+</li>
+</ol>
+<p>小结：</p>
+<pre><code>1. static 代码块是 ==**类加载**==时进行，只会执行一次。
+1. 普通代码块是在 创建对象 时调用，有一个对象被创建就调用一次。
+1. 类加载的三种情况需要记住
+</code></pre>
+<h3 id="四、案例分析理解-静态代码块、代码块、构造器的执行过程。"><a href="#四、案例分析理解-静态代码块、代码块、构造器的执行过程。" class="headerlink" title="四、案例分析理解 静态代码块、代码块、构造器的执行过程。"></a>四、案例分析理解 静态代码块、代码块、构造器的执行过程。</h3><ol>
+<li>单个类的执行过程分析<pre><code class="java">class signle{
+     private static int  n1=getN1();
+    public static int getN1(){
+        System.out.println(&quot;静态变量初始化&quot;);
+        return 100;
+    }
+    static {
+        System.out.println(&quot;静态代码块初始化&quot;);
+    }
+    private int n2=getN2();
+    public int getN2(){
+        System.out.println(&quot;普通变量初始化&quot;);
+        return 200;
+    }
+    //1.先加载类信息，即初始化静态代码块和静态变量
+    public signle() {
+//        默认的super()调用父类
+        //调用普通方法块和 初始化普通变量
+        //构造器方法
+    }
+}
+</code></pre>
+</li>
+</ol>
+<p>综合案例</p>
+<p>创建一个&#x3D;&#x3D;具有继承关系的类的对象&#x3D;&#x3D;</p>
+<ol>
+<li>从继承关系开始&#x3D;&#x3D;加载类的信息&#x3D;&#x3D;（从父类开始)。</li>
+<li>父类的静态代码和属性初始化（优先级一样，按定义的顺序执行)</li>
+<li>子类的静态代码和属性初始化（优先级一样，按定义的顺序执行)</li>
+<li>父类的普通代码块和普通属性初始化（优先级一样，按定义的顺序执行)</li>
+<li>父类的构造函数</li>
+<li>子类的普通代码块和普通属性初始化（优先级一样，按定义的顺序执行)</li>
+<li>子类的构造函数</li>
+</ol>
+<pre><code class="java">public class CodeBlockDetail04 {
+public static void main(String[] args) {
+//老师说明
+//(1) 进行类的加载
+//1.1 先加载 父类 A02 1.2 再加载 B02
+//(2) 创建对象
+//2.1 从子类的构造器开始
+//new B02();//对象
+new C02();
+}
+}
+class A02 { //父类
+private static int n1 = getVal01();
+static {
+System.out.println(&quot;A02 的一个静态代码块..&quot;);//(2)
+}
+{
+System.out.println(&quot;A02 的第一个普通代码块..&quot;);//(5)
+}
+public int n3 = getVal02();//普通属性的初始化
+public static int getVal01() {
+System.out.println(&quot;getVal01&quot;);//(1)
+return 10;
+}
+public int getVal02() {
+System.out.println(&quot;getVal02&quot;);//(6)
+return 10;
+}
+public A02() {//构造器
+//隐藏
+//super()
+//普通代码和普通属性的初始化...... System.out.println(&quot;A02 的构造器&quot;);//(7)
+}
+}
+class C02 {
+private int n1 = 100;
+private static int n2 = 200;
+private void m1() {
+}
+private static void m2() {
+}
+static {
+//静态代码块，只能调用静态成员
+//System.out.println(n1);错误
+System.out.println(n2);//ok
+//m1();//错误
+m2();
+}
+{
+//普通代码块，可以使用任意成员
+System.out.println(n1);
+System.out.println(n2);//ok
+m1();
+m2();
+}
+}
+class B02 extends A02 { //
+private static int n3 = getVal03();
+static {
+System.out.println(&quot;B02 的一个静态代码块..&quot;);//(4)
+}
+public int n5 = getVal04();
+{
+System.out.println(&quot;B02 的第一个普通代码块..&quot;);//(9)
+}
+public static int getVal03() {
+System.out.println(&quot;getVal03&quot;);//(3)
+return 10;
+}
+public int getVal04() {
+System.out.println(&quot;getVal04&quot;);//(8)
+return 10;
+}
+//一定要慢慢的去品.. public B02() {//构造器
+//隐藏了
+//super()
+//普通代码块和普通属性的初始化... System.out.println(&quot;B02 的构造器&quot;);//(10)
+// TODO Auto-generated constructor stub
+}
+}
+</code></pre>

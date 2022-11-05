@@ -1,0 +1,34 @@
+<h1 id="java转义字符"><a href="#java转义字符" class="headerlink" title="java转义字符"></a>java转义字符</h1><blockquote>
+<p>常用</p>
+</blockquote>
+<pre><code class="java">\t 制表位
+    
+\n 换行
+\\ ： 一个\
+\&quot; ： 一个“
+\&#39; : 一个&#39;
+\r :一个回车
+//回车没有换行，以前的打字机在打完第一行字后，会把光标放回头部
+    
+</code></pre>
+<pre><code class="java">System.out.println(&quot;韩顺平教育\r北京&quot;)
+  运行顺序
+        --&gt;韩顺平教育↓(光标)
+        ---&gt;↓韩顺平教育
+ ----------&gt; 北京平教育
+</code></pre>
+<blockquote>
+<p>计算机看到一个&#x2F;时，就会判断<code>下一个字符</code>为转义的。</p>
+<p>注意：</p>
+<p>​		 只有<code>一个</code></p>
+</blockquote>
+<pre><code class="java">Eg:
+
+​//如果想输出两个//
+
+System.out.println(&quot;////hello&quot;)
+
+</code></pre>
+<blockquote>
+<p>编译器看到第一个\时，看成是做转义的，第二个字符(有且只有一个)才是真正输出的字符。</p>
+</blockquote>

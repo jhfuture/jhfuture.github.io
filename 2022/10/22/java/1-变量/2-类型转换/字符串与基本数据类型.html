@@ -1,0 +1,67 @@
+<hr>
+<p>title: 字符串与基本数据类型<br>toc: true<br>tags:</p>
+<ul>
+<li>数据类型转换</li>
+<li>String字符串<br>categories:</li>
+<li>java<br>date: 2022-10-22 21:47:42</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、基本类型转换字符串"><a href="#一、基本类型转换字符串" class="headerlink" title="一、基本类型转换字符串"></a>一、基本类型转换字符串</h3><ol>
+<li><p>语法</p>
+<ol>
+<li><p>将基本类型的值 + “” 即可</p>
+</li>
+<li><pre><code class="java">int n1=20;
+String n2=n1+&quot;&quot;;
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="二、字符串转换为基本数据类型"><a href="#二、字符串转换为基本数据类型" class="headerlink" title="二、字符串转换为基本数据类型"></a>二、字符串转换为基本数据类型</h3><ol>
+<li><p>语法</p>
+<ol>
+<li><p>通过基本类型的 <strong>包装类</strong>调用parseXX方法即可。</p>
+<ol>
+<li><pre><code class="java">String ---&gt; int
+   String s5=&quot;123&quot;;
+        int n1= Integer.parseInt(s5);
+        System.out.println(n1);
+        double num2=Double.parseDouble(s5);
+        System.out.println(num2);
+        float num3=Float.parseFloat(s5);
+        long num4=Long.parseLong(s5);
+        byte num5=Byte.parseByte(s5);
+        boolean b=Boolean.parseBoolean(&quot;true&quot;);
+        short num6= Short.parseShort(s5);
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>特别的，把字符串转位字符—-&gt;  一般是将 字符串 中的第一个一个字符取出得到</p>
+<ol>
+<li><pre><code class="java">char i =s5.charAt(0);
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>在转换时一定要确保string类型能转换为有效的数据。比如我们可以将“123”转换为整数，但是不能将 ”hello “ 转换为一个整数。程序会直接报错并终止。</p>
+<ol>
+<li><pre><code class="java">    String h=&quot;hello&quot;;
+    int i=Integer.parseInt(h);
+Error:
+Exception in thread &quot;main&quot; java.lang.NumberFormatException: For input string: &quot;hello&quot;
+    at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+    at java.lang.Integer.parseInt(Integer.java:580)
+    at java.lang.Integer.parseInt(Integer.java:615)
+    at com.jhfuture.StringToBasetype.man.main(man.java:17)
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>

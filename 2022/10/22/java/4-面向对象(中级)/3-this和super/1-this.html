@@ -1,0 +1,69 @@
+<hr>
+<p>title: 1-this<br>toc: true<br>tags:</p>
+<ul>
+<li>this关键字<br>categories:</li>
+<li>java<br>date: 2022-10-22 20:54:28</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+
+
+<h4 id="一些自己的小实验"><a href="#一些自己的小实验" class="headerlink" title="一些自己的小实验"></a>一些自己的小实验</h4><ol>
+<li><p>即时在父类中使用this的关键字，在多态中依然会遵循动态绑定机制</p>
+<ol>
+<li><p>调用对象方法会有动态绑定机制（和对象的内存地址&#x2F;运行类型进行绑定）—&gt;根据运行类型，从本类中开始查找—&gt;父类</p>
+</li>
+<li><p>调用对象属性—&gt;在哪里声明，在那里调用</p>
+</li>
+<li><pre><code class="java">package com.jhfuture.thisDetail;
+
+//Person.java
+
+//person，xiaoming ,其中person有say方法，而两则都有bye 方法，
+// 当使用 向上转型调用xiaoming类时，如果，say方法中使用了this，那还遵守动态绑定吗 遵循
+public class Person {
+    String name=&quot;person&quot;;
+    public  void say(){
+        System.out.println(this.name);
+        bye();
+    }
+    public void bye(){
+        System.out.println(&quot;here is person&quot;);
+    }
+}
+
+//xiaoming.java
+
+package com.jhfuture.thisDetail;
+
+public class xiaoming extends Person{
+    String name=&quot;xiaoming&quot;;
+    public void bye(){
+        System.out.println(&quot;here is xiaoming&quot;);
+    }
+}
+
+//test.java
+
+package com.jhfuture.thisDetail;
+
+public class test {
+    public static void main(String[] args) {
+        Person xiaoming = new xiaoming();
+        xiaoming.say();
+
+    }
+}
+
+//结果
+person
+here is xiaoming
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>

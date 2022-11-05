@@ -1,0 +1,19 @@
+<hr>
+<p>title: finalize.md<br>toc: true<br>tags:</p>
+<ul>
+<li>finalize</li>
+<li>垃圾回收<br>categories:</li>
+<li>java<br>date: 2022-10-23 21:18:23</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><ol>
+<li>在对象没有任何引用时，jvm 就会调用对象的finalize方法。进行垃圾回收。</li>
+<li>程序猿可以在 finalize 中，写自己的业务逻辑代码（比如释放资源：数据库链接，或打开文件…)</li>
+<li>如果程序猿不重写 finalize 方法，则会默认调用 object 类的 finalize ，即默认处理。</li>
+</ol>
+<h3 id="二、小结"><a href="#二、小结" class="headerlink" title="二、小结"></a>二、小结</h3><p><img src="/finalize/image-20221023213127217.png" alt="image-20221023213127217"></p>
+<blockquote>
+<p>开发中，几乎不会运用finalize ,所以更多的是为了应对面试</p>
+</blockquote>

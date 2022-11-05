@@ -1,0 +1,20 @@
+<pre><code>public class ExtendTheory{
+public static void main(String[] args) {
+     Son son=new Son();   
+    }
+}
+class  GrandPa{
+    String name=&quot;大头爷爷&quot;;
+}
+class Father extends  GrandPa {
+    String name=&quot;大头爸爸&quot;;
+}
+class Son extends Father{
+    String name=&quot;大头儿子&quot;;
+}
+</code></pre>
+<ol>
+<li>首先加载类信息&#x3D;&#x3D;从父类开始逐级向下&#x3D;&#x3D;&gt;GrandPa信息–&gt;  Father—-&gt;son</li>
+<li>在堆中开辟 内存空间 —-&gt; 储存GrandPa—&gt;储存 Father—&gt;储存son</li>
+</ol>
+<p><img src="/2-%E7%BB%A7%E6%89%BF%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20221016163319682.png" alt="image-20221016163319682"></p>

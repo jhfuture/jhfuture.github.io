@@ -1,0 +1,96 @@
+<hr>
+<p>title: super<br>toc: true<br>tags:</p>
+<ul>
+<li>super<br>categories:</li>
+<li>java<br>date: 2022-10-21 0:1:24</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+
+
+<h3 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h3><ol>
+<li><p>super代表父类的引用，用于访问父类的属性、方法（均需要注意修饰符）、构造器（只能放在本类构造器的第一句）。</p>
+</li>
+<li><p>super会隐藏的出现在具有继承关系的子类的构造器中，即默认会调用父类的无参构造器</p>
+<ol>
+<li><pre><code class="java">public class father{
+    father(){
+        
+    }
+}
+public class son extends father{
+    son(){
+        super(); ====&gt;默认会有,
+    }
+    
+}
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>
+<h3 id="二、基本语法"><a href="#二、基本语法" class="headerlink" title="二、基本语法"></a>二、基本语法</h3><ol>
+<li><p>访问父类的属性，但不能访问父类的private属性</p>
+<ol>
+<li><p>super.属性名</p>
+</li>
+<li><pre><code class="java">    
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>访问父类的方法，但不能访问父类的private方法</p>
+<ol>
+<li>super.方法名(参数列表)</li>
+</ol>
+</li>
+<li><p>访问父类的构造器</p>
+<ol>
+<li>super(参数列表)</li>
+<li>只能放在本类构造器的第一句，且在一个函数体内只能出现一句。</li>
+<li>&#x3D;&#x3D;默认子类的构造器在本构造器的第一行就有一行super语句，调用父类的构造器&#x3D;&#x3D;</li>
+</ol>
+</li>
+</ol>
+<h3 id="三、综合案例"><a href="#三、综合案例" class="headerlink" title="三、综合案例"></a>三、综合案例</h3><pre><code class="java">package  com.jhfuture.superAndthis;
+
+public  class superDemo {
+    public static void main(String[] args) {
+        son son = new son();
+        //调用子类的有参
+        com.jhfuture.superAndthis.son son1 = new son(123);
+    }
+}
+
+class  father{
+    int age=10;
+    father(int age){
+        System.out.println(&quot;father的有参构造器被调用&quot;);
+    }
+    father(){
+        System.out.println(&quot;父类的无参构造器&quot;);
+    }
+    public void hello(){
+        System.out.println(&quot;hello&quot;);
+    }
+}
+class  son extends  father{
+    son(){
+        //默认会调用父类的无参构造器
+        super();
+        //属性
+        System.out.println(super.age);
+        //方法
+        super.hello();
+    }
+    //构造器
+    son(int input){
+        super(123);
+    }
+}
+</code></pre>
+<p><img src="/2-super/image-20221021003214056.png" alt="image-20221021003214056"></p>

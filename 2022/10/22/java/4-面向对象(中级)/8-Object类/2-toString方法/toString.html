@@ -1,0 +1,71 @@
+<hr>
+<p>title: toString.md<br>toc: true<br>tags:</p>
+<ul>
+<li>toString<br>categories:</li>
+<li>java<br>date: 2022-10-23 21:03:45</li>
+</ul>
+<hr>
+<!--more-->
+
+<p><img src="/toString/image-20221023210406001.png" alt="image-20221023210406001"></p>
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><ol>
+<li><p>toString 源码</p>
+<ol>
+<li><pre><code class="java">//（1）getClass.getName  类的全类名 （包+类） 
+// （2）Integer.toHexString(hashCode());将对象的hashcode转换为十六进制
+public String toString() {
+        return getClass().getName() + &quot;@&quot; + Integer.toHexString(hashCode());
+    }
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>子类默认重写</p>
+<ol>
+<li><pre><code class="java">//案例
+package com.jhfuture.toStringmethods;
+
+public class test {
+    public static void main(String[] args) {
+        Monster monster = new Monster(&quot;小米&quot;, 123);
+        System.out.println(monster.toString()+&quot;hashcode&quot;+monster.hashCode());
+    }
+}
+class Monster{
+    private  String name;
+    private  int age;
+    //重写toString 方法，输出对象的属性
+    //使用快捷键即可
+    //alt+insert
+    @Override
+    public String toString() {
+        //一般是把对象的属性值输出
+        return &quot;Monster{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;}&#39;;
+    }
+
+    public Monster(String name, int age) {
+        this.name = name;
+        this.age = age;
+
+    }
+}
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>当直接输出一个对象时，就会&#x3D;&#x3D;默认调用toString方法&#x3D;&#x3D;</p>
+<ol>
+<li><pre><code class="java">System.out.println(monster);// 等同于 monset.toString()
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>
+<h3 id="二、解释"><a href="#二、解释" class="headerlink" title="二、解释"></a>二、解释</h3><ol>
+<li>全类名：包名+类名<br>1. </li>
+<li></li>
+</ol>

@@ -1,0 +1,188 @@
+<hr>
+<p>title:多态入门<br>toc: true<br>tags:</p>
+<ul>
+<li>多态<br>categories:</li>
+<li>java<br>date: 2022-10-21 0:40:24</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h3><p>方法或对象具有&#x3D;&#x3D;<code>多种形态</code>&#x3D;&#x3D;。是面向对象的第三特征，多态是建立在封装和继承基础之上的。</p>
+<h3 id="二、多态的具体表现"><a href="#二、多态的具体表现" class="headerlink" title="二、多态的具体表现"></a>二、多态的具体表现</h3><h4 id="a-方法的多态"><a href="#a-方法的多态" class="headerlink" title="a).方法的多态"></a>a).方法的多态</h4><ol>
+<li>方法的重写—-&gt;子类从父类继承的方法<ol>
+<li>也称方法的覆盖</li>
+<li>方法名相同</li>
+<li>参数类型、个数或顺序，有一个不同</li>
+<li>&#x3D;&#x3D;返回值是父类的子类，或相等&#x3D;&#x3D;</li>
+</ol>
+</li>
+<li>方法的重载—-&gt;同一个类中的方法<ol>
+<li>方法名相同</li>
+<li>参数值不同</li>
+<li>返回类型无要求</li>
+</ol>
+</li>
+</ol>
+<h4 id="b-对象的多态（核心、困难、重点）"><a href="#b-对象的多态（核心、困难、重点）" class="headerlink" title="b). 对象的多态（核心、困难、重点）"></a>b). 对象的多态（核心、困难、重点）</h4><ol>
+<li>老韩重要的几句话：<ol>
+<li>一个对象的编译类型和运行类型可以不一致。</li>
+<li>编译类型在定义对象时，就确定了，不能改变。</li>
+<li>运行类型是可以变化的。</li>
+<li>编译类型看定义时 &#x3D; 号的左边，运行类型看 &#x3D; 号的右边。<ol>
+<li>&#x3D;&#x3D;&#x3D;&gt; 编译在左，运行在右</li>
+</ol>
+</li>
+<li>记住内存图！！！</li>
+<li>案例：<ol>
+<li>Animal animal &#x3D; new Dog() [ animal  编译类型是Animal ,运行类型是Dog]</li>
+<li>animal &#x3D; new Cat [animal 的运行类型变成了 Cat,编译类型仍然是 Animal] </li>
+<li>&#x3D;&#x3D;animal 只是对一个 Dog&#x2F; Cat 类型对象的引用(或者说是别名)，真正的对象是在堆中创建的对象。&#x3D;&#x3D;</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="三、多态的其他知识"><a href="#三、多态的其他知识" class="headerlink" title="三、多态的其他知识"></a>三、多态的其他知识</h3><p><img src="/1.%E5%A4%9A%E6%80%81%E5%85%A5%E9%97%A8+%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A/image-20221021010150696.png" alt="image-20221021010150696"></p>
+<h4 id="a-向上转型"><a href="#a-向上转型" class="headerlink" title="a)向上转型"></a>a)向上转型</h4><pre><code class="java">A a = new B();
+</code></pre>
+<h4 id="b-向下转型"><a href="#b-向下转型" class="headerlink" title="b)向下转型"></a>b)向下转型</h4><p>如果想要访问子类中特有的成员(方法、属性)，那可以通过向下转型的方法。</p>
+<p>—–&gt;下面代码中有解析。</p>
+<pre><code class="java">public class A{
+    
+}
+
+public class B extends A{
+    int age = 123;
+}
+A a = new B();
+
+//System.out.println(A.age); 直接报错，因为a在编译时被判断为A类型，而A中没有age属性。但a引用指向的B类型的对象中有，怎么办
+//向下转型
+B b=(B) a;
+System.out.println(B.age);
+</code></pre>
+<h4 id="x3D-x3D-c-动态绑定-x3D-x3D"><a href="#x3D-x3D-c-动态绑定-x3D-x3D" class="headerlink" title="&#x3D;&#x3D;c)动态绑定&#x3D;&#x3D;"></a><strong>&#x3D;&#x3D;c)动态绑定&#x3D;&#x3D;</strong></h4><pre><code>1. 当调用对象方法时，==该方法会和该对象的内存地址/运行类型绑定==
+1. 当调用对象属性时，==没有动态绑定机制==，哪里声明，使用的就是哪里的
+</code></pre>
+<p>案例分析</p>
+<pre><code class="java">package com.jhfuture.dynamBinding;
+
+public class DynamicBinding {
+    public static void main(String[] args) {
+        A a = new B();
+        System.out.println(a.sum());
+        System.out.println(a.sumI());
+    }
+}
+class  A{
+    public int i=10;
+    public int sum(){
+        return getI()+10;
+    }
+    public  int sumI(){
+        return  i+10;
+    }
+    public int getI(){
+        return i;
+    }
+
+}
+class B extends  A{
+    public int i=20;
+    public int sum(){
+        return i+20;
+    }
+    public  int sumI(){
+        return  i+10;
+    }
+    public int getI(){
+        return i;
+    }
+}
+40
+30
+</code></pre>
+<p>场景一、注释掉B中的sum，看 第六行的输出结果&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt; 方法的动态机制绑定</p>
+<pre><code class="java">package com.jhfuture.dynamBinding;
+
+public class DynamicBinding {
+    public static void main(String[] args) {
+        A a = new B();
+        System.out.println(a.sum());---&gt;30
+            //1.a指向的B对象中没有找到sum方法
+            //2.从继承的关系向父类 A 找，A 中找到
+            //3.A中的sum方法需要调用 getI 方法，而 A 和B中都有 getI 方法，应该调用哪个？
+            //4.遵循动态绑定原则，看该对象的编译类型/看该对象的内存地址，为B类型，则调用B中的getI
+            //5.结果为 B 中的getI(20)+10 =====&gt;   30
+        System.out.println(a.sumI());
+    }
+}
+class  A{
+    public int i=10;
+    public int sum(){
+        return getI()+10;
+    }
+    public  int sumI(){
+        return  i+10;
+    }
+    public int getI(){
+        return i;
+    }
+
+}
+class B extends  A{
+    public int i=20;
+   // public int sum(){
+     //   return i+20;
+    //}
+    public  int sumI(){
+        return  i+10;
+    }
+    public int getI(){
+        return i;
+    }
+}
+</code></pre>
+<p>场景二、注释掉 B 中的sumI,看第 七 行的输出结果&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;属性没有动态绑定机制</p>
+<pre><code class="java">package com.jhfuture.dynamBinding;
+
+public class DynamicBinding {
+    public static void main(String[] args) {
+        A a = new B();
+        System.out.println(a.sum());
+        System.out.println(a.sumI()); ----&gt;20
+        //1.B中没有sumI,利用继承关系找到A中的sumI方法，但方法需要用到 I，而 I 在 A 、B 中都有定义
+        //会调用哪一个？
+        //2.属性没用动态绑定机制,那里声明的，就在哪里使用
+        //3.调用的是 A 中的 sumI,则i也是 A 中的 I
+        //4。结果为10+10==20；
+    }
+}
+class  A{
+    public int i=10;
+    public int sum(){
+        return getI()+10;
+    }
+    public  int sumI(){
+        return  i+10;
+    }
+    public int getI(){
+        return i;
+    }
+
+}
+class B extends  A{
+    public int i=20;
+    public int sum(){
+        return i+20;
+    }
+   // public  int sumI(){
+     //   return  i+10;
+   // }
+    public int getI(){
+        return i;
+    }
+}
+</code></pre>

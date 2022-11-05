@@ -1,0 +1,46 @@
+<h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h2><h3 id="一、构造器的简介："><a href="#一、构造器的简介：" class="headerlink" title="一、构造器的简介："></a>一、构造器的简介：</h3><p>​	是类的一种特殊的方法，它的主要作用是完成对<code>==新对象的初始化==</code>。</p>
+<p>​						&#x3D;&#x3D;&#x3D;&gt;在创建完对象后，才进行的初始化，而不是用它来创建对象。</p>
+<p><img src="/1-%E6%9E%84%E9%80%A0%E5%99%A8/image-20221012220702986.png" alt="image-20221012220702986"></p>
+<h3 id="二、构造器的特点"><a href="#二、构造器的特点" class="headerlink" title="二、构造器的特点"></a>二、构造器的特点</h3><ol>
+<li><p>方法名和类名相同。</p>
+</li>
+<li><p>没有返回值。（&#x3D;&#x3D;同时不能写void关键字，留空即可！！！！&#x3D;&#x3D;）</p>
+</li>
+<li><p>在创建对象时，系统会自动的调用该类的构造器完成对对象的初始化。</p>
+</li>
+</ol>
+<p><img src="/1-%E6%9E%84%E9%80%A0%E5%99%A8/image-20220720234732290.png" alt="image-20220720234732290"></p>
+<h3 id="三、构造器的注意事项和细节"><a href="#三、构造器的注意事项和细节" class="headerlink" title="三、构造器的注意事项和细节"></a>三、构造器的注意事项和细节</h3><ol>
+<li>一个类中可以定义多个不同的构造器，即&#x3D;&#x3D;构造器重载&#x3D;&#x3D;</li>
+</ol>
+<pre><code>class sequenceArray{
+    int age;
+    String name;
+    sequenceArray(){
+        
+    }
+    sequenceArray(int age,String name){
+        this.age=age;
+        this.name=name;
+    }
+}
+</code></pre>
+<ol start="2">
+<li><p>构造器名与类名相同</p>
+</li>
+<li><p>构造器没有返回值（不能写void!!!!!!!!）</p>
+</li>
+<li><p>构造器是完成对对象的初始化，并不是创建对象！</p>
+</li>
+<li><p>在创建对象时，系统自动的调用该类的构造方法</p>
+</li>
+<li><p>如果程序猿没有定义构造器，系统会自动给类生成一个默认午参构造器(也叫默认构造器)，比如Dog()，使用<code>javap指令</code>进行反编译。</p>
+<ol>
+<li><img src="/1-%E6%9E%84%E9%80%A0%E5%99%A8/image-20221012224832331.png" alt="image-20221012224832331"></li>
+</ol>
+</li>
+<li><p>一旦定义了自己的构造器，默认的构造器就覆盖了，就不能再使用默认的无参构造器，除非显式的定义一下，即Dog(){}（这点很重要）</p>
+</li>
+<li><p>在构造器中可以使用this()方法调用本类中的另一个构造器，且this方法只能在第一行。</p>
+</li>
+</ol>

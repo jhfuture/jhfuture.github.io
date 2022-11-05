@@ -1,0 +1,59 @@
+<hr>
+<p>title: 1-数列入门.md<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-07-20 19:40:25</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><ol>
+<li>默认初始化<ol>
+<li>无论作为成员变量还是class全局变量，数组变量都会有初始化</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>数组变量无论作为什么变量，都有默认初始化</p>
+</blockquote>
+<ol start="2">
+<li><p>创建</p>
+<ol>
+<li><p>静态初始化</p>
+<ol>
+<li><pre><code class="java">type[] parameterName = new Type[]{data} 
+int[] arr =new int[]{1，2，4，4};
+//or 
+int[] arr={1,2,4,4}
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="二、一些细节"><a href="#二、一些细节" class="headerlink" title="二、一些细节"></a>二、一些细节</h3><ol>
+<li><p>索引越界</p>
+<ol>
+<li>访问了数组不存在的索引对应的元素，造成索引越界。</li>
+</ol>
+</li>
+<li><p>空指针异常</p>
+<ol>
+<li><p>当数组变量不再指向堆内存中的数组数据时，造成空指针异常</p>
+<ol>
+<li><pre><code class="java">int [] arr={1,10,-1};
+        arr=null;
+        System.out.println(arr[1]);	
+Exception in thread &quot;main&quot; java.lang.NullPointerException
+    at com.jhfuture.Array.main.main(main.java:8)
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>

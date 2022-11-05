@@ -1,0 +1,55 @@
+一、本质
+
+> 引用类型传递的值是一个 -------==地址==------
+>
+> --> 可以通过形参影响实参
+>
+> 
+
+
+
+二、常用的引用类型
+
+1. 数组
+2. 对象
+
+
+
+三、储存位置
+
+> jvm 里的==堆==
+
+
+
+
+
+四、测试代码
+
+
+
+```java
+public class methodParameter {
+    public static void main(String[] args) {
+        int[] array={12,14,512,214};
+        person person = new person();
+        person.printlnArr(array);
+            for (int i = 0; i <array.length ; i++) {
+                System.out.println(array[i]+"\t");
+            }
+
+    }
+
+}
+
+
+class person{
+    public  void printlnArr(int[] array){
+        array[0]=200;
+        for (int i = 0; i <array.length ; i++) {
+            System.out.println(array[i]);
+        }
+    }
+}
+> 200 14 512
+```
+

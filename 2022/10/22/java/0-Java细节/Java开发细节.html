@@ -1,0 +1,40 @@
+<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><blockquote>
+<p>Java中有一些细节的问题需要我们注意,这里进行详细的解释,避免后期踩坑.</p>
+</blockquote>
+<ol>
+<li><p>如果Java文件中<code>有且只能有##一个##public类</code>,</p>
+<ol>
+<li><p>如果public存在时， 文件名<code>必须</code>按该类名来命名。</p>
+</li>
+<li><p>其他类的个数不限制。</p>
+<ol>
+<li><blockquote>
+<p>同时，每一个类，在编译后都对应一个.class文件</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>main方法是java的程序入口，它具有固定的写法。</p>
+<ul>
+<li><p>只能有一个，但是位置不限（可存在public类，或其他类中）</p>
+</li>
+<li><p>可以将main方法写在其他非public类中，然后<code>指定运行</code>非public类，这样入口方法就是非public的main方法。</p>
+</li>
+<li><blockquote>
+<p>指定运行，即运行时，使用 java xxx(类名)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>public static void main(String[] args){
+
+
+}
+</code></pre>
+<p>老韩推荐的学习方法：</p>
+<p><img src="/Java%E5%BC%80%E5%8F%91%E7%BB%86%E8%8A%82/image-20220921204316192.png" alt="image-20220921204316192"></p>
+<p>3.可变参数一定要写在形参的第一个位置。</p>
+<p>4· 在构造器中使用this调用另一个构造器时，一定要把把把this调用语句放在第一位。0</p>

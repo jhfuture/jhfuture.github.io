@@ -1,0 +1,80 @@
+<h4 id="一、-使用"><a href="#一、-使用" class="headerlink" title="一、 使用"></a>一、 使用</h4><p>修饰符 static type ParameterNam</p>
+<h4 id="二、细节"><a href="#二、细节" class="headerlink" title="二、细节"></a>二、细节</h4><ol>
+<li><p>什么是类变量</p>
+<ol>
+<li>类变量也叫静态变量&#x2F;静态属性，是该类的所有对象实例共享的变量，任何一个该类的对象实例去访问它时，取到的都是相同的值；同样任何一个该类的对象去修改它时，修改的也是同一个边浪。</li>
+</ol>
+</li>
+<li><p>如何定义</p>
+<ol>
+<li>访问修饰符 static 数据类型 变量名</li>
+<li>static 访问修饰符 数据类型 变量名。</li>
+</ol>
+</li>
+<li><p>如何访问类变量</p>
+<ol>
+<li>类名.类变量名 &#x3D;&#x3D;&#x3D;&gt; 推荐</li>
+<li>or</li>
+<li>对象名.类变量名</li>
+<li>&#x3D;&#x3D;访问时需要遵守访问修饰符&#x3D;&#x3D;</li>
+</ol>
+</li>
+<li><p>类变量在什么时候生成</p>
+<ol>
+<li><p>类变量在类被加载时就初始化了，也就是说，即使你没有创建对象，只要类加载了，就可以使用类变量</p>
+</li>
+<li><p>类变量的生命周期是随类的加载开始，随类消亡</p>
+</li>
+<li><p>案例</p>
+<ol>
+<li><pre><code class="java">public class visitStatic {
+    public static void main(String[] args) {
+        System.out.println(A.name);
+    }
+}
+
+class A{
+    public static String name=&quot;ni hao&quot;;
+}
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>什么时候加载类信息.</p>
+</blockquote>
+<ol start="5">
+<li>什么时候需要用类变量<ol>
+<li>当我们需要让某个类的所有对象都共享一个变量时。</li>
+</ol>
+</li>
+<li>类变量与实例变量（普通属性）区别<ol>
+<li>类变量是该类的所有对象共享的，二实例变量（普通成员变量&#x2F;非静态成员变量)）是每个对象独享的’&#x3D;’</li>
+<li>普通属性不能通过 <code>类名.变量名</code>读取</li>
+</ol>
+</li>
+</ol>
+<p><img src="/0-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%82%A8%E5%AD%98%E4%BD%8D%E7%BD%AE/image-20221026213048223.png" alt="image-20221026213048223"></p>
+<h3 id="二、静态变量-x2F-类变量储存"><a href="#二、静态变量-x2F-类变量储存" class="headerlink" title="二、静态变量&#x2F; 类变量储存"></a>二、静态变量&#x2F; 类变量储存</h3><ol>
+<li><p>版本划分</p>
+<ol>
+<li>jdk7以前在方法区中</li>
+<li>jdk7以后，静态域储存于定义类型的Class对象中，Class对象如同堆中其他对象一样存在于GO堆中。<ol>
+<li>放在class 实例的尾部，class 变量存在于堆中。</li>
+</ol>
+</li>
+<li><img src="/0-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%82%A8%E5%AD%98%E4%BD%8D%E7%BD%AE/image-20221026210945215.png" alt="image-20221026210945215"></li>
+<li><img src="/0-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%82%A8%E5%AD%98%E4%BD%8D%E7%BD%AE/image-20221026212523430.png" alt="image-20221026212523430"></li>
+</ol>
+</li>
+<li><p>特定</p>
+<ol>
+<li>所有对象变量共享 ——&gt; 同一个类生成的所有对象。 </li>
+<li>在类加载的时候就生成</li>
+</ol>
+</li>
+</ol>

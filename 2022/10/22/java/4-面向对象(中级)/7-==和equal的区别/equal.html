@@ -1,0 +1,111 @@
+<hr>
+<p>title: ‘&#x3D;&#x3D;和equal’<br>toc: true<br>tags:</p>
+<ul>
+<li>经典面试题<br>categories:</li>
+<li>java<br>date: 2022-10-22 18:50:08</li>
+</ul>
+<hr>
+<!--more-->
+
+<h2 id="一、-x3D-x3D"><a href="#一、-x3D-x3D" class="headerlink" title="一、&#x3D;&#x3D;"></a>一、&#x3D;&#x3D;</h2><ol>
+<li><p>可以判断基本类型和引用类型</p>
+</li>
+<li><p>判断基本类型</p>
+<ol>
+<li>比较的是值是否相等</li>
+</ol>
+</li>
+<li><p>判断引用类型</p>
+<ol>
+<li><p>判断内存地址是否相同&#x2F;<strong>引用是否指向同一个对象</strong></p>
+</li>
+<li><p>object的equal方法的基本组成</p>
+<ol>
+<li><pre><code class="java">public boolean equals(Object obj) {
+        return (this == obj);
+    }
+</code></pre>
+</li>
+<li></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="二、equal"><a href="#二、equal" class="headerlink" title="二、equal"></a>二、equal</h2><ol>
+<li><p>equal 方法只能比较引用类型</p>
+</li>
+<li><p>object 类的 equal 方法</p>
+<ol>
+<li><pre><code class="java">         public boolean equals(Object obj) {
+                 return (this == obj);
+             }
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>Object 的子类 String 和 integer 都重写了 object 中的 equal 方法</p>
+<ol>
+<li><pre><code class="java">//String进行判断
+public boolean equals(Object anObject) {
+    //直接使用 == 判断内存地址
+        if (this == anObject) {
+           
+            return true;
+        }
+    //判断是否为 string 类/ string 的子类
+        if (anObject instanceof String) {
+//向下转型
+// 为什么为向下转型，因为 anObject 传入时就 发生了 object的向上转型，这里从 object 转回 String。
+            String anotherString = (String)anObject;
+            int n = value.length;
+            
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                //判断两个string类的值是否相同
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+</li>
+<li><pre><code class="java">//integer 的源码 
+public boolean equals(Object obj) {
+        if (obj instanceof Integer) {
+            return value == ((Integer)obj).intValue();
+        }
+        return false;
+    }
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="三、综合比较"><a href="#三、综合比较" class="headerlink" title="三、综合比较"></a>三、综合比较</h3><pre><code class="java">package com.jhfuture.checkJDKsrc;
+
+public class checkEqual {
+
+
+    public static void main(String[] args) {
+        String string = new String(&quot;hello&quot;);
+        String string1= new String(&quot;hello&quot;);
+        System.out.println(string==string1);//false---&gt;直接判断内存地址
+        System.out.println(string.equals(string1));//true ---&gt;判断值
+        Integer integer = new Integer(123);
+        Integer integer1 = new Integer(123);
+        System.out.println(integer==integer1); //false 
+        System.out.println(integer.equals(integer1)); //true 同理
+
+
+
+    }
+}
+</code></pre>

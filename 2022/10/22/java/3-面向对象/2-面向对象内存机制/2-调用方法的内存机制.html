@@ -1,0 +1,23 @@
+<pre><code class="java">
+
+Person p1 =new person();
+int res =p1.getSum(10,20);
+System.out.println(res);
+
+public void sum(int num1,int num2){
+    int result=num1+num2;
+    return result;
+}
+</code></pre>
+<ol>
+<li>在 main 栈里面，先执行 person p1&#x3D; new person()  在堆中创建一个新对象，并把内存地址赋值给 p1</li>
+<li>调用p1.getSum 创建一个新的栈（全新的独立空间)<ol>
+<li>将基本数据类型 10, 20分别执行 <strong>值拷贝</strong> 给num1, num2</li>
+</ol>
+</li>
+<li>第二步执行完成后会将 result 返回给 res ，并释放该方法的栈。</li>
+<li>继续执行后面的代码<ol>
+<li><img src="/2-%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%E7%9A%84%E5%86%85%E5%AD%98%E6%9C%BA%E5%88%B6/image-20221022200943102.png" alt="image-20221022200943102"></li>
+</ol>
+</li>
+</ol>
