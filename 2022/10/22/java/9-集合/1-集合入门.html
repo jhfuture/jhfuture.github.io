@@ -1,0 +1,96 @@
+<hr>
+<p>title: 1-集合入门<br>toc: true<br>tags:</p>
+<ul>
+<li>集合<br>categories:</li>
+<li>JAVA<br>date: 2022-11-20 17:11:52</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h3><p><img src="/1-%E9%9B%86%E5%90%88%E5%85%A5%E9%97%A8/image-20221120171421439.png" alt="image-20221120171421439"></p>
+<ol>
+<li><p>集合主要是两组(单列集合 , 双列集合) </p>
+</li>
+<li><p>Collection 接口有两个重要的子接口 List Set , 他们的实现子类都是单列集合 &#x2F;&#x2F;</p>
+<ol>
+<li>单列集合<pre><code class="java">//Collection
+//Map
+ArrayList arrayList = new ArrayList();
+arrayList.add(&quot;jack&quot;);
+arrayList.add(&quot;tom&quot;);
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>Map 接口的实现子类 是双列集合，存放的 K-V &#x2F;&#x2F;</p>
+<ol>
+<li>双列集合<pre><code class="java">HashMap hashMap = new HashMap();
+hashMap.put(&quot;NO1&quot;, &quot;北京&quot;);
+hashMap.put(&quot;NO2&quot;, &quot;上海&quot;);
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>&#x3D;&#x3D;把两张图记住&#x3D;&#x3D;</p>
+</li>
+</ol>
+<p><img src="/1-%E9%9B%86%E5%90%88%E5%85%A5%E9%97%A8/image-20221120171518671.png" alt="image-20221120171518671"></p>
+<p><img src="/1-%E9%9B%86%E5%90%88%E5%85%A5%E9%97%A8/image-20221120171532128.png" alt="image-20221120171532128"></p>
+<h3 id="二、特点"><a href="#二、特点" class="headerlink" title="二、特点"></a>二、特点</h3><p><img src="/1-%E9%9B%86%E5%90%88%E5%85%A5%E9%97%A8/image-20221120173011762.png" alt="image-20221120173011762"></p>
+<ul>
+<li><p>子类可以存放多个元素</p>
+</li>
+<li><p>存与取的顺序问题。</p>
+</li>
+<li><p>没有直接实现的子类。</p>
+</li>
+</ul>
+<p><img src="/1-%E9%9B%86%E5%90%88%E5%85%A5%E9%97%A8/image-20221120171518671.png" alt="image-20221120171518671"></p>
+<pre><code class="java">package com.hspedu.collection_;
+import java.util.ArrayList;
+import java.util.List;
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+public class CollectionMethod {
+@SuppressWarnings({&quot;all&quot;})
+public static void main(String[] args) {
+List list = new ArrayList();
+// add:添加单个元素
+list.add(&quot;jack&quot;);
+list.add(10);//list.add(new Integer(10))
+list.add(true);
+System.out.println(&quot;list=&quot; + list);
+// remove:删除指定元素
+//list.remove(0);//删除第一个元素
+list.remove(true);//指定删除某个元素
+System.out.println(&quot;list=&quot; + list);
+// contains:查找元素是否存在
+System.out.println(list.contains(&quot;jack&quot;));//T
+// size:获取元素个数
+System.out.println(list.size());//2
+// isEmpty:判断是否为空
+System.out.println(list.isEmpty());//F
+// clear:清空
+list.clear();
+System.out.println(&quot;list=&quot; + list);
+// addAll:添加多个元素
+ArrayList list2 = new ArrayList();
+list2.add(&quot;红楼梦&quot;);
+list2.add(&quot;三国演义&quot;);
+list.addAll(list2);
+System.out.println(&quot;list=&quot; + list);
+// containsAll:查找多个元素是否都存在
+System.out.println(list.containsAll(list2));//T
+// removeAll：删除多个元素
+list.add(&quot;聊斋&quot;);
+list.removeAll(list2);
+System.out.println(&quot;list=&quot; + list);//[聊斋]
+// 说明：以 ArrayList 实现类来演示. }
+}
+</code></pre>
+<blockquote>
+<p>list.add(10);&#x2F;&#x2F;list.add(new Integer(10)),—&gt; 放入的是一个&#x3D;&#x3D;对象&#x3D;&#x3D;，只是默认有&#x3D;&#x3D;自动装箱的过程&#x3D;&#x3D;</p>
+<p>Sytem.out.println(arraylist)—&gt;逐个输出，自动拆箱。</p>
+</blockquote>

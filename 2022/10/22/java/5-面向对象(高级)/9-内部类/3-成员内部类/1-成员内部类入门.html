@@ -1,0 +1,94 @@
+<hr>
+<p>title: 1-成员内部类入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-15 20:38:35</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><p>what?</p>
+<p>成员内部类定义在在 outer类 成员属性 的位置，属于类成员的内部类。</p>
+<p>how?</p>
+<pre><code class="java">class Outer{
+ //内部类
+    class inner{
+        private String name=&quot;我是一个内部类的私有属性&quot;;
+        void   innerprint(){
+            System.out.println(outerName);
+        }
+    }
+}
+</code></pre>
+<h3 id="二、特点"><a href="#二、特点" class="headerlink" title="二、特点"></a>二、特点</h3><p>说明：成员内部类定义在在 outer类 成员属性 的位置，并且没有 static 修饰。</p>
+<ol>
+<li><p>作用域问题：</p>
+<ol>
+<li><p>在 成员内部类 中可以随意访问 outer类 中的内容，outer类也可以使用 成员内部类。</p>
+</li>
+<li><p>成员内部类访问 outer类 的属性。</p>
+<ol>
+<li>直接使用属性名 </li>
+<li>&#x3D;&#x3D;—-&gt;包括private属性–&gt;因为在同一个类中&#x3D;&#x3D;</li>
+<li>&#x3D;&#x3D;就近原则&#x3D;&#x3D;&gt;如果外部类的属性成员名字 和 内部类相同 <ol>
+<li>通过&#x3D;&#x3D;外部类.this.属性&#x3D;&#x3D;来访问外部类的成员</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>外部类的成员使用成员内部类</p>
+<ol>
+<li>&#x3D;&#x3D;同样包括 private 属性&#x3D;&#x3D;</li>
+</ol>
+<pre><code class="java">1.创建内部类的对象
+    neinner inner = new inner();
+2.使用 inner.xx即可
+System.out.println(inner.name);
+    
+</code></pre>
+</li>
+<li><p>外部其他类–访问—-&gt;成员内部类</p>
+<blockquote>
+<p>外部类名.成员内部类 xxx &#x3D;new 外部类对象.new 成员内部类</p>
+</blockquote>
+<pre><code class="java">
+public class memberClass_1 {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        outer.print();
+        //外部其他类访问成员内部类的两种方法
+        //1.使用外部类的对象创建---&gt;成员内部类也是外部类对象的一个成员。
+        Outer.inner inner = outer.new inner();
+        inner.innerprint();
+        //2.在外部类中创建一个方法---&gt;返回成员内部类对象
+        Outer.inner inner1= outer.getinnerInstace();
+        inner1.innerprint();
+    }
+}
+
+class Outer{
+    private String outerName=&quot;我是一个外部类的私有属性&quot;;
+    class inner{
+        private String name=&quot;我是一个内部类的私有属性&quot;;
+        void   innerprint(){
+            System.out.println(outerName);
+        }
+    }
+    void print(){
+        inner inner = new inner();
+        System.out.println(inner.name);
+        inner.innerprint();
+    }
+    public inner getinnerInstace(){
+        return  new inner();
+    }
+}
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>可以添加任意修饰符(public、protected、默认、private)，因为它的地位就是&#x3D;&#x3D;一个成员&#x3D;&#x3D;</p>
+</li>
+</ol>

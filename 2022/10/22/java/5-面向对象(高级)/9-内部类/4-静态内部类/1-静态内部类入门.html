@@ -1,0 +1,103 @@
+<hr>
+<p>title: 1-静态内部类入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-15 21:15:15</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><p><img src="/1-%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB%E5%85%A5%E9%97%A8/image-20221115211650611.png" alt="image-20221115211650611"></p>
+<p>what?</p>
+<p>​	定义在 outer类 的&#x3D;&#x3D;成员位置&#x3D;&#x3D;，并且有 static 修饰。</p>
+<p>how</p>
+<pre><code class="java">class Outer{
+    private String outerName=&quot;我是一个外部类的私有属性&quot;;
+    //1.放在成员位置
+    //2.static 修饰
+   static class inner{
+        private String name=&quot;我是一个内部类的私有属性&quot;;
+        void   innerprint(){
+            System.out.println(outerName);
+        }
+    }
+</code></pre>
+<h3 id="二、特点"><a href="#二、特点" class="headerlink" title="二、特点"></a>二、特点</h3><ol>
+<li><p>使用 static 修饰，符合 static 修饰的原则。</p>
+<ol>
+<li>只能访问 外部类的 &#x3D;&#x3D;所有静态成员&#x3D;&#x3D;，无法访问非静态。</li>
+</ol>
+</li>
+<li><p>可以添加任意的 访问修饰符 (public、protected、private、默认)</p>
+</li>
+<li><p>作用域的问题</p>
+<ol>
+<li><p>外部类 –&gt;访问 –&gt;静态成员 [访问方式：1. 创建对象 2.使用方法名访问。]</p>
+<pre><code class="java">1.创建对象
+    
+2.对象名.xxx
+</code></pre>
+</li>
+<li><p>内部成员—&gt; 访问 —&gt; 外部成员 [访问方式：直接访问所有静态成员]</p>
+<ol>
+<li>&#x3D;&#x3D;就近原则&#x3D;&#x3D;。如果重名，使用 &#x3D;&#x3D;外部类.属性名&#x3D;&#x3D;进行访问。</li>
+</ol>
+<pre><code class="java">class  outer{
+
+static  String Staticname=&quot;外部类的属性&quot;;
+String name=&quot;外部类非静态属性&quot;;
+    static class staticInner{
+    static  String Staticname=&quot;静态内部类的属性&quot;;
+       void print(){
+    System.out.println(Staticname);
+         System.out.println(outer.staticname);
+       }
+    }
+}
+</code></pre>
+<p><img src="/1-%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB%E5%85%A5%E9%97%A8/image-20221115212849597.png" alt="image-20221115212849597"></p>
+</li>
+<li><p>外部其他类 使用静态内部类。</p>
+<pre><code class="java">package com.jhfuture.innerclass.staticInnerclass;
+
+public class staticner {
+    public static void main(String[] args) {
+//其他外部类访问静态成员内部类的三种方法
+        //1.使用 外部类名.静态类名 方法创建
+        outer.staticInner staticInner = new outer.staticInner();
+        staticInner.print();
+        //2.在外部类里 创建一个方法/静态方法 使用外部类对象名/外部类名 . 方法名来创建。
+        //2.1
+        outer outerObject = new outer();
+        outer.staticInner staticInner1 = outerObject.getstaticInnerInstace_commonly();
+        staticInner1.print();
+        //2.2
+        outer.staticInner staticInner2= outer.getstaticInnerInstace_StaticVersion();
+        staticInner2.print();
+    }
+}
+
+class  outer{
+static  String Staticname=&quot;外部类的属性&quot;;
+String name=&quot;外部类非静态属性&quot;;
+    static class staticInner{
+       void print(){
+           System.out.println(Staticname);
+
+       }
+    }
+    staticInner getstaticInnerInstace_commonly(){
+    return  new staticInner();
+    }
+   static staticInner getstaticInnerInstace_StaticVersion(){
+        return  new staticInner();
+    }
+}
+</code></pre>
+<ol start="4">
+<li></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>

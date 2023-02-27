@@ -1,0 +1,94 @@
+<hr>
+<p>title: 1-异常入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-16 20:41:14</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><h4 id="1-引出："><a href="#1-引出：" class="headerlink" title="1)引出："></a>1)引出：</h4><pre><code class="java">对异常进行捕获，保证程序可以继续运行. 看老师的代码演示 try-catch
+package com.hspedu.exception_;
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+public class Exception01 {
+public static void main(String[] args) {
+int num1 = 10;
+int num2 = 0;//Scanner();
+//老韩解读
+//1. num1 / num2 =&gt; 10 / 0
+//2. 当执行到 num1 / num2 因为 num2 = 0, 程序就会出现(抛出)异常 ArithmeticException
+//3. 当抛出异常后，程序就退出，崩溃了 , 下面的代码就不在执行
+//4. 大家想想这样的程序好吗? 不好，不应该出现了一个不算致命的问题，就导致整个系统崩溃
+
+</code></pre>
+<blockquote>
+<p>java 设计者，提供了一个叫 异常处理机制来解决该问题  try catch</p>
+</blockquote>
+<pre><code class="java">// int res = num1 / num2;
+如果程序员，认为一段代码可能出现异常/问题，可以使用 try-catch 异常处理机制来解决
+从而保证程序的健壮性
+将该代码块-&gt;选中-&gt;快捷键 ctrl + alt + t -&gt; 选中 try-catch
+6. 如果进行异常处理(c)，那么即使出现了异常，程序可以继续执行。
+try {
+int res = num1 / num2;
+} catch (Exception e) {
+//e.printStackTrace();
+System.out.println(&quot;出现异常的原因=&quot; + e.getMessage());//输出异常信息
+}
+System.out.println(&quot;程序继续运行....&quot;);
+}
+}
+</code></pre>
+<h4 id="2-分类"><a href="#2-分类" class="headerlink" title="2)分类"></a>2)分类</h4><ul>
+<li>Error(错误)：java 虚拟机无法解决的问题。如：jvm系统内部错误、资源耗尽等严重情况。比如：stackovererror[栈溢出]和 OOM（out of memory），error 是严重错误，程序会奔溃。</li>
+<li>Exception：其他因编程错误或偶然的外在因素导致的。<ul>
+<li>编译时异常[&#x3D;&#x3D;编译时&#x3D;&#x3D;，编译器检查出的异常]</li>
+<li>运行时异常[程序&#x3D;&#x3D;运行时&#x3D;&#x3D;，程序出现的异常] –&gt; 例如空指针</li>
+</ul>
+</li>
+</ul>
+<p><img src="/1-%E5%BC%82%E5%B8%B8%E5%85%A5%E9%97%A8/image-20221116210909156.png" alt="image-20221116210909156"></p>
+<blockquote>
+<p>Throwable–&gt;本类 。</p>
+<p>—虚线为实现了接口</p>
+<p>——为子类</p>
+</blockquote>
+<p><img src="/1-%E5%BC%82%E5%B8%B8%E5%85%A5%E9%97%A8/image-20221116211025214.png" alt="image-20221116211025214"></p>
+<p>小结</p>
+<p><img src="/1-%E5%BC%82%E5%B8%B8%E5%85%A5%E9%97%A8/image-20221116212657171.png" alt="image-20221116212657171"></p>
+<pre><code class="java">package com.jhfuture.Exception;
+
+public class customerexctpion {
+    /**
+     * @author 韩顺平
+     * @version 1.0
+     */
+   
+        public static void main(String[] args) /*throws AgeException*/ {
+            int age = 180;
+//要求范围在 18 – 120 之间，否则抛出一个自定义异常
+            if(!(age &gt;= 18 &amp;&amp; age &lt;= 120)) {
+//这里我们可以通过构造器，设置信息
+                throw new AgeException(&quot;年龄需要在 18~120 之间&quot;);
+            }
+            System.out.println(&quot;你的年龄范围正确.&quot;);
+        }
+    }
+    //自定义一个异常
+//老韩解读
+//1. 一般情况下，我们自定义异常是继承 RuntimeException
+//2. 即把自定义异常做成 运行时异常，好处时，我们可以使用默认的处理机制
+//3. 即比较方便
+
+    class AgeException extends RuntimeException {
+        public AgeException(String message) {//构造器
+            super(message);
+        }
+    
+}
+</code></pre>

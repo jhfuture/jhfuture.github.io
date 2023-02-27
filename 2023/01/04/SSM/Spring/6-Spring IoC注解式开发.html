@@ -1,0 +1,1061 @@
+<hr>
+<p>layout: 6-spring<br>title: IoC注解式开发<br>date: 2023-01-07 23:44:02<br>tags:</p>
+<hr>
+<h2 id="1-回顾注解"><a href="#1-回顾注解" class="headerlink" title="1 回顾注解"></a>1 回顾注解</h2><p>注解的存在主要是为了简化XML的配置。<strong>Spring6倡导全注解开发</strong>。</p>
+<p>我们来回顾一下：</p>
+<ul>
+<li>第一：注解怎么定义，注解中的属性怎么定义？</li>
+<li>第二：注解怎么使用？</li>
+<li>第三：通过反射机制怎么读取注解？</li>
+</ul>
+<h3 id="1-1注解怎么定义，注解中的属性怎么定义？"><a href="#1-1注解怎么定义，注解中的属性怎么定义？" class="headerlink" title="1.1注解怎么定义，注解中的属性怎么定义？"></a>1.1<strong>注解怎么定义，注解中的属性怎么定义？</strong></h3><pre><code class="java">package com.powernode.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(value = {ElementType.TYPE})
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface Component {
+    String value();
+}
+</code></pre>
+<p>以上是自定义了一个注解：Component</p>
+<p>该注解上面修饰的注解包括：Target 注解和 Retention 注解，这两个注解被称为元注解。</p>
+<blockquote>
+<p>元注解：用来注解 注解 的注解。</p>
+</blockquote>
+<h4 id="两个重要的标签"><a href="#两个重要的标签" class="headerlink" title="两个重要的标签"></a>两个重要的标签</h4><ul>
+<li><p>Target 注解用来设置 Component 注解可以出现的位置，</p>
+<ul>
+<li>ElemtType.Type	<ul>
+<li>以上代表表示Component注解只能用在类和接口上。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Retention注解用来设置Component注解的保持性策略，</p>
+<ul>
+<li>RetetionPolicy.RUNTIME<ul>
+<li>以上代表Component注解可以被反射机制读取。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="定义的属性"><a href="#定义的属性" class="headerlink" title="定义的属性"></a>定义的属性</h4><ul>
+<li>String value(); 是Component注解中的一个属性。<ul>
+<li>该属性类型String，属性名是value。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-注解怎么使用？"><a href="#1-2-注解怎么使用？" class="headerlink" title="1.2.注解怎么使用？"></a><strong>1.2.注解怎么使用？</strong></h3><pre><code class="java">package com.powernode.bean;
+
+import com.powernode.annotation.Component;
+
+@Component(value = &quot;userBean&quot;)
+public class User {
+}
+</code></pre>
+<p>语法格式：</p>
+<ul>
+<li>@注解类型名(属性名&#x3D;属性值, 属性名&#x3D;属性值, 属性名&#x3D;属性值……)</li>
+</ul>
+<p>userBean为什么使用双引号括起来，因为value属性是String类型，字符串。</p>
+<blockquote>
+<p> 另外如果属性名是value，则在使用的时候可以省略属性名，例如：</p>
+</blockquote>
+<pre><code class="java">package com.powernode.bean;
+
+import com.powernode.annotation.Component;
+
+//@Component(value = &quot;userBean&quot;)
+@Component(&quot;userBean&quot;)
+public class User {
+}
+</code></pre>
+<p><strong>通过反射机制怎么读取注解？</strong></p>
+<blockquote>
+<p>—————–&gt;类的clazz对象.isAnnotationPresent(注解的class对象)</p>
+</blockquote>
+<p>接下来，我们来写一段程序，当Bean类上有Component注解时，则实例化Bean对象，如果没有，则不实例化对象。</p>
+<p>我们准备两个Bean，一个上面有注解，一个上面没有注解。</p>
+<pre><code class="java">package com.powernode.bean;
+
+import com.powernode.annotation.Component;
+
+@Component(&quot;userBean&quot;)
+public class User {
+}
+package com.powernode.bean;
+
+public class Vip {
+}
+</code></pre>
+<p>假设我们现在只知道包名：com.powernode.bean。至于这个包下有多少个Bean我们不知道。哪些Bean上有注解，哪些Bean上没有注解，这些我们都不知道，如何通过程序全自动化判断。</p>
+<pre><code class="java">package com.powernode.test;
+
+import com.powernode.annotation.Component;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 动力节点
+ * @version 1.0
+ * @className Test
+ * @since 1.0
+ **/
+public class Test {
+    public static void main(String[] args) throws Exception {
+        // 存放Bean的Map集合。key存储beanId。value存储Bean。
+        Map&lt;String,Object&gt; beanMap = new HashMap&lt;&gt;();
+
+        String packageName = &quot;com.powernode.bean&quot;;
+        String path = packageName.replaceAll(&quot;\\.&quot;, &quot;/&quot;);
+        URL url = ClassLoader.getSystemClassLoader().getResource(path);
+        File file = new File(url.getPath());
+        File[] files = file.listFiles();
+        Arrays.stream(files).forEach(f -&gt; {
+            String className = packageName + &quot;.&quot; + f.getName().split(&quot;\\.&quot;)[0];
+            try {
+                Class&lt;?&gt; clazz = Class.forName(className);
+                if (clazz.isAnnotationPresent(Component.class)) {
+                    Component component = clazz.getAnnotation(Component.class);
+                    String beanId = component.value();
+                    Object bean = clazz.newInstance();
+                    beanMap.put(beanId, bean);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        System.out.println(beanMap);
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665543007882-24036142-350b-4209-bb20-46a61e35716d.png)</p>
+<h2 id="2-声明Bean的注解"><a href="#2-声明Bean的注解" class="headerlink" title="2 声明Bean的注解"></a>2 声明Bean的注解</h2><p>负责声明Bean的注解，常见的包括四个：</p>
+<ul>
+<li>@Component  其余三个是第一个的别名。</li>
+<li>@Controller</li>
+<li>@Service</li>
+<li>@Repository</li>
+</ul>
+<p>源码如下：</p>
+<pre><code class="java">package com.powernode.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(value = {ElementType.TYPE})
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface Component {
+    String value();
+}
+package org.springframework.stereotype;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.core.annotation.AliasFor;
+
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Controller {
+    @AliasFor(
+        annotation = Component.class
+    )
+    String value() default &quot;&quot;;
+}
+package org.springframework.stereotype;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.core.annotation.AliasFor;
+
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Service {
+    @AliasFor(
+        annotation = Component.class
+    )
+    String value() default &quot;&quot;;
+}
+package org.springframework.stereotype;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.core.annotation.AliasFor;
+
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Repository {
+    @AliasFor(
+        annotation = Component.class
+    )
+    String value() default &quot;&quot;;
+}
+</code></pre>
+<p>通过源码可以看到，@Controller、@Service、@Repository这三个注解都是@Component注解的别名。</p>
+<p>也就是说：这四个注解的功能都一样。用哪个都可以。</p>
+<p>只是为了增强程序的可读性，建议：</p>
+<ul>
+<li>控制器类上使用：Controller</li>
+<li>service类上使用：Service</li>
+<li>dao类上使用：Repository</li>
+</ul>
+<p>他们都是只有一个value属性。value属性用来指定bean的id，也就是bean的名字。</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545099269-ebd7e446-bc2f-4442-89b8-3f513e546a8b.png)</p>
+<h2 id="3-Spring注解的使用"><a href="#3-Spring注解的使用" class="headerlink" title="3 Spring注解的使用"></a>3 Spring注解的使用</h2><p>如何使用以上的注解呢？</p>
+<ul>
+<li>第一步：加入aop的依赖</li>
+<li>第二步：在配置文件中添加context命名空间</li>
+<li>第三步：在配置文件中指定扫描的包</li>
+<li>第四步：在Bean类上使用注解</li>
+</ul>
+<p><strong>第一步：加入aop的依赖</strong></p>
+<p>我们可以看到当加入spring-context依赖之后，会关联加入aop的依赖。所以这一步不用做。</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545268001-e3fb24f3-6688-4f52-a8c7-7c3084fa10a2.png)</p>
+<p><strong>第二步：在配置文件中添加context命名空间</strong></p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p><strong>第三步：在配置文件中指定要扫描的包</strong></p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.bean&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p><strong>第四步：在Bean类上使用注解</strong></p>
+<pre><code class="java">package com.powernode.spring6.bean;
+
+import org.springframework.stereotype.Component;
+
+@Component(value = &quot;userBean&quot;)
+public class User {
+}
+</code></pre>
+<p>编写测试程序：</p>
+<pre><code class="java">package com.powernode.spring6.test;
+
+import com.powernode.spring6.bean.User;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AnnotationTest {
+    @Test
+    public void testBean(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring.xml&quot;);
+        User userBean = applicationContext.getBean(&quot;userBean&quot;, User.class);
+        System.out.println(userBean);
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545669944-c067eacb-f65b-45ab-b68b-2320647cdfb4.png)</p>
+<p><strong>如果注解的属性名是value，那么value是可以省略的。</strong></p>
+<pre><code class="java">package com.powernode.spring6.bean;
+
+import org.springframework.stereotype.Component;
+
+@Component(&quot;vipBean&quot;)
+public class Vip {
+}
+package com.powernode.spring6.test;
+
+import com.powernode.spring6.bean.Vip;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AnnotationTest {
+    @Test
+    public void testBean(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring.xml&quot;);
+        Vip vipBean = applicationContext.getBean(&quot;vipBean&quot;, Vip.class);
+        System.out.println(vipBean);
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545860738-8bae2a45-efa8-40eb-9213-0dbd2ae1b54a.png)</p>
+<p><strong>如果把value属性彻底去掉，spring会被Bean自动取名吗？会的。并且默认名字的规律是：Bean类名首字母小写即可。</strong></p>
+<pre><code class="java">package com.powernode.spring6.bean;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class BankDao {
+}
+</code></pre>
+<p>也就是说，这个BankDao的bean的名字为：bankDao</p>
+<p>测试一下</p>
+<pre><code class="java">package com.powernode.spring6.test;
+
+import com.powernode.spring6.bean.BankDao;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AnnotationTest {
+    @Test
+    public void testBean(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring.xml&quot;);
+        BankDao bankDao = applicationContext.getBean(&quot;bankDao&quot;, BankDao.class);
+        System.out.println(bankDao);
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546100844-e0ffc213-8126-419a-ab67-7f433ad43105.png)</p>
+<p>我们将Component注解换成其它三个注解，看看是否可以用：</p>
+<pre><code class="java">package com.powernode.spring6.bean;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class BankDao {
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546198246-f9d6adc1-ecc8-4e8c-babf-49f2ed7b87cd.png)</p>
+<p>剩下的两个注解大家可以测试一下。</p>
+<p><strong>如果是多个包怎么办？有两种解决方案：</strong></p>
+<ul>
+<li><strong>第一种：在配置文件中指定多个包，用逗号隔开。</strong></li>
+<li><strong>第二种：指定多个包的共同父包。</strong></li>
+</ul>
+<p>先来测试一下逗号（英文）的方式：</p>
+<p>创建一个新的包：bean2，定义一个Bean类。</p>
+<pre><code class="java">package com.powernode.spring6.bean2;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class Order {
+}
+</code></pre>
+<p>配置文件修改：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.bean,com.powernode.spring6.bean2&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>测试程序：</p>
+<pre><code class="java">package com.powernode.spring6.test;
+
+import com.powernode.spring6.bean.BankDao;
+import com.powernode.spring6.bean2.Order;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AnnotationTest {
+    @Test
+    public void testBean(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring.xml&quot;);
+        BankDao bankDao = applicationContext.getBean(&quot;bankDao&quot;, BankDao.class);
+        System.out.println(bankDao);
+        Order order = applicationContext.getBean(&quot;order&quot;, Order.class);
+        System.out.println(order);
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546710304-8ebbe95d-1d1d-44fa-9605-9dad43e487b7.png)</p>
+<p>我们再来看看，指定共同的父包行不行：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546777022-4eb8c5e3-22ed-4baf-8722-a5fa98df253d.png)</p>
+<h2 id="4-选择性实例化Bean"><a href="#4-选择性实例化Bean" class="headerlink" title="4 选择性实例化Bean"></a>4 选择性实例化Bean</h2><p>假设在某个包下有很多Bean，有的Bean上标注了Component，有的标注了Controller，有的标注了Service，有的标注了Repository，现在由于某种特殊业务的需要，只允许其中所有的Controller参与Bean管理，其他的都不实例化。这应该怎么办呢？</p>
+<pre><code class="java">package com.powernode.spring6.bean3;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+@Component
+public class A {
+    public A() {
+        System.out.println(&quot;A的无参数构造方法执行&quot;);
+    }
+}
+
+@Controller
+class B {
+    public B() {
+        System.out.println(&quot;B的无参数构造方法执行&quot;);
+    }
+}
+
+@Service
+class C {
+    public C() {
+        System.out.println(&quot;C的无参数构造方法执行&quot;);
+    }
+}
+
+@Repository
+class D {
+    public D() {
+        System.out.println(&quot;D的无参数构造方法执行&quot;);
+    }
+}
+
+@Controller
+class E {
+    public E() {
+        System.out.println(&quot;E的无参数构造方法执行&quot;);
+    }
+}
+
+@Controller
+class F {
+    public F() {
+        System.out.println(&quot;F的无参数构造方法执行&quot;);
+    }
+}
+</code></pre>
+<p>我只想实例化bean3包下的Controller。配置文件这样写：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.bean3&quot; use-default-filters=&quot;false&quot;&gt;
+        &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+    &lt;/context:component-scan&gt;
+    
+&lt;/beans&gt;
+</code></pre>
+<p>use-default-filters&#x3D;”true” 表示：使用spring默认的规则，只要有Component、Controller、Service、Repository中的任意一个注解标注，则进行实例化。</p>
+<p><strong>use-default-filters&#x3D;”false”</strong> 表示：不再spring默认实例化规则，即使有Component、Controller、Service、Repository这些注解标注，也不再实例化。</p>
+<p>&lt;context:include-filter type&#x3D;”annotation” expression&#x3D;”org.springframework.stereotype.Controller”&#x2F;&gt; 表示只有Controller进行实例化。</p>
+<pre><code class="java">@Test
+public void testChoose(){
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-choose.xml&quot;);
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665556059297-de0d7dbc-aa37-46a3-9b1d-1d4c246b0ffc.png)</p>
+<p>也可以将use-default-filters设置为true（不写就是true），并且采用exclude-filter方式排出哪些注解标注的Bean不参与实例化：</p>
+<pre><code class="xml">&lt;context:component-scan base-package=&quot;com.powernode.spring6.bean3&quot;&gt;
+  &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Repository&quot;/&gt;
+  &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Service&quot;/&gt;
+  &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+&lt;/context:component-scan&gt;
+</code></pre>
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665556372417-14f2208c-4151-4bcd-9f22-80db5e3ed837.png)</p>
+<h2 id="5-负责注入的注解"><a href="#5-负责注入的注解" class="headerlink" title="5 负责注入的注解"></a>5 负责注入的注解</h2><p>@Component @Controller @Service @Repository 这四个注解是用来声明Bean的，声明后这些Bean将被实例化。接下来我们看一下，如何给Bean的属性赋值。给Bean属性赋值需要用到这些注解：</p>
+<ul>
+<li>@Value  —&gt;简单类型</li>
+<li>@Autowired  ——–&gt;根据类型注入</li>
+<li>@Qualifier  —-&gt;配合上面使用名字注入</li>
+<li>@Resource  —&gt;J</li>
+</ul>
+<h3 id="5-1-Value"><a href="#5-1-Value" class="headerlink" title="5.1 @Value"></a>5.1 @Value</h3><p>当属性的类型是简单类型时，可以使用@Value注解进行注入。</p>
+<pre><code class="java">package com.powernode.spring6.bean4;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class User {
+    @Value(value = &quot;zhangsan&quot;)
+    private String name;
+    @Value(&quot;20&quot;)
+    private int age;
+
+    @Override
+    public String toString() {
+        return &quot;User{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;}&#39;;
+    }
+}
+</code></pre>
+<p>开启包扫描：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.bean4&quot;/&gt;
+&lt;/beans&gt;
+@Test
+public void testValue(){
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-injection.xml&quot;);
+    Object user = applicationContext.getBean(&quot;user&quot;);
+    System.out.println(user);
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557109935-e0300b67-fd35-4d66-99d1-dac41cb0f13d.png)</p>
+<p>通过以上代码可以发现，我们并没有给属性提供setter方法，但仍然可以完成属性赋值。</p>
+<p>如果提供setter方法，并且在setter方法上添加@Value注解，可以完成注入吗？尝试一下：</p>
+<pre><code class="java">package com.powernode.spring6.bean4;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class User {
+    
+    private String name;
+
+    private int age;
+
+    @Value(&quot;李四&quot;)
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Value(&quot;30&quot;)
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;User{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;}&#39;;
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557275282-82ba995b-6395-4d32-b322-d976ac3299d1.png)</p>
+<p>通过测试可以得知，@Value注解可以直接使用在属性上，也可以使用在setter方法上。都是可以的。都可以完成属性的赋值。</p>
+<p>为了简化代码，以后我们一般不提供setter方法，直接在属性上使用@Value注解完成属性赋值。</p>
+<p>出于好奇，我们再来测试一下，是否能够通过构造方法完成注入：</p>
+<pre><code class="java">package com.powernode.spring6.bean4;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class User {
+
+    private String name;
+
+    private int age;
+
+    public User(@Value(&quot;隔壁老王&quot;) String name, @Value(&quot;33&quot;) int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;User{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;}&#39;;
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557643220-1010bea9-5578-4388-8868-4beb11dfbe95.png)</p>
+<p>通过测试得知：@Value注解可以出现在属性上、setter方法上、以及构造方法的形参上。可见Spring给我们提供了多样化的注入。太灵活了。</p>
+<h3 id="5-2-Autowired与-Qualifier"><a href="#5-2-Autowired与-Qualifier" class="headerlink" title="5.2 @Autowired与@Qualifier"></a>5.2 @Autowired与@Qualifier</h3><p>@Autowired注解可以用来注入<strong>非简单类型</strong>。被翻译为：自动连线的，或者自动装配。</p>
+<p>单独使用@Autowired注解，<strong>默认根据类型装配</strong>。【默认是byType】</p>
+<p>看一下它的源码：</p>
+<pre><code class="java">package org.springframework.beans.factory.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Autowired {
+    boolean required() default true;
+}
+</code></pre>
+<p>源码中有两处需要注意：</p>
+<ul>
+<li><p>第一处：该注解可以标注在哪里？</p>
+</li>
+<li><ul>
+<li>构造方法上</li>
+<li>方法上</li>
+<li>形参上</li>
+<li>属性上</li>
+<li>注解上</li>
+</ul>
+</li>
+<li><p>第二处：该注解有一个required属性，默认值是true，表示在注入的时候要求被注入的Bean必须是存在的，如果不存在则报错。如果required属性设置为false，表示注入的Bean存在或者不存在都没关系，存在的话就注入，不存在的话，也不报错。</p>
+</li>
+</ul>
+<p><strong>我们先在属性上使用@Autowired注解：</strong></p>
+<pre><code class="java">package com.powernode.spring6.dao;
+
+public interface UserDao {
+    void insert();
+}
+package com.powernode.spring6.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository //纳入bean管理
+public class UserDaoForMySQL implements UserDao{
+    @Override
+    public void insert() {
+        System.out.println(&quot;正在向mysql数据库插入User数据&quot;);
+    }
+}
+package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service // 纳入bean管理
+public class UserService {
+
+    @Autowired // 在属性上注入
+    private UserDao userDao;
+    
+    // 没有提供构造方法和setter方法。
+
+    public void save(){
+        userDao.insert();
+    }
+}
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.dao,com.powernode.spring6.service&quot;/&gt;
+&lt;/beans&gt;
+@Test
+public void testAutowired(){
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-injection.xml&quot;);
+    UserService userService = applicationContext.getBean(&quot;userService&quot;, UserService.class);
+    userService.save();
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665561365140-b0200308-0c25-4a29-96be-5a93594e2d2b.png)</p>
+<p>以上构造方法和setter方法都没有提供，经过测试，仍然可以注入成功。</p>
+<p><strong>接下来，再来测试一下@Autowired注解出现在setter方法上：</strong></p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    @Autowired
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665562770986-e19377a6-af3e-4082-9463-16c795742ad5.png)</p>
+<p><strong>我们再来看看能不能出现在构造方法上：</strong></p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    @Autowired
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665562985700-7820d3d8-cf43-43af-8c81-46f301ea2835.png)</p>
+<p><strong>再来看看，这个注解能不能只标注在构造方法的形参上：</strong></p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    public UserService(@Autowired UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563225083-172d5675-cfcb-4f63-9b83-ce85b29b953e.png)</p>
+<p><strong>还有更劲爆的，当有参数的构造方法只有一个时，@Autowired注解可以省略。</strong></p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563320900-df9e4cb3-c046-4f5c-b482-42951f18fb16.png)</p>
+<p><strong>当然，如果有多个构造方法，@Autowired肯定是不能省略的。</strong></p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+    
+    public UserService(){
+        
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563410134-267b2484-54a3-4204-8e02-a9499ecbe614.png)</p>
+<p>到此为止，我们已经清楚@Autowired注解可以出现在哪些位置了。</p>
+<p>@Autowired注解默认是byType进行注入的，也就是说根据类型注入的，如果以上程序中，UserDao接口还有另外一个实现类，会出现问题吗？</p>
+<pre><code class="java">package com.powernode.spring6.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository //纳入bean管理
+public class UserDaoForOracle implements UserDao{
+    @Override
+    public void insert() {
+        System.out.println(&quot;正在向Oracle数据库插入User数据&quot;);
+    }
+}
+</code></pre>
+<p>当你写完这个新的实现类之后，此时IDEA工具已经提示错误信息了：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563729880-0421bc02-19ca-4353-8a10-5b0ef9972b90.png)</p>
+<p>错误信息中说：不能装配，UserDao这个Bean的数量大于1.</p>
+<p>怎么解决这个问题呢？<strong>当然要byName，根据名称进行装配了。</strong></p>
+<p>@Autowired注解和@Qualifier注解联合起来才可以根据名称进行装配，在@Qualifier注解中指定Bean名称。</p>
+<pre><code class="java">package com.powernode.spring6.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository // 这里没有给bean起名，默认名字是：userDaoForOracle
+public class UserDaoForOracle implements UserDao{
+    @Override
+    public void insert() {
+        System.out.println(&quot;正在向Oracle数据库插入User数据&quot;);
+    }
+}
+package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    @Autowired
+    @Qualifier(&quot;userDaoForOracle&quot;) // 这个是bean的名字。
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665564055076-ffda3ad0-f957-4216-bf6c-957d62724d5f.png)</p>
+<p>总结：</p>
+<ul>
+<li>@Autowired注解可以出现在：属性上、构造方法上、构造方法的参数上、setter方法上。</li>
+<li>当带参数的构造方法只有一个，@Autowired注解可以省略。</li>
+<li>@Autowired注解默认根据类型注入。如果要根据名称注入的话，需要配合@Qualifier注解一起使用。</li>
+</ul>
+<h3 id="5-3-Resource"><a href="#5-3-Resource" class="headerlink" title="5.3 @Resource"></a>5.3 @Resource</h3><p>@Resource注解也可以完成非简单类型注入。那它和@Autowired注解有什么区别？</p>
+<ul>
+<li>@Resource注解是JDK扩展包中的，也就是说属于JDK的一部分。所以该注解是标准注解，更加具有通用性。(JSR-250标准中制定的注解类型。JSR是Java规范提案。)</li>
+<li>@Autowired注解是Spring框架自己的。</li>
+<li><strong>@Resource注解默认根据名称装配byName，未指定name时，使用属性名作为name。通过name找不到的话会自动启动通过类型byType装配。</strong></li>
+<li><strong>@Autowired注解默认根据类型装配byType，如果想根据名称装配，需要配合@Qualifier注解一起用。</strong></li>
+<li>@Resource注解用在属性上、setter方法上。</li>
+<li>@Autowired注解用在属性上、setter方法上、构造方法上、构造方法参数上。</li>
+</ul>
+<p>@Resource注解属于JDK扩展包，所以不在JDK当中，需要额外引入以下依赖：【<strong>如果是JDK8的话不需要额外引入依赖。高于JDK11或低于JDK8需要引入以下依赖。</strong>】</p>
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;jakarta.annotation&lt;/groupId&gt;
+  &lt;artifactId&gt;jakarta.annotation-api&lt;/artifactId&gt;
+  &lt;version&gt;2.1.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>一定要注意：<strong>如果你用Spring6，要知道Spring6不再支持JavaEE，它支持的是JakartaEE9。（Oracle把JavaEE贡献给Apache了，Apache把JavaEE的名字改成JakartaEE了，大家之前所接触的所有的  javax.*  包名统一修改为  jakarta.*包名了。）</strong></p>
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;javax.annotation&lt;/groupId&gt;
+  &lt;artifactId&gt;javax.annotation-api&lt;/artifactId&gt;
+  &lt;version&gt;1.3.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>@Resource注解的源码如下：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665565515435-2ad5614a-8572-4c6f-80c1-efa236dbe35f.png)</p>
+<p>测试一下：</p>
+<pre><code class="java">package com.powernode.spring6.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository(&quot;xyz&quot;)
+public class UserDaoForOracle implements UserDao{
+    @Override
+    public void insert() {
+        System.out.println(&quot;正在向Oracle数据库插入User数据&quot;);
+    }
+}
+package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Resource(name = &quot;xyz&quot;)
+    private UserDao userDao;
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665622877352-0ae69e3c-e7f3-452d-a405-392901612465.png)</p>
+<p><strong>我们把UserDaoForOracle的名字xyz修改为userDao，让这个Bean的名字和UserService类中的UserDao属性名一致：</strong></p>
+<pre><code class="java">package com.powernode.spring6.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository(&quot;userDao&quot;)
+public class UserDaoForOracle implements UserDao{
+    @Override
+    public void insert() {
+        System.out.println(&quot;正在向Oracle数据库插入User数据&quot;);
+    }
+}
+package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Resource
+    private UserDao userDao;
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623044796-c4051a04-c56b-4ce9-b627-333ab7ca7b6a.png)</p>
+<p>通过测试得知，当@Resource注解使用时没有指定name的时候，还是根据name进行查找，这个name是属性名。</p>
+<p>接下来把UserService类中的属性名修改一下：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Resource
+    private UserDao userDao2;
+
+    public void save(){
+        userDao2.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623273523-aff8ef45-b484-4462-bacc-fba7e14c8fee.png)</p>
+<p>根据异常信息得知：显然当通过name找不到的时候，自然会启动byType进行注入。以上的错误是因为UserDao接口下有两个实现类导致的。所以根据类型注入就会报错。</p>
+<p>我们再来看@Resource注解使用在setter方法上可以吗？</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    @Resource
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>注意这个setter方法的方法名，setUserDao去掉set之后，将首字母变小写userDao，userDao就是name</p>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623530366-79b8e09d-2559-4657-83eb-0b722261045f.png)</p>
+<p>当然，也可以指定name：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import com.powernode.spring6.dao.UserDao;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private UserDao userDao;
+
+    @Resource(name = &quot;userDaoForMySQL&quot;)
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void save(){
+        userDao.insert();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623611980-a66591e7-bd29-4327-a43c-6c6492c8612f.png)</p>
+<p>一句话总结@Resource注解：默认byName注入，没有指定name时把属性名当做name，根据name找不到时，才会byType注入。byType注入时，某种类型的Bean只能有一个。</p>
+<h2 id="6-全注解式开发"><a href="#6-全注解式开发" class="headerlink" title="6 全注解式开发"></a>6 全注解式开发</h2><p>所谓的全注解开发就是不再使用spring配置文件了。写一个配置类来代替配置文件。</p>
+<pre><code class="java">package com.powernode.spring6.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan({&quot;com.powernode.spring6.dao&quot;, &quot;com.powernode.spring6.service&quot;})
+public class Spring6Configuration {
+}
+</code></pre>
+<p>编写测试程序：不再new ClassPathXmlApplicationContext()对象了。</p>
+<pre><code class="java">@Test
+public void testNoXml(){
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(Spring6Configuration.class);
+    UserService userService = applicationContext.getBean(&quot;userService&quot;, UserService.class);
+    userService.save();
+}
+</code></pre>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665624710824-61ee0ae9-ae96-49bf-b189-4a1f358e084a.png)</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>

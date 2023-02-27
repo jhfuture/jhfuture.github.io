@@ -1,0 +1,24 @@
+<hr>
+<p>title: 2-事件处理机制<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-12-26 20:29:18</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h2 id="java-实践处理机制。"><a href="#java-实践处理机制。" class="headerlink" title="java 实践处理机制。"></a>java 实践处理机制。</h2><p>“委派事件模型”。当事件发生时，会产生&#x3D;&#x3D;“该事件的对象”&#x3D;&#x3D;，然后会把该对象交给 &#x3D;&#x3D;“事件的监听者”&#x3D;&#x3D;进行处理。</p>
+<p><img src="/2-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221226203251158.png" alt="image-20221226203251158"></p>
+<p>机制分析举例</p>
+<p><img src="/2-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221226203307900.png" alt="image-20221226203307900"></p>
+<h3 id="二、深入理解"><a href="#二、深入理解" class="headerlink" title="二、深入理解"></a>二、深入理解</h3><p><strong>事件源</strong>：</p>
+<p>​		产生事件的对象，比如按钮，窗口等。</p>
+<p><strong>事件</strong>：</p>
+<p>​		承载事件源状态改变时的对象，比如当键盘事件会生成一个事件对象</p>
+<pre><code>- 事件类型
+</code></pre>
+<p><strong>事件监听器接口</strong>：</p>
+<p>​		1.事件监听器实际上就是一个类，该类&#x3D;&#x3D;实现了某个事件监听器接口&#x3D;&#x3D;。</p>
+<p><img src="/2-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221226203706603.png" alt="image-20221226203706603"></p>

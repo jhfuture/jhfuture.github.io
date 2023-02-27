@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>1-线程的基本使用 | jhfuture</title>
+  <meta name="description" content="一、简单定义 什么是进程    2.线程与进程 线程由进程创建。 3.并发与并行  二、线程的使用 使用 继承 thread 类。重写 run 方法  实现 Runnable 接口，重写 run 方法，并将其对象传入 thread 的构造器中创建 thread 对象   1.Extend thread123456789101112131415161718192021222324252627pu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-线程的基本使用">
+<meta property="og:url" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="jhfuture">
+<meta property="og:description" content="一、简单定义 什么是进程    2.线程与进程 线程由进程创建。 3.并发与并行  二、线程的使用 使用 继承 thread 类。重写 run 方法  实现 Runnable 接口，重写 run 方法，并将其对象传入 thread 的构造器中创建 thread 对象   1.Extend thread123456789101112131415161718192021222324252627pu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190211563.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190252847.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224195957206.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224234828119.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191429302.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191421528.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224235800248.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225153246140.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225165651218.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225195634274.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200005591.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200201260.png">
+<meta property="article:published_time" content="2022-12-24T11:01:32.000Z">
+<meta property="article:modified_time" content="2022-12-25T12:04:33.328Z">
+<meta property="article:author" content="jhfuture">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190211563.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="jhfuture" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/jhfuture" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">jhfuture</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/TWRP/">TWRP</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDBC/">JDBC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JUnit/">JUnit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/Servlet/">Servlet</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/">Javaweb</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/Servlet/">Servlet</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring6/">Spring6</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Windows%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">Windows使用技巧</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/">前端三剑客</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/javascript%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/">javascript进阶知识</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%93%8D%E5%BA%94%E5%BC%8F/">响应式</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF-%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/">软/硬件知识</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBA/" rel="tag">DBA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Less/" rel="tag">Less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/" rel="tag">Servlet</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring6/" rel="tag">Spring6</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">String字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" rel="tag">Vue中的坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="tag">Vue中的技巧</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E6%96%B9%E6%B3%95/" rel="tag">Vue方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E7%BB%84%E4%BB%B6/" rel="tag">Vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/check/" rel="tag">check</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compile/" rel="tag">compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css%E6%89%A9%E5%B1%95/" rel="tag">css扩展</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/finalize/" rel="tag">finalize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95/" rel="tag">mysql索引</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" rel="tag">mysql索引失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" rel="tag">mysql索引的引出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rem%E9%80%82%E9%85%8D/" rel="tag">rem适配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/" rel="tag">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E7%BA%A6%E6%9D%9F/" rel="tag">sql约束</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E8%A7%86%E5%9B%BE/" rel="tag">sql视图</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/" rel="tag">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" rel="tag">this关键字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/toString/" rel="tag">toString</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/twrp/" rel="tag">twrp</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%84%E4%BB%B6/" rel="tag">vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" rel="tag">vue绑定样式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" rel="tag">像素比大小</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" rel="tag">前段三剑客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="tag">原型链</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" rel="tag">响应式开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" rel="tag">多态应用&#x2F;多态参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" rel="tag">多态数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" rel="tag">安装教程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" rel="tag">成员方法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag">数据类型转换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" rel="tag">本地储存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%9A%E4%B8%BE/" rel="tag">枚举</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" rel="tag">硬核知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">经典面试题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/DBA/" style="font-size: 13px;">DBA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JDBC/" style="font-size: 13px;">JDBC</a> <a href="/tags/Java/" style="font-size: 13.25px;">Java</a> <a href="/tags/Less/" style="font-size: 13px;">Less</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/Servlet/" style="font-size: 13.5px;">Servlet</a> <a href="/tags/Spring6/" style="font-size: 13.25px;">Spring6</a> <a href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 13px;">String字符串</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" style="font-size: 13.25px;">Vue中的坑</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" style="font-size: 13.25px;">Vue中的技巧</a> <a href="/tags/Vue%E6%96%B9%E6%B3%95/" style="font-size: 13.25px;">Vue方法</a> <a href="/tags/Vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">Vue组件</a> <a href="/tags/Windows/" style="font-size: 13.25px;">Windows</a> <a href="/tags/check/" style="font-size: 13px;">check</a> <a href="/tags/compile/" style="font-size: 13px;">compile</a> <a href="/tags/css%E6%89%A9%E5%B1%95/" style="font-size: 13px;">css扩展</a> <a href="/tags/finalize/" style="font-size: 13px;">finalize</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/mysql/" style="font-size: 13.5px;">mysql</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95/" style="font-size: 13px;">mysql索引</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" style="font-size: 13px;">mysql索引失效</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" style="font-size: 13px;">mysql索引的引出</a> <a href="/tags/rem%E9%80%82%E9%85%8D/" style="font-size: 13px;">rem适配</a> <a href="/tags/servlet/" style="font-size: 13.25px;">servlet</a> <a href="/tags/sql%E7%BA%A6%E6%9D%9F/" style="font-size: 13.25px;">sql约束</a> <a href="/tags/sql%E8%A7%86%E5%9B%BE/" style="font-size: 13px;">sql视图</a> <a href="/tags/super/" style="font-size: 13px;">super</a> <a href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 13px;">this关键字</a> <a href="/tags/toString/" style="font-size: 13px;">toString</a> <a href="/tags/twrp/" style="font-size: 13.25px;">twrp</a> <a href="/tags/vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">vue组件</a> <a href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">vue绑定样式</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13.5px;">个人博客</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.75px;">事务</a> <a href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" style="font-size: 13px;">像素比大小</a> <a href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" style="font-size: 13px;">前段三剑客</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13.75px;">前端</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" style="font-size: 13px;">原型链</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 13px;">反射</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" style="font-size: 13px;">响应式开发</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13px;">垃圾回收</a> <a href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" style="font-size: 13px;">多态应用/多态参数</a> <a href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" style="font-size: 13px;">多态数组</a> <a href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" style="font-size: 13.25px;">安装教程</a> <a href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" style="font-size: 13px;">成员方法</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" style="font-size: 13px;">抽象类</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" style="font-size: 13px;">数据类型转换</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" style="font-size: 13px;">本地储存</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 13px;">枚举</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">硬核知识</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 13px;">经典面试题</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 13px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">62</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">47</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">46</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/27/C/Array/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-27T13:18:37.735Z" itemprop="datePublished">2023-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE/%E9%85%8D%E7%BD%AEV2rayA/" class="title">配置V2rayA</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-26T13:34:12.000Z" itemprop="datePublished">2023-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/25/leetCode/1-%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">1-力扣刷题笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-25T06:45:14.000Z" itemprop="datePublished">2023-02-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/07/SSM/MyBatis/2-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" class="title">2-常用注解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-07T11:29:53.000Z" itemprop="datePublished">2023-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/05/SSM/MyBatis/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="title">1-MyBatis基本使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-05T14:00:21.000Z" itemprop="datePublished">2023-02-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E5%8D%95%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">一、简单定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">二、线程的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Extend-thread"><span class="toc-number">2.1.</span> <span class="toc-text">1.Extend thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-implement-Runnable-%E8%A7%A3%E5%86%B3%E8%AF%A5%E7%B1%BB%E5%B7%B2%E7%BB%8F%E6%9C%89-%E5%9F%BA%E7%BB%A7%E6%89%BF%E7%9A%84%E7%B1%BB"><span class="toc-number">2.2.</span> <span class="toc-text">2.implement Runnable 解决该类已经有 基继承的类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-extend-%E5%92%8C-implement-runnable-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.3.</span> <span class="toc-text">3. extend 和 implement runnable  的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%80%9A%E7%9F%A5%E7%BA%BF%E7%A8%8B%E9%80%80%E5%87%BA"><span class="toc-number">2.4.</span> <span class="toc-text">4.通知线程退出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">5.常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.6.</span> <span class="toc-text">6.用户线程和守护线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">2.6.1.</span> <span class="toc-text">注意点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">3.</span> <span class="toc-text">三、生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">3.1.</span> <span class="toc-text">1.生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">2.线程同步机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-synchronize-%E4%BD%BF%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text">2.synchronize 使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">四、锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E7%BB%86%E8%8A%82%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">1.注意事项和细节：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-number">4.2.</span> <span class="toc-text">2.线程死锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%87%8A%E6%94%BE%E9%94%81"><span class="toc-number">4.3.</span> <span class="toc-text">3.释放锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE"><span class="toc-number">5.</span> <span class="toc-text">六、一些疑问</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JAVA/14-多线程基础/1-线程的基本使用" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      1-线程的基本使用
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="article-date">
+	  <time datetime="2022-12-24T11:01:32.000Z" itemprop="datePublished">2022-12-24</time>
+	</a>
+</span>
+        
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 8(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+<h2 id="一、简单定义"><a href="#一、简单定义" class="headerlink" title="一、简单定义"></a>一、简单定义</h2><ol>
+<li><p>什么是进程</p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190211563.png" alt="image-20221224190211563"></p>
+</li>
+</ol>
+<p>2.线程与进程</p>
+<p>线程由进程创建。</p>
+<p>3.并发与并行</p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190252847.png" alt="image-20221224190252847"></p>
+<h2 id="二、线程的使用"><a href="#二、线程的使用" class="headerlink" title="二、线程的使用"></a>二、线程的使用</h2><ol>
+<li><p>使用 继承 thread 类。重写 run 方法</p>
+</li>
+<li><p>实现 Runnable 接口，重写 run 方法，并将其对象传入 thread 的构造器中创建 thread 对象</p>
+</li>
+</ol>
+<h3 id="1-Extend-thread"><a href="#1-Extend-thread" class="headerlink" title="1.Extend thread"></a>1.Extend thread</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">threadsEXtend</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">dog</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Dog</span>();</span><br><span class="line">        dog.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;这是主线程&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">extends</span>  <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> count=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;小狗汪汪&quot;</span>+<span class="string">&quot;线程名&quot;</span>+currentThread().getClass()+count++);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (count==<span class="number">30</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-implement-Runnable-解决该类已经有-基继承的类"><a href="#2-implement-Runnable-解决该类已经有-基继承的类" class="headerlink" title="2.implement Runnable 解决该类已经有 基继承的类"></a>2.implement Runnable 解决该类已经有 基继承的类</h3><blockquote>
+<p>Thread 中具有代理模式的设计模式。</p>
+<p>具有 一个 runnable 类型 的 Target</p>
+<p>然后还有一个 构造器，可以接受一个 实现了 runnale 接口的类。</p>
+</blockquote>
+<p> 因为 runnable 接口没有 start 方法，创建 线程需要调用 start 方法，所以需要 <strong>thread 类进行代理。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.threadUser;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadProxy</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Cat</span> <span class="variable">cat</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Cat</span>();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(cat);</span><br><span class="line">        thread.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> count=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">30</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程名&quot;</span> +<span class="string">&quot;第&quot;</span>+count++ +<span class="string">&quot;此&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-extend-和-implement-runnable-的区别"><a href="#3-extend-和-implement-runnable-的区别" class="headerlink" title="3. extend 和 implement runnable  的区别"></a>3. extend 和 implement runnable  的区别</h3><ol>
+<li><p>Runnable 更适合 多个线程共享一个资源的情况，并且避免了单继承的限制</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T3 t3=<span class="keyword">new</span> <span class="title class_">T3</span>();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224195957206.png" alt="image-20221224195957206"></p>
+</li>
+</ol>
+<h3 id="4-通知线程退出"><a href="#4-通知线程退出" class="headerlink" title="4.通知线程退出"></a>4.通知线程退出</h3><ol>
+<li>线程完成任务后，会自动退出</li>
+<li>可以使用&#x3D;&#x3D;控制变量&#x3D;&#x3D;来控制 run 方法退出的方式停止进程，即通知方式。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">安丽</span><br><span class="line"><span class="keyword">package</span> com.threadUser;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadExit_</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">exitTest</span> <span class="variable">exitTest</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">exitTest</span>();</span><br><span class="line">        exitTest.start();</span><br><span class="line">        System.out.println(<span class="string">&quot;等待五秒后手动关闭&quot;</span>);</span><br><span class="line">        Thread.sleep(<span class="number">5</span>*<span class="number">1000</span>);</span><br><span class="line">        exitTest.setLoop(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">exitTest</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> loop=<span class="literal">true</span>;</span><br><span class="line">    <span class="type">int</span> count=<span class="number">1</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (loop)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;正在运行&quot;</span>+count++);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//等待500毫秒</span></span><br><span class="line">                sleep(<span class="number">500</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setLoop</span><span class="params">(<span class="type">boolean</span> loop)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.loop=loop;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="5-常用方法"><a href="#5-常用方法" class="headerlink" title="5.常用方法"></a>5.常用方法</h3><ul>
+<li>1.setName &#x2F;&#x2F;设置线程名字</li>
+<li>2.getName &#x2F;&#x2F;返回线程名称</li>
+<li>3.start 启动该线程，jvm 底层调用该进程的 start0 方法</li>
+<li>4.run &#x2F;&#x2F;直接调用线程对象的 run 方法</li>
+<li>5-setPriority &#x2F;&#x2F;更改线程的优先级</li>
+<li>6-getPriority &#x2F;&#x2F;获取线程的优先级<ul>
+<li>min –1</li>
+<li>max –10</li>
+<li>normal –5</li>
+</ul>
+</li>
+<li>7-sleep &#x2F;&#x2F;让线程指定休眠  xxx 毫秒 (暂停执行)</li>
+<li>8- interrupt &#x2F;&#x2F;中断&#x3D;&#x3D;线程的休眠&#x3D;&#x3D;</li>
+<li>9- yield :线程的礼让，让出 CPU ，让其他线程先执行，但礼让的时间不一定，所以礼让也&#x3D;&#x3D;不一定成功&#x3D;&#x3D;。<ul>
+<li>是否礼让由系统资源决定，操作系统内核负责处理，这一块 java 无法控制</li>
+</ul>
+</li>
+<li>10- join:线程的插队，插队的线程一旦插队成功，则肯定&#x3D;&#x3D;先执行完插入的线程的所有任务&#x3D;&#x3D;。<ul>
+<li>小弟让大哥先吃完包子自己再吃。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-用户线程和守护线程"><a href="#6-用户线程和守护线程" class="headerlink" title="6.用户线程和守护线程"></a>6.用户线程和守护线程</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">线程对象.setDaemon(<span class="literal">true</span>) ---&gt;守护进程。</span><br><span class="line">    setDaemon要在 start 之前设置。</span><br><span class="line">案例</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">package</span> com.threadUser;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SetDamon_</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">damon_</span> <span class="variable">damon_</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">damon_</span>();</span><br><span class="line">        damon_.setDaemon(<span class="literal">true</span>);</span><br><span class="line">        damon_.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">if</span> (i==<span class="number">4</span>)&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;不，你是守护进程，你要和我一起走。&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">damon_</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我还要继续！！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224234828119.png" alt="image-20221224234828119"></p>
+<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><ol>
+<li>当处于 Runnable状态时，并不是一定在进行，而是由 操作系统的线程调度器负责 调配运行。—&gt;由操作系统内核决定。（内核态）</li>
+<li>官方文档为 6 种状态，但一般 又将 runnable 细分为两种转态，即有7 钟转态</li>
+</ol>
+<p>可以使用 jconsole 工具 查看线程</p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191429302.png" alt="image-20221224191429302"></p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191421528.png" alt="image-20221224191421528"></p>
+<h2 id="三、生命周期"><a href="#三、生命周期" class="headerlink" title="三、生命周期"></a>三、生命周期</h2><h3 id="1-生命周期"><a href="#1-生命周期" class="headerlink" title="1.生命周期"></a>1.生命周期</h3><p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224235800248.png" alt="image-20221224235800248"></p>
+<h3 id="2-线程同步机制"><a href="#2-线程同步机制" class="headerlink" title="2.线程同步机制"></a>2.线程同步机制</h3><p>1）线程同步机制 Synchronizd</p>
+<p>一个敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何同一时刻，最多有一个线程访问，以保证数据的完整性。</p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225153246140.png" alt="image-20221225153246140"></p>
+<h3 id="2-synchronize-使用"><a href="#2-synchronize-使用" class="headerlink" title="2.synchronize 使用"></a>2.synchronize 使用</h3><h2 id="四、锁"><a href="#四、锁" class="headerlink" title="四、锁"></a>四、锁</h2><p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225165651218.png" alt="image-20221225165651218"></p>
+<blockquote>
+<p>这里的同步方法是否是 静态的 非常重要。—Synchronized</p>
+<p>如果是 this  ，则是 当前对象，如果不同对象，不会造成堵塞。</p>
+<p>如果是&#x3D;&#x3D;静态(stastic)&#x3D;&#x3D;， 则是  加在该类的 Class 中(类加载的知识) ，该&#x3D;&#x3D;类的不同对象&#x3D;&#x3D;，会造成&#x3D;&#x3D;堵塞&#x3D;&#x3D;。  </p>
+</blockquote>
+<h3 id="1-注意事项和细节："><a href="#1-注意事项和细节：" class="headerlink" title="1.注意事项和细节："></a>1.<strong>注意事项和细节</strong>：</h3><ul>
+<li><p>1.同步方法如果没有使用 static 修饰，默认锁对象就是 this</p>
+</li>
+<li><p>2.同步方法使用了 static 修饰，默认锁对象：当前类的 Class 对象(通常通过 类名.class获得)</p>
+</li>
+<li><p>3.实现锁的步骤</p>
+<ul>
+<li><p>1.分析需要上锁的代码</p>
+</li>
+<li><p>2.选择&#x3D;&#x3D;同步代码块（优先考虑）&#x3D;&#x3D;或同步代码</p>
+</li>
+<li><p>3.&#x3D;&#x3D;要求多个线程的锁对象为同一个。&#x3D;&#x3D;</p>
+<ul>
+<li>什么意思？<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Thread1</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">sayhi</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hi&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">思考：这里的 hi 能锁住吗？</span><br><span class="line">分析：</span><br><span class="line">    <span class="number">1.</span>同步方法没有使用 <span class="keyword">static</span> 修饰，那默认锁对象为 <span class="built_in">this</span>。</span><br><span class="line">    <span class="number">2.</span>而想要调用 sayhi 方法，就要使用 <span class="keyword">new</span> <span class="title class_">Thread1</span>().sayhi</span><br><span class="line">    <span class="number">3.</span>而第<span class="number">2</span>步中每次 调用都 <span class="keyword">new</span> 了一个新对象，即此时如果使用 不同对象的 start 方法进行创建多线程。</span><br><span class="line">    <span class="number">4.</span>那此时，多个线程的锁对象就是他们对应的那个对象----&gt;即不是同一个对象。不同的线程争夺的是不同的锁，那就无法锁住。 </span><br><span class="line">怎么解决？</span><br><span class="line">    <span class="number">1.</span>绑定同一个对象，其他的对象，例如新建一个 object 对象</span><br><span class="line">    <span class="number">2.</span>给方法加上 <span class="keyword">static</span> ，使其绑定类的Class 对象</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-线程死锁"><a href="#2-线程死锁" class="headerlink" title="2.线程死锁"></a>2.线程死锁</h3><p>多个线程都占用了对方的锁资源，但不肯相让，导致了死锁。</p>
+<p>一个案例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hspedu.syn;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@author</span> 韩顺平</span></span><br><span class="line"><span class="comment">* <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment">* 模拟线程死锁</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeadLock_</span> &#123;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"><span class="comment">//模拟死锁现象</span></span><br><span class="line"><span class="type">DeadLockDemo</span> <span class="variable">A</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DeadLockDemo</span>(<span class="literal">true</span>);</span><br><span class="line">A.setName(<span class="string">&quot;A 线程&quot;</span>);</span><br><span class="line"><span class="type">DeadLockDemo</span> <span class="variable">B</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DeadLockDemo</span>(<span class="literal">false</span>);</span><br><span class="line">B.setName(<span class="string">&quot;B 线程&quot;</span>);</span><br><span class="line">A.start();</span><br><span class="line">B.start();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//线程</span></span><br><span class="line">韩顺平循序渐进学 Java 零基础</span><br><span class="line">第 <span class="number">810</span>页</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DeadLockDemo</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line"><span class="keyword">static</span> <span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();<span class="comment">// 保证多线程，共享一个对象,这里使用 static</span></span><br><span class="line"><span class="keyword">static</span> <span class="type">Object</span> <span class="variable">o2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"><span class="type">boolean</span> flag;</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">DeadLockDemo</span><span class="params">(<span class="type">boolean</span> flag)</span> &#123;<span class="comment">//构造器</span></span><br><span class="line"><span class="built_in">this</span>.flag = flag;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="comment">//下面业务逻辑的分析</span></span><br><span class="line"><span class="comment">//1. 如果 flag 为 T, 线程 A 就会先得到/持有 o1 对象锁, 然后尝试去获取 o2 对象锁</span></span><br><span class="line"><span class="comment">//2. 如果线程 A 得不到 o2 对象锁，就会 Blocked</span></span><br><span class="line"><span class="comment">//3. 如果 flag 为 F, 线程 B 就会先得到/持有 o2 对象锁, 然后尝试去获取 o1 对象锁</span></span><br><span class="line"><span class="comment">//4. 如果线程 B 得不到 o1 对象锁，就会 Blocked</span></span><br><span class="line"><span class="keyword">if</span> (flag) &#123;</span><br><span class="line"><span class="keyword">synchronized</span> (o1) &#123;<span class="comment">//对象互斥锁, 下面就是同步代码</span></span><br><span class="line">System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入 1&quot;</span>);</span><br><span class="line"><span class="keyword">synchronized</span> (o2) &#123; <span class="comment">// 这里获得 li 对象的监视权</span></span><br><span class="line">System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入 2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">synchronized</span> (o2) &#123;</span><br><span class="line">System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入 3&quot;</span>);</span><br><span class="line"><span class="keyword">synchronized</span> (o1) &#123; <span class="comment">// 这里获得 li 对象的监视权</span></span><br><span class="line">System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入 4&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-释放锁"><a href="#3-释放锁" class="headerlink" title="3.释放锁"></a>3.释放锁</h3><p>释放锁的问题。</p>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225195634274.png" alt="image-20221225195634274"></p>
+<p>下列操作不会释放锁</p>
+<ol>
+<li>sleep、yield<br>太困了，但还在厕所里面。</li>
+<li>线程被挂起.suspend()。<br><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200005591.png" alt="image-20221225200005591"></li>
+</ol>
+<p><img src="/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200201260.png" alt="image-20221225200201260"></p>
+<h2 id="六、一些疑问"><a href="#六、一些疑问" class="headerlink" title="六、一些疑问"></a>六、一些疑问</h2><ol>
+<li>为什么调用的是 start 方法，而不是直接调用 run 方法</li>
+</ol>
+<p>A: 直接调用 run 方法，那就是相当于普通的方法调用，只会在主栈中调用，不会创建新线程。而调用 start 方法可以创建新 线程并 会自动调用 run 方法。–&gt;看源码分析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> &#123;</span><br><span class="line">start0();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//start0() 是本地方法，是 JVM 调用, 底层是 c/c++实现</span></span><br><span class="line"><span class="comment">//真正实现多线程的效果， 是 start0(), 而不是 run</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">start0</span><span class="params">()</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://jhfuture.github.io/2022/12/24/JAVA/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="1-线程的基本使用" target="_blank" rel="external">https://jhfuture.github.io/2022/12/24/JAVA/14-多线程基础/1-线程的基本使用/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/jhfuture" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/jhfuture" target="_blank"><span class="text-dark">jhfuture</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>一个记录技术分享的网站。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/12/25/JAVA/15-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98%E8%81%94%E7%B3%BB%E6%A1%88%E4%BE%8B/1-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/" title="1-坦克大战"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/12/24/Basics_of_OS/OperatingSystem/1-Computer%20System%20Operation/" title="1-Computer System Operation"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 jhfuture
+        
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        </div>
+            
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="/css/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

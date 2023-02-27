@@ -1,0 +1,149 @@
+<hr>
+<p>title: 5-Bean的循环依赖问题<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2023-01-05 23:25:11</li>
+</ul>
+<hr>
+<!--more-->
+
+<h2 id="一、Sigle-Set模式的-循环依赖问题。"><a href="#一、Sigle-Set模式的-循环依赖问题。" class="headerlink" title="一、Sigle+Set模式的 循环依赖问题。"></a>一、Sigle+Set模式的 循环依赖问题。</h2><ul>
+<li><blockquote>
+<p>只有 socle 为 single 才有这个曝光的机制。</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/5-Bean%E7%9A%84%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/image-20230105232610981.png" alt="image-20230105232610981"></p>
+<p>- </p>
+<p>XML</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;husbandBean&quot; class=&quot;com.jhfuture.spring6.Husband&quot; scope=&quot;singleton&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;
+
+        &lt;/property&gt;
+        &lt;property name=&quot;wife&quot; ref=&quot;wifeBean&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;wifeBean&quot; class=&quot;com.jhfuture.spring6.Wife&quot; scope=&quot;singleton&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;梨花&quot;/&gt;
+        &lt;property name=&quot;husband&quot; ref=&quot;husbandBean&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p><strong>java</strong> src</p>
+<pre><code class="java">
+Husband
+package com.jhfuture.spring6;
+
+public class Husband {
+    private String name;
+    private Wife wife;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWife(Wife wife) {
+        this.wife = wife;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Husband{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, wife=&quot; + wife.getName() +
+                &#39;}&#39;;
+    }
+}
+
+</code></pre>
+<p>Wife</p>
+<pre><code class="java">package com.jhfuture.spring6;
+
+public class Wife {
+    private String name;
+    private Husband husband;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setHusband(Husband husband) {
+        this.husband = husband;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Wife{&quot; +
+                &quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, husband=&quot; + husband.getName() +
+                &#39;}&#39;;
+    }
+}
+</code></pre>
+<h2 id="二、prototype-Set-模式-—-gt-报错"><a href="#二、prototype-Set-模式-—-gt-报错" class="headerlink" title="二、prototype +Set 模式  —&gt;报错"></a>二、prototype +Set 模式  —&gt;报错</h2><p>直接报错</p>
+<pre><code class="java">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &#39;husbandBean&#39; defined in class path resource [circle.xml]: Cannot resolve reference to bean &#39;wifeBean&#39; while setting bean property &#39;wife&#39;
+
+    
+    
+    
+</code></pre>
+<p>XML文件</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;husbandBean&quot; class=&quot;com.jhfuture.spring6.Husband&quot; scope=&quot;prototype&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;
+
+        &lt;/property&gt;
+        &lt;property name=&quot;wife&quot; ref=&quot;wifeBean&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;wifeBean&quot; class=&quot;com.jhfuture.spring6.Wife&quot; scope=&quot;prototype&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;梨花&quot;/&gt;
+        &lt;property name=&quot;husband&quot; ref=&quot;husbandBean&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<h2 id="三、single-prototype-Set模式-—-gt-无问题"><a href="#三、single-prototype-Set模式-—-gt-无问题" class="headerlink" title="三、single + prototype +Set模式 —&gt;无问题"></a>三、single + prototype +Set模式 —&gt;无问题</h2><pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;husbandBean&quot; class=&quot;com.jhfuture.spring6.Husband&quot; scope=&quot;prototype&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;
+
+        &lt;/property&gt;
+        &lt;property name=&quot;wife&quot; ref=&quot;wifeBean&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;wifeBean&quot; class=&quot;com.jhfuture.spring6.Wife&quot; scope=&quot;single&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;梨花&quot;/&gt;
+        &lt;property name=&quot;husband&quot; ref=&quot;husbandBean&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<h2 id="五、基于构造依赖下产生的循环依赖—–-gt-无法解决"><a href="#五、基于构造依赖下产生的循环依赖—–-gt-无法解决" class="headerlink" title="五、基于构造依赖下产生的循环依赖—–&gt;无法解决"></a>五、基于构造依赖下产生的循环依赖—–&gt;无法解决</h2><h2 id="总结-Spring解决循环依赖的机理"><a href="#总结-Spring解决循环依赖的机理" class="headerlink" title="总结 Spring解决循环依赖的机理"></a>总结 Spring解决循环依赖的机理</h2><blockquote>
+<p>核心–&gt;三层缓存</p>
+</blockquote>
+<p>Spring为什么可以解决set + singleton模式下循环依赖？</p>
+<p>根本的原因在于：这种方式可以做到将“实例化Bean”和“给Bean属性赋值”这两个动作分开去完成。</p>
+<blockquote>
+<p>实例化Bean的时候：调用无参数构造方法来完成。<strong>此时可以先不给属性赋值，可以提前将该Bean对象&#x3D;&#x3D;“曝光”&#x3D;&#x3D;给外界。</strong></p>
+</blockquote>
+<p>给Bean属性赋值的时候：调用setter方法来完成。</p>
+<blockquote>
+<p>两个步骤是完全可以分离开去完成的，并且这&#x3D;&#x3D;两步不要求在同一个时间点上完成&#x3D;&#x3D;。</p>
+</blockquote>
+<p>也就是说，Bean都是单例的，我们可以先把所有的单例Bean实例化出来，放到一个集合当中（我们可以称之为缓存），所有的单例Bean全部实例化完成之后，以后我们再慢慢的调用setter方法给属性赋值。这样就解决了循环依赖的问题。</p>

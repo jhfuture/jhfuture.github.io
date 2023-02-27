@@ -1,0 +1,71 @@
+<hr>
+<p>title: 1-抽象列的入门<br>toc: true<br>tags:</p>
+<ul>
+<li>抽象类<br>categories:</li>
+<li>JAVA<br>date: 2022-11-08 18:38:01</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、抽象类的介绍"><a href="#一、抽象类的介绍" class="headerlink" title="一、抽象类的介绍"></a>一、抽象类的介绍</h3><h4 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h4><p>what?</p>
+<p>​		当用 一个 abstract 关键字来修饰一个类时，这个类就被称为 &#x3D;&#x3D;抽象类&#x3D;&#x3D;</p>
+<p>how?</p>
+<pre><code class="java">修饰符 abstract 类名{
+    
+}
+</code></pre>
+<h4 id="抽象方法"><a href="#抽象方法" class="headerlink" title="抽象方法"></a>抽象方法</h4><p>what?</p>
+<p>​		当用 一个 abstract 关键字来修饰一个方法时，这个类就被称为 &#x3D;&#x3D;抽象方法&#x3D;&#x3D;</p>
+<p><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108184236092.png" alt="image-20221108184236092"></p>
+<h3 id="二、抽象类的注意事项"><a href="#二、抽象类的注意事项" class="headerlink" title="二、抽象类的注意事项"></a>二、抽象类的注意事项</h3><ol>
+<li><p>抽象类的 &#x3D;&#x3D;抽象方法一定要被子类实现&#x3D;&#x3D;or&#x3D;&#x3D;子类也是抽象类&#x3D;&#x3D;。</p>
+</li>
+<li><p>抽象类不能被实例化<br><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108184721482.png" alt="image-20221108184721482"></p>
+</li>
+<li><p>有抽象方法的类一定是抽象方法，但抽象类不一定有抽象方法。</p>
+</li>
+<li><p><code>abstract 只能修饰类和方法</code><br><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108184853996.png" alt="image-20221108184853996"></p>
+</li>
+<li><p>抽象类可以有类的任何成员。&#x3D;&#x3D;【其本质还是类】&#x3D;&#x3D;</p>
+</li>
+<li><p>抽象方法不能有方法主体<br><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108185110200.png" alt="image-20221108185110200"></p>
+</li>
+<li><p>抽象方法不能使用 private、final 和 static 来修饰。</p>
+<blockquote>
+<p>private ：子类无法访问改父类方法，也就无法完成对此方法进行重写。</p>
+<p>final 修饰的方法不能被重写，但在子类中必须对抽象方法进行重写。</p>
+<p>static ：静态方法本身就不能被覆盖<br><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108192501511.png" alt="image-20221108192501511"></p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p> 重写是子类对&#x3D;&#x3D;父类的允许访问的方法&#x3D;&#x3D;的实现过程进行重新编写, 返回值和形参都不能改变。即外壳不变，核心重写！</p>
+</blockquote>
+<h3 id="三、应用"><a href="#三、应用" class="headerlink" title="三、应用"></a>三、应用</h3><p>１．　模块设计模式</p>
+<p>需求：<br><img src="/1-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108185603751.png" alt="image-20221108185603751"></p>
+<p>答案：</p>
+<p>１. 写一个父类。然后让 dojob 方法成为抽象方法，子类实现它，并在里面写子类做的事情</p>
+<pre><code class="java">abstract  class test{
+public long calculateTime(){
+    long start = System.currentTimeMillis();
+    dojob();
+    long end = System.currentTimeMillis();
+    long total=end-start;
+    return total;
+}
+public abstract void dojob();
+}
+</code></pre>
+<p>2.子类</p>
+<pre><code class="java">class bbb extends test{
+
+    @Override
+    public void dojob() {
+        for (int i = 0; i &lt; 1000; i++) {
+            
+        }
+    }
+}
+</code></pre>

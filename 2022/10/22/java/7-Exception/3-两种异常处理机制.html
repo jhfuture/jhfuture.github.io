@@ -1,0 +1,77 @@
+<hr>
+<p>title: 3-两种异常处理机制<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-16 21:37:59</li>
+</ul>
+<hr>
+<!--more-->
+
+<p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116213815625.png" alt="image-20221116213815625"></p>
+<h3 id="一、try-catch-finnally"><a href="#一、try-catch-finnally" class="headerlink" title="一、try-catch-finnally"></a>一、try-catch-finnally</h3><h4 id="1-try-catch-finally"><a href="#1-try-catch-finally" class="headerlink" title="1)try-catch-finally"></a>1)try-catch-finally</h4><p>ctrl + alt + t</p>
+<p>程序员在代码中捕获发生的异常，自行处理。</p>
+<pre><code class="java">try{
+    可能有异常的代码块
+        
+}
+catch(Exception e){
+    //捕获到异常
+    1.当一场发生时
+    2.系统将异常封装成 exception 对象 e，传递给catch
+    3.得到异常对象后，程序猿，自己处理
+        
+！！4.注意，如果没有发生异常，catch 代码快不执行！！！！
+        
+}finally{
+    1.不管try代码快是否发生异常，都会执行finally代码快里的。
+    2.通常将释放资源的代码放在 finally。
+}
+</code></pre>
+<p>2)throws</p>
+<p>将发生的异常抛出，交给调用者(方法)来处理，最顶级的处理者就是 JVM。</p>
+<h4 id="2-注意点"><a href="#2-注意点" class="headerlink" title="2)注意点"></a>2)注意点</h4><p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116215843007.png" alt="image-20221116215843007"></p>
+<ol>
+<li><p>如果异常发生了那，异常后面的代码不会执行，直接进入catch快。</p>
+<pre><code class="java">public class exception2 {
+    public static void main(String[] args) {
+
+        try{
+            String str=&quot;13a&quot;;
+            int i =Integer.parseInt(str);
+            System.out.println(&quot;前面发生后面这个不会执行了&quot;);
+        }catch (Exception e){
+            System.out.println(&quot;出现异常进入catch&quot;+e.getMessage());
+        }
+        System.out.println(&quot;代码继续执行trycatch后面的代码&quot;);
+    }
+}finally {
+            System.out.println(&quot;finaly被执行了&quot;);
+        }
+=====
+出现异常进入catchFor input string: &quot;13a&quot;
+    finaly被执行了
+代码继续执行trycatch后面的代码
+</code></pre>
+<ol start="2">
+<li>可以由多个 catch 语句，捕获不同的异常。 但要求&#x3D;&#x3D;父类异常在后，子类异常在前&#x3D;&#x3D;。比如(EXCEPTION 在后，nullpointexception 在前。) 。如果报错，&#x3D;&#x3D;只会匹配一个 catch&#x3D;&#x3D;</li>
+</ol>
+<p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116220408732.png" alt="image-20221116220408732"><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116220822674.png" alt="image-20221116220822674"></p>
+</li>
+<li><p>不管结果怎么样，最终都要执行 finally 的方法<img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116220932055.png" alt="image-20221116220932055"><br>案例<br><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116221058103.png" alt="image-20221116221058103"><br>这里出现异常没有进行 catch ，则直接到 finally ，然后就退出该方法了，不会继续执行后面的代码。</p>
+</li>
+</ol>
+<h3 id="二、throw"><a href="#二、throw" class="headerlink" title="二、throw"></a>二、throw</h3><blockquote>
+<p>如果程序抛出了异常，而没有进行异常捕获处理，那默认就是 throw 抛出这个异常。</p>
+</blockquote>
+<p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116215345573.png" alt="image-20221116215345573"></p>
+<h3 id="三、案例分析"><a href="#三、案例分析" class="headerlink" title="三、案例分析"></a>三、案例分析</h3><p>1.try&#x2F;catch finally</p>
+<p>1.1</p>
+<p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116223021962.png" alt="image-20221116223021962"></p>
+<blockquote>
+<p>finally 优先级很高，必须执行！！！！。</p>
+</blockquote>
+<p>1.2<img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116223201338.png" alt="image-20221116223201338"></p>
+<blockquote>
+<p>return i++; ，i++会执行，但因为必须执行 finally ，所以先不能执行 return。</p>
+</blockquote>
+<h3 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h3><p><img src="/3-%E4%B8%A4%E7%A7%8D%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/image-20221116223943319.png" alt="image-20221116223943319"></p>

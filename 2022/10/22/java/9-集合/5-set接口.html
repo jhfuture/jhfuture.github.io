@@ -1,0 +1,42 @@
+<hr>
+<p>title: 5-set接口<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-22 12:28:35</li>
+</ul>
+<hr>
+<!--more-->
+
+<p>——–进度 522截止</p>
+<h2 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h2><p><img src="/5-set%E6%8E%A5%E5%8F%A3/image-20221122123010935.png" alt="image-20221122123010935"></p>
+<ul>
+<li><p>&#x3D;&#x3D;无序、没有索引，不允许重复元素（重复添加，内容只会有一个）&#x3D;&#x3D;</p>
+</li>
+<li><p>可以添加 null</p>
+</li>
+</ul>
+<h2 id="二、常用方法"><a href="#二、常用方法" class="headerlink" title="二、常用方法"></a>二、常用方法</h2><ul>
+<li>set</li>
+<li>isempty</li>
+<li>size</li>
+<li>迭代器</li>
+<li>remove(Object ) –&gt;指定删除某一个对象。</li>
+</ul>
+<h3 id="遍历方式"><a href="#遍历方式" class="headerlink" title="遍历方式"></a>遍历方式</h3><p><img src="/5-set%E6%8E%A5%E5%8F%A3/image-20221122123140352.png" alt="image-20221122123140352"></p>
+<pre><code class="java">Iterator iterator = set.iterator();
+while (iterator.hasNext()) {
+Object obj = iterator.next();
+System.out.println(&quot;obj=&quot; + obj);
+}
+set.remove(null);
+//方式 2: 增强 for
+System.out.println(&quot;=====增强 for====&quot;);
+for (Object o : set) {
+System.out.println(&quot;o=&quot; + o);
+}
+</code></pre>
+<h2 id="三、原理分析"><a href="#三、原理分析" class="headerlink" title="三、原理分析"></a>三、原理分析</h2><p><img src="/5-set%E6%8E%A5%E5%8F%A3/image-20221122130702174.png" alt="image-20221122130702174"></p>
+<h3 id="String对象添加失败的原因"><a href="#String对象添加失败的原因" class="headerlink" title="String对象添加失败的原因"></a>String对象添加失败的原因</h3><pre><code class="java">hashset.add(new String(&quot;john&quot;))T
+hashset.add(new String(&quot;john&quot;))F
+</code></pre>
+<p>因为 String 类中的 equal 方法已经被重写，当 hashset 调用判断时，就会得到两个对象是相同的结果。</p>

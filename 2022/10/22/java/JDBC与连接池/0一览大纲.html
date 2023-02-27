@@ -1,0 +1,32 @@
+<p><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105183017600.png" alt="image-20221105183017600"></p>
+<h3 id="一、JDBC的概述"><a href="#一、JDBC的概述" class="headerlink" title="一、JDBC的概述"></a>一、JDBC的概述</h3><ol>
+<li><p><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105184525040.png" alt="image-20221105184525040"><br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105184903507.png" alt="image-20221105184903507"><br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105184943617.png" alt="image-20221105184943617"></p>
+</li>
+<li><p>原理图<br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105184007050.png" alt="image-20221105184007050"><br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105192200652.png" alt="image-20221105192200652"></p>
+</li>
+</ol>
+<h3 id="二、第一个jdbc"><a href="#二、第一个jdbc" class="headerlink" title="二、第一个jdbc"></a>二、第一个jdbc</h3><ol>
+<li><p>基本介绍<br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105185107152.png" alt="image-20221105185107152"><br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105201033046.png" alt="image-20221105201033046"></p>
+</li>
+<li><p>开始</p>
+<ol>
+<li>安装驱动 —将 jar 包放入 project 的 libs 文件目录下 ，然后右键 add as library<br><img src="/0%E4%B8%80%E8%A7%88%E5%A4%A7%E7%BA%B2/image-20221105190350011.png" alt="image-20221105190350011"></li>
+</ol>
+</li>
+</ol>
+<p>安装驱动的另一种方法，添加classpath系统变量(这个配置时针对文本编辑器，使用 idea 不用此配置)</p>
+<pre><code class="shell">classpath:&#39;.;你的mysql-connect-java.jar包的路径&#39;
+//为什么要配置 . ---&gt;当前路径
+# 如果不配置的话，当你想在当前路径执行编译完的.class文件
+执行的时候它将会直接到你设置的 mysqlxxxx 那个路径去找
+</code></pre>
+<ol start="3">
+<li>编写案例<pre><code class="java">1.连接驱动
+jdbc五以上用这个
+String driver = &quot;com.mysql.cj.jdbc.Driver&quot;;//jdbc驱动
+jdbc五以前
+String driver = &quot;com.mysql.jdbc.Driver&quot;;
+Class.forName(drive)
+</code></pre>
+</li>
+</ol>

@@ -1,0 +1,109 @@
+<hr>
+<p>title: 4-LinkedList<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-21 22:13:12</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、LinkedList"><a href="#一、LinkedList" class="headerlink" title="一、LinkedList"></a>一、LinkedList</h3><p><img src="/4-LinkedList/image-20221122121943077.png" alt="image-20221122121943077"></p>
+<ol>
+<li><p>底层实现了双向链表和双端队列等特点。</p>
+</li>
+<li><p>可以添加任意元素（元素可以重复），包括&#x3D;&#x3D;null&#x3D;&#x3D;</p>
+</li>
+<li><p>线程不安全，没有实现同步。</p>
+</li>
+</ol>
+<h3 id="二、底层源码分析"><a href="#二、底层源码分析" class="headerlink" title="二、底层源码分析"></a>二、底层源码分析</h3><h4 id="1-底层原理"><a href="#1-底层原理" class="headerlink" title="1)底层原理"></a>1)底层原理</h4><p>底层维护了一个&#x3D;&#x3D;双向链表&#x3D;&#x3D;。</p>
+<p><img src="/4-LinkedList/image-20221122122521791.png" alt="image-20221122122521791"></p>
+<h4 id="2-简单案例"><a href="#2-简单案例" class="headerlink" title="2)简单案例"></a>2)简单案例</h4><pre><code class="java">public class LinkedList01 {
+public static void main(String[] args) {
+//模拟一个简单的双向链表
+Node jack = new Node(&quot;jack&quot;);
+Node tom = new Node(&quot;tom&quot;);
+Node hsp = new Node(&quot;老韩&quot;);
+//连接三个结点，形成双向链表
+//jack -&gt; tom -&gt; hsp
+jack.next = tom;
+tom.next = hsp;
+//hsp -&gt; tom -&gt; jack
+hsp.pre = tom;
+tom.pre = jack;
+Node first = jack;//让 first 引用指向 jack,就是双向链表的头结点
+Node last = hsp; //让 last 引用指向 hsp,就是双向链表的尾结点
+//演示，从头到尾进行遍历
+System.out.println(&quot;===从头到尾进行遍历===&quot;);
+while (true) {
+韩顺平循序渐进学 Java 零基础
+第 632页
+if(first == null) {
+break;
+}
+//输出 first 信息
+System.out.println(first);
+first = first.next;
+}
+//演示，从尾到头的遍历
+System.out.println(&quot;====从尾到头的遍历====&quot;);
+while (true) {
+if(last == null) {
+break;
+}
+//输出 last 信息
+System.out.println(last);
+last = last.pre;
+}
+//演示链表的添加对象/数据，是多么的方便
+//要求，是在 tom --------- 老韩直接，插入一个对象 smith
+//1. 先创建一个 Node 结点，name 就是 smith
+Node smith = new Node(&quot;smith&quot;);
+//下面就把 smith 加入到双向链表了
+smith.next = hsp;
+韩顺平循序渐进学 Java 零基础
+第 633页
+smith.pre = tom;
+hsp.pre = smith;
+tom.next = smith;
+//让 first 再次指向 jack
+first = jack;//让 first 引用指向 jack,就是双向链表的头结点
+System.out.println(&quot;===从头到尾进行遍历===&quot;);
+while (true) {
+if(first == null) {
+break;
+}
+//输出 first 信息
+System.out.println(first);
+first = first.next;
+}
+last = hsp; //让 last 重新指向最后一个结点
+//演示，从尾到头的遍历
+System.out.println(&quot;====从尾到头的遍历====&quot;);
+while (true) {
+if(last == null) {
+break;
+}
+//输出 last 信息
+System.out.println(last);
+韩顺平循序渐进学 Java 零基础
+第 634页
+last = last.pre;
+}
+}
+}
+//定义一个 Node 类，Node 对象 表示双向链表的一个结点
+class Node {
+public Object item; //真正存放数据
+public Node next; //指向后一个结点
+public Node pre; //指向前一个结点
+public Node(Object name) {
+this.item = name;
+}
+public String toString() {
+return &quot;Node name=&quot; + item;
+}
+}
+</code></pre>
+<h3 id="三、选择"><a href="#三、选择" class="headerlink" title="三、选择"></a>三、选择</h3><p><img src="/4-LinkedList/image-20221122122716665.png" alt="image-20221122122716665"></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>

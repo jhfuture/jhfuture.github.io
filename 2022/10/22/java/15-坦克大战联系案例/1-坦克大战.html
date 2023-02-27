@@ -1,0 +1,41 @@
+<hr>
+<p>title: 1-坦克大战<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-12-25 20:58:06</li>
+</ul>
+<hr>
+<!--more-->
+
+<h2 id="一、基础"><a href="#一、基础" class="headerlink" title="一、基础"></a>一、基础</h2><h3 id="1-绘图坐标体系"><a href="#1-绘图坐标体系" class="headerlink" title="1.绘图坐标体系"></a>1.绘图坐标体系</h3><p><img src="/1-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/image-20221225211319154.png" alt="image-20221225211319154"></p>
+<p><img src="/1-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/image-20221225211446052.png" alt="image-20221225211446052"></p>
+<h4 id="2-绘制的基本使用"><a href="#2-绘制的基本使用" class="headerlink" title="2.绘制的基本使用"></a>2.绘制的基本使用</h4><p><img src="/1-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/image-20221225213450208.png" alt="image-20221225213450208"></p>
+<h5 id="1-绘制的常用方法。"><a href="#1-绘制的常用方法。" class="headerlink" title="1-绘制的常用方法。"></a>1-绘制的常用方法。</h5><p>小细节。</p>
+<p>字体 x,y 的起始位置</p>
+<p><img src="/1-%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/image-20221225215117202.png" alt="image-20221225215117202"></p>
+<pre><code class="java">画直线 drawLine(int x1,int y1,int x2,int y2)
+g.drawLine(10, 10, 100, 100);
+画矩形边框 drawRect(int x, int y, int width, int height)
+g.drawRect(10, 10, 100, 100);
+画椭圆边框 drawOval(int x, int y, int width, int height)
+填充矩形 fillRect(int x, int y, int width, int height)
+设置画笔的颜色
+ g.setColor(Color.blue);
+ g.fillRect(10, 10, 100, 100);
+填充椭圆 fillOval(int x, int y, int width, int height)
+// g.setColor(Color.red);
+韩顺平循序渐进学 Java 零基础
+第 747页
+// g.fillOval(10, 10, 100, 100);
+//画图片 drawImage(Image img, int x, int y, ..)
+//1. 获取图片资源, /bg.png 表示在该项目的根目录去获取 bg.png 图片资源
+// Image image = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource(&quot;/bg.png&quot;));
+// g.drawImage(image, 10, 10, 175, 221, this);
+//画字符串 drawString(String str, int x, int y)//写字
+//给画笔设置颜色和字体
+g.setColor(Color.red);
+g.setFont(new Font(&quot;隶书&quot;, Font.BOLD, 50));
+//这里设置的 100， 100， 是 &quot;北京你好&quot;左下角
+g.drawString(&quot;北京你好&quot;, 100, 100);
+//设置画笔的字体 setFont(Font font
+</code></pre>

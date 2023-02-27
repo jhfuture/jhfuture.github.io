@@ -1,0 +1,32 @@
+<hr>
+<p>title: 7-GoF代理模式<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-07-20 22:34:33</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+
+
+<h3 id="一、扩展——类与类之间的关系"><a href="#一、扩展——类与类之间的关系" class="headerlink" title="一、扩展——类与类之间的关系"></a>一、扩展——类与类之间的关系</h3><h3 id="1-泛化关系-继承-is-a"><a href="#1-泛化关系-继承-is-a" class="headerlink" title="1.泛化关系 继承  is a"></a>1.泛化关系 继承  is a</h3><p>Cat is Anima</p>
+<p>public class Animal(){}</p>
+<p>public calss Cat extends Animal（）{}</p>
+<h3 id="2-关联关系-has-a"><a href="#2-关联关系-has-a" class="headerlink" title="2.关联关系 has a"></a>2.关联关系 has a</h3><p>张三 is a aapple   </p>
+<p><img src="/7-GoF%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/image-20220720223608138.png" alt="image-20220720223608138"></p>
+<h3 id="二、动态代理机制"><a href="#二、动态代理机制" class="headerlink" title="二、动态代理机制"></a>二、动态代理机制</h3><p>1.JDK自带的动态代理</p>
+<blockquote>
+<p>核心：proxy 类 的 newProxyInstance 方法</p>
+</blockquote>
+<p><strong>原理</strong></p>
+<pre><code> //创建代理对象
+/*做了两件事
+        1。在内存中动态生成了一个代理类的字节码class
+        2.new对象了，通过内存中生成的代理类 这个代码，实例化了代理对象。
+        *
+        * */
+//Proxy.newProxyInstance(类加载器，代理类要实现的接口，调用处理器)
+调用 处理器是一个实现了 InvocationHandler 接口的类。
+</code></pre>

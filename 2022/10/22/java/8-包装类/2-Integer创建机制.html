@@ -1,0 +1,89 @@
+<hr>
+<p>title: 2-Integer创建机制<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-19 16:01:32</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><pre><code class="java">
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+public class WrapperExercise02 {
+public static void main(String[] args) {
+Integer i = new Integer(1);
+Integer j = new Integer(1);
+System.out.println(i == j); //False --&gt;比较内存地址。
+    
+    
+// valueof（手动装箱和自动装箱的原理）的源码
+    public static Integer valueOf(int i) {
+if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
+return IntegerCache.cache[i + (-IntegerCache.low)];
+return new Integer(i);
+}
+/*
+老韩解读
+//1. 如果 i 在 IntegerCache.low(-128)~IntegerCache.high(127),就直接从数组返回
+//2. 如果不在 -128~127,就直接 new Integer(i)
+
+*/
+Integer m = 1; //底层 Integer.valueOf(1); -&gt; 阅读源码
+Integer n = 1;//底层 Integer.valueOf(1);
+System.out.println(m == n); //Ttru
+//所以，这里主要是看范围 -128 ~ 127 就是直接返回
+//，否则，就 new Integer(xx);
+Integer x = 128;//底层 Integer.valueOf(1);
+Integer y = 128;//底层 Integer.valueOf(1);
+System.out.println(x == y);//False
+}
+}
+</code></pre>
+<p>源码中 integercache.cache在类加载时完成了加载</p>
+<p><img src="/2-Integer%E5%88%9B%E5%BB%BA%E6%9C%BA%E5%88%B6/image-20221119162543116.png" alt="image-20221119162543116"></p>
+<h3 id="二、面试题"><a href="#二、面试题" class="headerlink" title="二、面试题"></a>二、面试题</h3><pre><code class="java">看看下面代码，输出什么结果.WrapperExercise03.java 5min
+package com.hspedu.wrapper;
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+public class WrapperExercise03 {
+public static void main(String[] args) {
+//示例一
+Integer i1 = new Integer(127);
+Integer i2 = new Integer(127);
+System.out.println(i1 == i2);//F
+//示例二
+Integer i3 = new Integer(128);
+Integer i4 = new Integer(128);
+System.out.println(i3 == i4);//F
+//示例三
+Integer i5 = 127;//底层 Integer.valueOf(127)
+Integer i6 = 127;//-128~127
+System.out.println(i5 == i6); //T
+//示例四
+Integer i7 = 128;
+Integer i8 = 128;
+System.out.println(i7 == i8);//F
+//示例五
+Integer i9 = 127; //Integer.valueOf(127)
+Integer i10 = new Integer(127);
+System.out.println(i9 == i10);//F
+//示例六
+Integer i11=127;
+int i12=127;
+    ===========================================
+ 只要有基本数据类型，判断的是
+    值是否相等。 
+    这里 i11 自动调用了 intValue 方法
+System.out.println(i11==i12); //T
+//示例七
+Integer i13=128;
+int i14=128;
+System.out.println(i13==i14);//T
+}
+}
+</code></pre>

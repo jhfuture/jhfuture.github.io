@@ -1,0 +1,10 @@
+<p>基本 sql 语句</p>
+<pre><code class="mysql">select field, from table_name where fielid3 like &#39;%xxx%&#39;
+</code></pre>
+<p>JDBC中的使用</p>
+<pre><code class="java">
+ String sql=&quot;select * from blogTable where title like ?&quot;;
+preparedStatement=connection.prepareStatement(sql);
+       String keyword_v2=&quot;%&quot;+keyword+&quot;%&quot;;
+            preparedStatement.setString(1,keyword_v2);
+</code></pre>

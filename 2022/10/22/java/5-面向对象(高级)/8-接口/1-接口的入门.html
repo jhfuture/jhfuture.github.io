@@ -1,0 +1,168 @@
+<hr>
+<p> title: 1-接口的入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>JAVA<br>date: 2022-11-08 18:37:12</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h3><p>what?</p>
+<p>​	接口就是给出一些没有实现的方法，封装到一起，到某个类要使用的时候，在根据实际情况吧这些方法写出来。</p>
+<p>how?</p>
+<pre><code class="java">interface 接口名{
+    //属性
+    //方法(1.抽象方法、2 默认实现方法 、3静态方法)；
+    void method();
+    default void method(){
+        
+    }
+    public static void method(){
+        
+    }
+}
+class 类名 implements 接口 {
+    必须实现的接口的抽象方法。
+    自己的属性、方法;
+    
+}
+</code></pre>
+<h3 id="二、注意事项"><a href="#二、注意事项" class="headerlink" title="二、注意事项"></a>二、注意事项</h3><blockquote>
+<p>在 jdk7.0前 接口里的所有方法都没有方法体。</p>
+<p>在jdk8.0后 接口类可以由静态方法，默认方法，也就是说接口中可以有方法的具体实现。<br>&#x3D;&#x3D;但需要用default 修饰&#x3D;&#x3D;</p>
+<pre><code class="java">default public void print(){
+     System.out.println(&quot;interface A&quot;);
+ }
+ public  static  void hello(){
+     System.out.println(&quot;hello&quot;);
+ }
+</code></pre>
+</blockquote>
+<ol>
+<li><p>接口不能被实例化<br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108193658397.png" alt="image-20221108193658397"></p>
+<blockquote>
+<p>接口本身就是抽象的，希望其他类来实现它，然后再去创建实现了接口这个类的实例。用实例、</p>
+</blockquote>
+</li>
+<li><p>接口中所有的方法都是 &#x3D;&#x3D;public 方法，接口中都是抽象方法&#x3D;&#x3D;，可以不用 abstract 修饰<br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108193954091.png" alt="image-20221108193954091"><br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108194543622.png" alt="image-20221108194543622"></p>
+</li>
+<li><p>一个普通类实现接口，就必须将该接口的所有方法</p>
+</li>
+<li><p>‘都实现。–&gt;快捷键 alt+insert 。</p>
+</li>
+<li><p>抽象类实现接口，可以不用实现接口的方法</p>
+<blockquote>
+<p>抽象类本身就可以包含抽象方法。</p>
+</blockquote>
+</li>
+<li><p>一个类同时可以实现 &#x3D;&#x3D;多个接口&#x3D;&#x3D;</p>
+</li>
+<li><p>接口中的属性，只能是 final 的，而且是 public static final 修饰符。</p>
+<p>访问形式 接口名.属性名</p>
+<pre><code class="java">interface A{
+    void test();
+    abstract void test1();
+    int n1=10;
+    default public void print(){
+        System.out.println(&quot;interface A&quot;);
+    }
+    public  static  void hello(){
+        System.out.println(&quot;hello&quot;);
+    }
+}
+A.n1=3;---&gt;报错，final修饰不能再赋值。
+System.out.println(A.n1);
+//在另一个类中使用对象访问属性，
+// 证明此不是默认修饰符
+System.out.println(a.n1);
+</code></pre>
+</li>
+<li><p>一个接口不能继承其他的类，但是可以&#x3D;&#x3D;继承多个别的接口。&#x3D;&#x3D;</p>
+</li>
+<li><p>接口的修饰符 只能是 public 和默认， 和类的修饰符相同。</p>
+<pre><code class="java">interface IA extends IB,IC{
+    
+}
+</code></pre>
+</li>
+</ol>
+<h3 id="三、应用场景"><a href="#三、应用场景" class="headerlink" title="三、应用场景"></a>三、应用场景</h3><ol>
+<li><p>规范代码 </p>
+<blockquote>
+<p>interface 规定的方法必须实现</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108202618727.png" alt="image-20221108202618727"></p>
+<p>接口<br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108202644986.png" alt="image-20221108202644986"></p>
+<p>程序A：<br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108202719956.png" alt="image-20221108202719956"></p>
+<p>使用：<br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108202821970.png" alt="image-20221108202821970"></p>
+<h3 id="四、接口和继承"><a href="#四、接口和继承" class="headerlink" title="四、接口和继承"></a>四、接口和继承</h3><p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108205516105.png" alt="image-20221108205516105"></p>
+<p>一些相似性：</p>
+<ol>
+<li>接口的属性(final static public)、方法(普通方法和静态方法) 可以被实现接口的类调用、或者是实现类的实例。</li>
+</ol>
+<p>注意点：</p>
+<ol>
+<li>如果一个类实现了一个含有父类的接口，那么这个类也必须实现&#x3D;&#x3D;该接口父类中的抽象方法&#x3D;&#x3D;。</li>
+</ol>
+<h3 id="五、接口的多态"><a href="#五、接口的多态" class="headerlink" title="五、接口的多态"></a>五、接口的多态</h3><ol>
+<li><p>多态参数。&#x3D;&#x3D;接口类型&#x3D;&#x3D;可以指向 &#x3D;&#x3D;实现了该接口的类 的对象实例&#x3D;&#x3D;。</p>
+</li>
+<li><p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108212704189.png" alt="image-20221108212704189"></p>
+</li>
+</ol>
+<h4 id="1-多态参数"><a href="#1-多态参数" class="headerlink" title="1.多态参数"></a>1.多态参数</h4><p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108205634224.png" alt="image-20221108205634224"><br><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108205843513.png" alt="image-20221108205843513"></p>
+<h4 id="2-多态数组"><a href="#2-多态数组" class="headerlink" title="2.多态数组"></a>2.多态数组</h4><p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108212436115.png" alt="image-20221108212436115"></p>
+<h4 id="3-多态类的传递"><a href="#3-多态类的传递" class="headerlink" title="3.多态类的传递"></a>3.多态类的传递</h4><p>一句话 爷爷可以指向 孙子</p>
+<pre><code class="java">package com.jhfuture;
+
+public class Interface {
+    public static void main(String[] args) {
+        //接口类型的变量可以指向，实现了该接口的类的对象实例
+    IG g= new Teacher();
+    //如果IG 继承了 IH 接口，而Teacher 类 实现了 IG接口
+        //就相当于Teacher 类也实现了 IH接口。
+        // Teacher 也要实现 IH 里的接口。
+        //这就是所谓的 接口 多态传递现象
+    IH h=new Teacher();
+    }
+}
+interface IH{
+void hi();
+}
+interface IG extends IH{
+
+}
+class  Teacher implements IG{
+
+    @Override
+    public void hi() {
+
+    }
+}
+</code></pre>
+<h3 id="六、练习题目"><a href="#六、练习题目" class="headerlink" title="六、练习题目"></a>六、练习题目</h3><p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108213654246.png" alt="image-20221108213654246"></p>
+<ol>
+<li><p>继承中的变量和接口中的变量冲突。</p>
+<pre><code class="java">interface A{
+    int x=1;
+    //public static final int x=1;
+}
+class   B{
+    int x=1;
+
+}
+class  C extends B implements A{
+    void print(){
+        System.out.println(x);
+    }
+}
+怎么解决？
+
+明确指明 接口的 A.x
+        父类的
+</code></pre>
+<p><img src="/1-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%A5%E9%97%A8/image-20221108214016445.png" alt="image-20221108214016445"></p>
+</li>
+</ol>

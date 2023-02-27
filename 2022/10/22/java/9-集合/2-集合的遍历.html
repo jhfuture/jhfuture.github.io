@@ -1,0 +1,53 @@
+<hr>
+<p>title: 2-集合的遍历<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-21 16:26:58</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+
+
+<h3 id="一、iter-———-gt-Iterable-接口里的方法。"><a href="#一、iter-———-gt-Iterable-接口里的方法。" class="headerlink" title="一、iter ———-&gt; Iterable 接口里的方法。"></a>一、iter ———-&gt; Iterable 接口里的方法。</h3><h4 id="how"><a href="#how" class="headerlink" title="how?"></a>how?</h4><pre><code class="java">//1. 先得到 col 对应的 迭代器
+Iterator iterator = col.iterator();
+//2. 使用 while 循环遍历
+// while (iterator.hasNext()) {//判断是否还有数据
+// //返回下一个元素，类型是 Object
+// Object obj = iterator.next();
+// System.out.println(&quot;obj=&quot; + obj);
+// }
+//老师教大家一个快捷键，快速生成 while =&gt; itit
+//显示所有的快捷键的的快捷键 ctrl + j
+while (iterator.hasNext()) {
+Object obj = iterator.next();
+System.out.println(&quot;obj=&quot; + obj);
+
+}
+//3. 当退出 while 循环后 , 这时 iterator 迭代器，指向最后的元素
+// iterator.next();//NoSuchElementException
+//4. 如果希望再次遍历，需要重置我们的迭代器
+iterator = col.iterator();
+System.out.println(&quot;===第二次遍历===&quot;);
+while (iterator.hasNext()) {
+Object obj = iterator.next();
+System.out.println(&quot;obj=&quot; + obj);
+}
+</code></pre>
+<p><img src="/2-%E9%9B%86%E5%90%88%E7%9A%84%E9%81%8D%E5%8E%86/image-20221121162950590.png" alt="image-20221121162950590"></p>
+<p><img src="/2-%E9%9B%86%E5%90%88%E7%9A%84%E9%81%8D%E5%8E%86/image-20221121163002700.png" alt="image-20221121163002700"></p>
+<h3 id="二、for-增强循环"><a href="#二、for-增强循环" class="headerlink" title="二、for 增强循环"></a>二、for 增强循环</h3><h4 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h4><p>​	底层依然是迭代器。可以在 &#x3D;&#x3D;集合、数组&#x3D;&#x3D;中使用。</p>
+<p>快捷键—-&gt;  输入 &#x3D;&#x3D;I（大写I）&#x3D;&#x3D;</p>
+<h4 id="How"><a href="#How" class="headerlink" title="How"></a>How</h4><pre><code class="java">for (Object object:col){
+
+System.out.println(object);
+}
+</code></pre>
+<h3 id="三、普通-for-循环"><a href="#三、普通-for-循环" class="headerlink" title="三、普通 for 循环"></a>三、普通 for 循环</h3><h4 id="what"><a href="#what" class="headerlink" title="what?"></a>what?</h4><p>使用 get 方法</p>
+<h4 id="how-1"><a href="#how-1" class="headerlink" title="how"></a>how</h4><pre><code class="java"> for (int i = 0; i &lt;arrayList.size() ; i++) {
+            System.out.println(arrayList.get(i));
+        }
+</code></pre>
+<h3 id="四、练习"><a href="#四、练习" class="headerlink" title="四、练习"></a>四、练习</h3><p><img src="/2-%E9%9B%86%E5%90%88%E7%9A%84%E9%81%8D%E5%8E%86/image-20221121163522007.png" alt="image-20221121163522007"></p>

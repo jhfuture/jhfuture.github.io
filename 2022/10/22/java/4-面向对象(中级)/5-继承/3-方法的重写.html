@@ -1,4 +1,10 @@
 <h3 id="一、方法重写"><a href="#一、方法重写" class="headerlink" title="一、方法重写"></a>一、方法重写</h3><p>方法重写也叫方法覆盖，需要满足下面的条件</p>
+<blockquote>
+<p>重写是子类对&#x3D;&#x3D;父类的允许访问的方法&#x3D;&#x3D;的实现过程进行重新编写, 返回值和形参都不能改变。即外壳不变，核心重写！</p>
+<blockquote>
+<p>这里可以解释为什么 private 方法不能被重写，因为private 方法不能被子类访问。</p>
+</blockquote>
+</blockquote>
 <ol>
 <li><p>子类的方法&#x3D;&#x3D;参数，方法名&#x3D;&#x3D;，要和父类的参数，方法名称完全一样。</p>
 <ol>
@@ -42,7 +48,7 @@ say(String)&#39; in &#39;com.jhfuture.object.Person.t&#39; clashes with &#39;say
     }
     class  t extends hello{
         private void say(String age){
-
+   
         }
     }
 }
@@ -60,4 +66,8 @@ say(String)&#39; in &#39;com.jhfuture.object.Person.t&#39; clashes with &#39;say
 </ol>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
 <li>方法重写时，需要注意两个重要点，1是访问权限，2.返回类型，不同则报错。最后一个为参数，如果不同则只是方法的重载。</li>
+<li>private 修饰的方法不能被重写，因为 在重写的概念中，需要 是 子类具有的父类的允许访问方法。private 修饰了那前提条件就不满足了。</li>
+<li>static 修饰的方法也&#x3D;&#x3D;不会被覆盖&#x3D;&#x3D;。</li>
 </ol>
+<blockquote>
+</blockquote>

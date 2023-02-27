@@ -1,0 +1,26 @@
+<hr>
+<p>title: 4-Bean的实例化方法<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2023-01-05 19:55:14</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h1 id="Bean的实例化方式"><a href="#Bean的实例化方式" class="headerlink" title="Bean的实例化方式"></a>Bean的实例化方式</h1><p>Spring为Bean提供了多种实例化方式，通常包括4种方式。（也就是说在Spring中为Bean对象的创建准备了多种方案，目的是：更加灵活）</p>
+<ul>
+<li>第一种：通过构造方法实例化</li>
+<li>第二种：通过简单工厂模式实例化</li>
+<li>第三种：通过factory-bean实例化</li>
+<li>第四种：通过FactoryBean接口实例化</li>
+</ul>
+<h2 id="7-5-BeanFactory和FactoryBean的区别"><a href="#7-5-BeanFactory和FactoryBean的区别" class="headerlink" title="7.5 BeanFactory和FactoryBean的区别"></a>7.5 BeanFactory和FactoryBean的区别</h2><h3 id="7-5-1-BeanFactory"><a href="#7-5-1-BeanFactory" class="headerlink" title="7.5.1 BeanFactory"></a>7.5.1 BeanFactory</h3><p>Spring IoC容器的顶级对象，BeanFactory被翻译为“Bean工厂”，在Spring的IoC容器中，“Bean工厂”负责创建Bean对象。</p>
+<p>BeanFactory是工厂。</p>
+<h3 id="7-5-2-FactoryBean"><a href="#7-5-2-FactoryBean" class="headerlink" title="7.5.2 FactoryBean"></a>7.5.2 FactoryBean</h3><p>FactoryBean：它是一个Bean，是一个能够<strong>辅助Spring</strong>实例化其它Bean对象的一个Bean。</p>
+<p>在Spring中，Bean可以分为两类：</p>
+<ul>
+<li>第一类：普通Bean</li>
+<li>第二类：工厂Bean（记住：工厂Bean也是一种Bean，只不过这种Bean比较特殊，它可以辅助Spring实例化其它Bean对象。）</li>
+</ul>

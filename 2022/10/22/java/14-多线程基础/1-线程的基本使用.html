@@ -1,0 +1,299 @@
+<hr>
+<p>title: 1-线程的基本使用<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-12-24 19:01:32</li>
+</ul>
+<hr>
+<!--more-->
+
+<h2 id="一、简单定义"><a href="#一、简单定义" class="headerlink" title="一、简单定义"></a>一、简单定义</h2><ol>
+<li><p>什么是进程</p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190211563.png" alt="image-20221224190211563"></p>
+</li>
+</ol>
+<p>2.线程与进程</p>
+<p>线程由进程创建。</p>
+<p>3.并发与并行</p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224190252847.png" alt="image-20221224190252847"></p>
+<h2 id="二、线程的使用"><a href="#二、线程的使用" class="headerlink" title="二、线程的使用"></a>二、线程的使用</h2><ol>
+<li><p>使用 继承 thread 类。重写 run 方法</p>
+</li>
+<li><p>实现 Runnable 接口，重写 run 方法，并将其对象传入 thread 的构造器中创建 thread 对象</p>
+</li>
+</ol>
+<h3 id="1-Extend-thread"><a href="#1-Extend-thread" class="headerlink" title="1.Extend thread"></a>1.Extend thread</h3><pre><code class="java">public class threadsEXtend {
+    public static void main(String[] args) throws InterruptedException {
+        Dog dog = new Dog();
+        dog.start();
+        for (int i = 0; i &lt; 20; i++) {
+            System.out.println(&quot;这是主线程&quot;+Thread.currentThread().getName());
+            Thread.sleep(1000);
+        }
+    }
+}
+class Dog extends  Thread{
+    @Override
+    public void run() {
+        int count=1;
+        while (true){
+            System.out.println(&quot;小狗汪汪&quot;+&quot;线程名&quot;+currentThread().getClass()+count++);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (count==30){
+            break;
+        }
+        }
+    }
+}
+</code></pre>
+<h3 id="2-implement-Runnable-解决该类已经有-基继承的类"><a href="#2-implement-Runnable-解决该类已经有-基继承的类" class="headerlink" title="2.implement Runnable 解决该类已经有 基继承的类"></a>2.implement Runnable 解决该类已经有 基继承的类</h3><blockquote>
+<p>Thread 中具有代理模式的设计模式。</p>
+<p>具有 一个 runnable 类型 的 Target</p>
+<p>然后还有一个 构造器，可以接受一个 实现了 runnale 接口的类。</p>
+</blockquote>
+<p> 因为 runnable 接口没有 start 方法，创建 线程需要调用 start 方法，所以需要 <strong>thread 类进行代理。</strong></p>
+<pre><code class="java">package com.threadUser;
+
+public class ThreadProxy {
+    public static void main(String[] args) {
+        Cat cat = new Cat();
+        Thread thread = new Thread(cat);
+        thread.run();
+    }
+}
+class Cat implements Runnable{
+    @Override
+    public void run() {
+        int count=1;
+        for (int i = 0; i &lt; 30; i++) {
+            System.out.println(&quot;线程名&quot; +&quot;第&quot;+count++ +&quot;此&quot;);
+
+        }
+    }
+}
+</code></pre>
+<h3 id="3-extend-和-implement-runnable-的区别"><a href="#3-extend-和-implement-runnable-的区别" class="headerlink" title="3. extend 和 implement runnable  的区别"></a>3. extend 和 implement runnable  的区别</h3><ol>
+<li><p>Runnable 更适合 多个线程共享一个资源的情况，并且避免了单继承的限制</p>
+<pre><code class="java">T3 t3=new T3();
+</code></pre>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224195957206.png" alt="image-20221224195957206"></p>
+</li>
+</ol>
+<h3 id="4-通知线程退出"><a href="#4-通知线程退出" class="headerlink" title="4.通知线程退出"></a>4.通知线程退出</h3><ol>
+<li>线程完成任务后，会自动退出</li>
+<li>可以使用&#x3D;&#x3D;控制变量&#x3D;&#x3D;来控制 run 方法退出的方式停止进程，即通知方式。</li>
+</ol>
+<pre><code class="java">安丽
+package com.threadUser;
+
+public class ThreadExit_ {
+    public static void main(String[] args) throws InterruptedException {
+        exitTest exitTest = new exitTest();
+        exitTest.start();
+        System.out.println(&quot;等待五秒后手动关闭&quot;);
+        Thread.sleep(5*1000);
+        exitTest.setLoop(false);
+    }
+}
+class exitTest extends Thread{
+    private boolean loop=true;
+    int count=1;
+    @Override
+    public void run() {
+        while (loop){
+            System.out.println(&quot;正在运行&quot;+count++);
+            try {
+                //等待500毫秒
+                sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public void setLoop(boolean loop){
+        this.loop=loop;
+    }
+}
+</code></pre>
+<h3 id="5-常用方法"><a href="#5-常用方法" class="headerlink" title="5.常用方法"></a>5.常用方法</h3><ul>
+<li>1.setName &#x2F;&#x2F;设置线程名字</li>
+<li>2.getName &#x2F;&#x2F;返回线程名称</li>
+<li>3.start 启动该线程，jvm 底层调用该进程的 start0 方法</li>
+<li>4.run &#x2F;&#x2F;直接调用线程对象的 run 方法</li>
+<li>5-setPriority &#x2F;&#x2F;更改线程的优先级</li>
+<li>6-getPriority &#x2F;&#x2F;获取线程的优先级<ul>
+<li>min –1</li>
+<li>max –10</li>
+<li>normal –5</li>
+</ul>
+</li>
+<li>7-sleep &#x2F;&#x2F;让线程指定休眠  xxx 毫秒 (暂停执行)</li>
+<li>8- interrupt &#x2F;&#x2F;中断&#x3D;&#x3D;线程的休眠&#x3D;&#x3D;</li>
+<li>9- yield :线程的礼让，让出 CPU ，让其他线程先执行，但礼让的时间不一定，所以礼让也&#x3D;&#x3D;不一定成功&#x3D;&#x3D;。<ul>
+<li>是否礼让由系统资源决定，操作系统内核负责处理，这一块 java 无法控制</li>
+</ul>
+</li>
+<li>10- join:线程的插队，插队的线程一旦插队成功，则肯定&#x3D;&#x3D;先执行完插入的线程的所有任务&#x3D;&#x3D;。<ul>
+<li>小弟让大哥先吃完包子自己再吃。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-用户线程和守护线程"><a href="#6-用户线程和守护线程" class="headerlink" title="6.用户线程和守护线程"></a>6.用户线程和守护线程</h3><pre><code class="java">线程对象.setDaemon(true) ---&gt;守护进程。
+    setDaemon要在 start 之前设置。
+案例
+    
+    
+    package com.threadUser;
+
+public class SetDamon_ {
+    public static void main(String[] args) {
+        damon_ damon_ = new damon_();
+        damon_.setDaemon(true);
+        damon_.start();
+        for (int i = 0; i &lt; 5; i++) {
+            System.out.println(i);
+            if (i==4){
+                System.out.println(&quot;不，你是守护进程，你要和我一起走。&quot;);
+            }
+        }
+    }
+}
+class damon_ extends Thread{
+    @Override
+    public void run() {
+        while (true){
+            System.out.println(&quot;我还要继续！！&quot;);
+        }
+    }
+}
+</code></pre>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224234828119.png" alt="image-20221224234828119"></p>
+<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><ol>
+<li>当处于 Runnable状态时，并不是一定在进行，而是由 操作系统的线程调度器负责 调配运行。—&gt;由操作系统内核决定。（内核态）</li>
+<li>官方文档为 6 种状态，但一般 又将 runnable 细分为两种转态，即有7 钟转态</li>
+</ol>
+<p>可以使用 jconsole 工具 查看线程</p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191429302.png" alt="image-20221224191429302"></p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224191421528.png" alt="image-20221224191421528"></p>
+<h2 id="三、生命周期"><a href="#三、生命周期" class="headerlink" title="三、生命周期"></a>三、生命周期</h2><h3 id="1-生命周期"><a href="#1-生命周期" class="headerlink" title="1.生命周期"></a>1.生命周期</h3><p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221224235800248.png" alt="image-20221224235800248"></p>
+<h3 id="2-线程同步机制"><a href="#2-线程同步机制" class="headerlink" title="2.线程同步机制"></a>2.线程同步机制</h3><p>1）线程同步机制 Synchronizd</p>
+<p>一个敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何同一时刻，最多有一个线程访问，以保证数据的完整性。</p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225153246140.png" alt="image-20221225153246140"></p>
+<h3 id="2-synchronize-使用"><a href="#2-synchronize-使用" class="headerlink" title="2.synchronize 使用"></a>2.synchronize 使用</h3><h2 id="四、锁"><a href="#四、锁" class="headerlink" title="四、锁"></a>四、锁</h2><p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225165651218.png" alt="image-20221225165651218"></p>
+<blockquote>
+<p>这里的同步方法是否是 静态的 非常重要。—Synchronized</p>
+<p>如果是 this  ，则是 当前对象，如果不同对象，不会造成堵塞。</p>
+<p>如果是&#x3D;&#x3D;静态(stastic)&#x3D;&#x3D;， 则是  加在该类的 Class 中(类加载的知识) ，该&#x3D;&#x3D;类的不同对象&#x3D;&#x3D;，会造成&#x3D;&#x3D;堵塞&#x3D;&#x3D;。  </p>
+</blockquote>
+<h3 id="1-注意事项和细节："><a href="#1-注意事项和细节：" class="headerlink" title="1.注意事项和细节："></a>1.<strong>注意事项和细节</strong>：</h3><ul>
+<li><p>1.同步方法如果没有使用 static 修饰，默认锁对象就是 this</p>
+</li>
+<li><p>2.同步方法使用了 static 修饰，默认锁对象：当前类的 Class 对象(通常通过 类名.class获得)</p>
+</li>
+<li><p>3.实现锁的步骤</p>
+<ul>
+<li><p>1.分析需要上锁的代码</p>
+</li>
+<li><p>2.选择&#x3D;&#x3D;同步代码块（优先考虑）&#x3D;&#x3D;或同步代码</p>
+</li>
+<li><p>3.&#x3D;&#x3D;要求多个线程的锁对象为同一个。&#x3D;&#x3D;</p>
+<ul>
+<li>什么意思？<pre><code class="java">class Thread1{
+    public synchronized void sayhi(){
+        System.out.println(&quot;hi&quot;);
+    }
+}
+思考：这里的 hi 能锁住吗？
+分析：
+    1.同步方法没有使用 static 修饰，那默认锁对象为 this。
+    2.而想要调用 sayhi 方法，就要使用 new Thread1().sayhi
+    3.而第2步中每次 调用都 new 了一个新对象，即此时如果使用 不同对象的 start 方法进行创建多线程。
+    4.那此时，多个线程的锁对象就是他们对应的那个对象----&gt;即不是同一个对象。不同的线程争夺的是不同的锁，那就无法锁住。 
+怎么解决？
+    1.绑定同一个对象，其他的对象，例如新建一个 object 对象
+    2.给方法加上 static ，使其绑定类的Class 对象
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-线程死锁"><a href="#2-线程死锁" class="headerlink" title="2.线程死锁"></a>2.线程死锁</h3><p>多个线程都占用了对方的锁资源，但不肯相让，导致了死锁。</p>
+<p>一个案例</p>
+<pre><code class="java">package com.hspedu.syn;
+/**
+* @author 韩顺平
+* @version 1.0
+* 模拟线程死锁
+*/
+public class DeadLock_ {
+public static void main(String[] args) {
+//模拟死锁现象
+DeadLockDemo A = new DeadLockDemo(true);
+A.setName(&quot;A 线程&quot;);
+DeadLockDemo B = new DeadLockDemo(false);
+B.setName(&quot;B 线程&quot;);
+A.start();
+B.start();
+}
+}
+//线程
+韩顺平循序渐进学 Java 零基础
+第 810页
+class DeadLockDemo extends Thread {
+static Object o1 = new Object();// 保证多线程，共享一个对象,这里使用 static
+static Object o2 = new Object();
+boolean flag;
+public DeadLockDemo(boolean flag) {//构造器
+this.flag = flag;
+}
+@Override
+public void run() {
+//下面业务逻辑的分析
+//1. 如果 flag 为 T, 线程 A 就会先得到/持有 o1 对象锁, 然后尝试去获取 o2 对象锁
+//2. 如果线程 A 得不到 o2 对象锁，就会 Blocked
+//3. 如果 flag 为 F, 线程 B 就会先得到/持有 o2 对象锁, 然后尝试去获取 o1 对象锁
+//4. 如果线程 B 得不到 o1 对象锁，就会 Blocked
+if (flag) {
+synchronized (o1) {//对象互斥锁, 下面就是同步代码
+System.out.println(Thread.currentThread().getName() + &quot; 进入 1&quot;);
+synchronized (o2) { // 这里获得 li 对象的监视权
+System.out.println(Thread.currentThread().getName() + &quot; 进入 2&quot;);
+}
+}
+} else {
+synchronized (o2) {
+System.out.println(Thread.currentThread().getName() + &quot; 进入 3&quot;);
+synchronized (o1) { // 这里获得 li 对象的监视权
+System.out.println(Thread.currentThread().getName() + &quot; 进入 4&quot;);
+}
+}
+}
+}
+}
+</code></pre>
+<h3 id="3-释放锁"><a href="#3-释放锁" class="headerlink" title="3.释放锁"></a>3.释放锁</h3><p>释放锁的问题。</p>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225195634274.png" alt="image-20221225195634274"></p>
+<p>下列操作不会释放锁</p>
+<ol>
+<li>sleep、yield<br>太困了，但还在厕所里面。</li>
+<li>线程被挂起.suspend()。<br><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200005591.png" alt="image-20221225200005591"></li>
+</ol>
+<p><img src="/1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221225200201260.png" alt="image-20221225200201260"></p>
+<h2 id="六、一些疑问"><a href="#六、一些疑问" class="headerlink" title="六、一些疑问"></a>六、一些疑问</h2><ol>
+<li>为什么调用的是 start 方法，而不是直接调用 run 方法</li>
+</ol>
+<p>A: 直接调用 run 方法，那就是相当于普通的方法调用，只会在主栈中调用，不会创建新线程。而调用 start 方法可以创建新 线程并 会自动调用 run 方法。–&gt;看源码分析</p>
+<pre><code class="java">
+public synchronized void start() {
+start0();
+}
+//start0() 是本地方法，是 JVM 调用, 底层是 c/c++实现
+//真正实现多线程的效果， 是 start0(), 而不是 run
+private native void start0();
+</code></pre>

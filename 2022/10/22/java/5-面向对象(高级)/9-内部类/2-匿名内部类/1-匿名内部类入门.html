@@ -1,0 +1,310 @@
+<hr>
+<p>title: 1-匿名内部类入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-13 12:48:08</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h3><blockquote>
+<p>综合性强：1继承 2 多态 3 动态绑定 4内部类</p>
+</blockquote>
+<p>what?</p>
+<ol>
+<li>本质还是类</li>
+<li>属于内部类</li>
+<li>该类没有名字</li>
+<li>&#x3D;&#x3D;同时还是一个对象&#x3D;&#x3D;  —-&gt; 在创建过程中使用了 new xxx()。类似创建对象的方法</li>
+</ol>
+<p>位置：外部类的&#x3D;&#x3D;局部位置&#x3D;&#x3D;，比如方法中。</p>
+<p>why?</p>
+<p>一个需求：</p>
+<p>&#x2F;&#x2F;1.如果想使用 IA 接口。</p>
+<p>2.传统方式 ：创建一个 class 实现这个接口，然后再创建对象。</p>
+<p>3.使用匿名内部类 直接 IA ia &#x3D; new IA(){</p>
+<p>} 就完成了一个 实现了接口的类的对象实例。</p>
+<p>老韩的需求是 Tiger&#x2F;Dog 类只是使用一次，后面不再使用。</p>
+<p>–&gt;.使用匿名内部类来简化 开发</p>
+<p>How?</p>
+<pre><code class="java">new 类或接口(参数列表){
+    类体。
+}
+
+package com.hspedu.innerclass;
+/**
+* 演示匿名内部类的使用
+*/
+public class AnonymousInnerClass {
+public static void main(String[] args) {
+Outer04 outer04 = new Outer04();
+outer04.method();
+}
+}
+class Outer04 { //外部类
+private int n1 = 10;//属性
+public void method() {//方法
+//基于接口的匿名内部类
+//老韩解读
+//1.需求： 想使用 IA 接口,并创建对象
+//2.传统方式，是写一个类，实现该接口，并创建对象
+//3.老韩需求是 Tiger/Dog 类只是使用一次，后面再不使用
+//4. 可以使用匿名内部类来简化开发
+//5. tiger 的编译类型 ? IA
+//6. tiger 的运行类型 ? 就是匿名内部类 Outer04$1
+/*
+我们看底层 会分配 类名 Outer04$1
+class Outer04$1 implements IA {
+@Override
+public void cry() {
+System.out.println(&quot;老虎叫唤...&quot;);
+}
+} 
+*/
+//7. jdk 底层在创建匿名内部类 Outer04$1,立即马上就创建了 Outer04$1 实例，并且把地址
+// 返回给 tiger
+//8. 匿名内部类使用一次，就不能再使用
+演示基于接口的匿名内部类。
+IA tiger = new IA() {
+@Override
+public void cry() {
+System.out.println(&quot;老虎叫唤...&quot;);
+}
+};
+System.out.println(&quot;tiger 的运行类型=&quot; + tiger.getClass());
+tiger.cry();
+tiger.cry();
+tiger.cry();
+// IA tiger = new Tiger();
+// tiger.cry();
+ 
+演示基于类的匿名内部类
+//分析
+//1. father 编译类型 Father
+//2. father 运行类型 Outer04$2
+//3. 底层会创建匿名内部类
+/*
+class Outer04$2 extends Father{
+@Override
+public void test() {
+System.out.println(&quot;匿名内部类重写了 test 方法&quot;);
+}
+}
+*/
+//4. 同时也直接返回了 匿名内部类 Outer04$2 的对象
+//5. 注意(&quot;jack&quot;) 参数列表会传递给 构造器
+Father father = new Father(&quot;jack&quot;){
+@Override
+public void test() {
+System.out.println(&quot;匿名内部类重写了 test 方法&quot;);
+}
+};
+System.out.println(&quot;father 对象的运行类型=&quot; + father.getClass());//Outer04$2
+father.test();
+    
+    
+基于抽象类的匿名内部类
+Animal animal = new Animal(){
+@Override
+    void eat() {
+System.out.println(&quot;小狗吃骨头...&quot;);
+}
+};
+animal.eat();
+}
+}
+interface IA {//接口
+public void cry();
+}
+//class Tiger implements IA {
+//
+// @Override
+// public void cry() {
+// System.out.println(&quot;老虎叫唤...&quot;);
+// }
+//}
+//class Dog implements IA{
+// @Override
+// public void cry() {
+// System.out.println(&quot;小狗汪汪...&quot;);
+// }
+//}
+class Father {//类
+    public Father(String name) {//构造器
+System.out.println(&quot;接收到 name=&quot; + name);
+}
+public void test() {//方法
+}
+}
+abstract class Animal { //抽象类
+abstract void eat();
+}
+</code></pre>
+<h4 id="一、接口的匿名内部类使用"><a href="#一、接口的匿名内部类使用" class="headerlink" title="一、接口的匿名内部类使用"></a>一、接口的匿名内部类使用</h4><pre><code class="java">public class AnnoymouslnnerClass {
+    public static void main(String[] args) {
+        tiger tiger = new tiger();
+        tiger.cry();
+        //使用匿名内部类实现
+    // 底层 会分配类名
+        /*class outerName+$1 implements IA{
+        * @Override
+        * public void cry() {
+         *       System.out.println(&quot;tigger&quot;);
+          * }
+        *}
+        *
+        *
+        * 7 dk 底层在创建了 匿名内部类立即马上就创建了它的实例，并且把地址返回。
+        * 8.匿名内部类使用一次就没有了，不能再使用， ---但是匿名内部类的对象还可以使用
+        * 就没有了 不能使用 new outerclass$1这个方法再来调用
+        * */
+        IA tigger=new IA() {
+            @Override
+            public void cry() {
+                System.out.println(&quot;tigger&quot;);
+            }
+        };
+        tigger.cry();
+        //验证
+        // getclass 获取运行类型
+        System.out.println(&quot;tigger的运行类型&quot;+tigger.getClass());
+    }
+    }
+</code></pre>
+<h4 id="二、类的匿名内部类。"><a href="#二、类的匿名内部类。" class="headerlink" title="二、类的匿名内部类。"></a>二、类的匿名内部类。</h4><pre><code class="java"> 基于类的匿名内部类
+        //1.father --编译类型
+        //2.编译类型  outerClass$2 --&gt; extend father
+     //这个类只能使用一次，且是 继承了father的
+     //m 	
+     //1. father 编译类型 Father
+        //2. father 运行类型 Outer04$2
+    //3. 底层会创建匿名内部类
+    /*
+    class Outer04$2 extends Father{
+    @Override
+    public void test() {
+    System.out.println(&quot;匿名内部类重写了 test 方法&quot;);
+    }
+    }
+*/
+//4. 同时也直接返回了 匿名内部类 Outer04$2 的对象
+//5. 注意(&quot;jack&quot;) 参数列表会传递给 构造器
+        Father father = new Father(&quot;hello&quot;) {
+@Override
+    public void test() {
+    System.out.println(&quot;匿名内部类重写了 test 方法&quot;);	
+        };
+
+基于抽闲类的匿名内部类
+        Animal animal = new Animal() {
+    //必须实现抽象方法
+            @Override
+            void eat() {
+
+            }
+        };
+
+abstract  class Animal{
+   abstract void eat();
+}
+</code></pre>
+<h3 id="二、匿名内部类的细节。"><a href="#二、匿名内部类的细节。" class="headerlink" title="二、匿名内部类的细节。"></a>二、匿名内部类的细节。</h3><ol>
+<li>匿名内部类是一个对象。—&gt; 创建的过程中也有 new xx的操作。<ol>
+<li>创建的内部类 为 &#x3D;&#x3D;extend 了该类的 一个子类&#x3D;&#x3D;。</li>
+<li>使用的过程中遵循多态的特点。</li>
+</ol>
+</li>
+</ol>
+<p><img src="/1-%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E5%85%A5%E9%97%A8/image-20221114214357388.png" alt="image-20221114214357388"></p>
+<ol start="2">
+<li><p>可以访问外部类的所有成员。包括私有的</p>
+</li>
+<li><p>不能&#x3D;&#x3D;添加访问修饰符&#x3D;&#x3D;，它的堤围就是一个局部变量。</p>
+</li>
+<li><p>作用域：仅仅在定义它的方法或代码块中，且只能使用一次。—&gt; 即 new 的那个操作。</p>
+</li>
+<li><p>如果外部内的成员和匿名内部类的成员重名时，匿名内部类遵循&#x3D;&#x3D;就近原则&#x3D;&#x3D;，如果想访问外部类的成员，则可以使用&#x3D;&#x3D;(外部类名.this.成员)&#x3D;&#x3D;</p>
+<blockquote>
+<p>外部类名.this 就是调用 &#x3D;&#x3D;匿名内部类所在方法&#x3D;&#x3D;的 对象。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="三、案例"><a href="#三、案例" class="headerlink" title="三、案例"></a>三、案例</h3><p>1)接口参数</p>
+<pre><code class="java">做实参直接传递，简洁高效。 InnerClassExercise01.java
+package com.hspedu.innerclass;
+import com.hspedu.abstract_.AA;
+public class InnerClassExercise01 {
+public static void main(String[] args) {
+//当做实参直接传递，简洁高效
+f1(new IL() {
+@Override
+public void show() {
+    System.out.println(&quot;这是一副名画~~...&quot;);
+}
+});
+//传统方法需要先创建一个实现该接口的类，然后再使用 new创建对象。
+f1(new Picture());
+}
+//静态方法,形参是接口类型
+public static void f1(IL il) {
+il.show();
+}
+}
+//接口
+interface IL {
+void show();
+}
+
+
+类-&gt;实现 IL =&gt; 编程领域 (硬编码)
+class Picture implements IL {
+@Override
+public void show() {
+System.out.println(&quot;这是一副名画 XX...&quot;);
+}
+}
+</code></pre>
+<p>2)类<img src="/1-%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E5%85%A5%E9%97%A8/image-20221114222036530.png" alt="image-20221114222036530"></p>
+<pre><code class="java">package com.hspedu.innerclass;
+public class InnerClassExercise02 {
+public static void main(String[] args) {
+/*
+1.有一个铃声接口 Bell，里面有个 ring 方法。(右图)
+2.有一个手机类 Cellphone，具有闹钟功能 alarmClock，参数是 Bell 类型(右图)
+3.测试手机类的闹钟功能，通过匿名内部类(对象)作为参数，打印：懒猪起床了
+4.再传入另一个匿名内部类(对象)，打印：小伙伴上课了
+*/
+CellPhone cellPhone = new CellPhone();
+//老韩解读
+//1. 传递的是实现了 Bell 接口的匿名内部类 InnerClassExercise02$1
+//2. 重写了 ring
+//3. Bell bell = new Bell() {
+// @Override
+// public void ring() {
+// System.out.println(&quot;懒猪起床了&quot;);
+// }
+// }
+cellPhone.alarmClock(new Bell() {
+@Override
+public void ring() {
+System.out.println(&quot;懒猪起床了&quot;);
+}
+});
+cellPhone.alarmClock(new Bell() {
+@Override
+public void ring() {
+System.out.println(&quot;小伙伴上课了&quot;);
+}
+});
+}
+}
+interface Bell{ //接口
+void ring();//方法
+}
+class CellPhone{//类
+public void alarmClock(Bell bell){//形参是 Bell 接口类型
+System.out.println(bell.getClass());
+bell.ring();//动态绑定
+}
+}
+</code></pre>

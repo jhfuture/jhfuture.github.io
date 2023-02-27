@@ -1,0 +1,41 @@
+<hr>
+<p>title: 3-转换流<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-12-23 00:25:10</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<p><img src="/3-%E8%BD%AC%E6%8D%A2%E6%B5%81/image-20221223002648360.png" alt="image-20221223002648360"></p>
+<blockquote>
+<p>InputStreamReader 的构造方法为传入一个 inputStream(字节输入流), 和指定编码(charsetDecoder)</p>
+</blockquote>
+<blockquote>
+<p>Reader的包装类 BufferedReader 的构造器接受对象为 Reader 的子类，inputStreamReader 也属于，可以直接进行包装</p>
+</blockquote>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><pre><code class="java"> //如果有特定编码，不是utf-8，则需要进行转换
+        BufferedReader bufferedReader=null;
+        try {
+            //1.先创建字节节点流
+            //2.将字节流转换为字符流 使用inputStreamReader
+            //3.包装
+            FileInputStream fileInputStream = new FileInputStream(&quot;e:\\mytemp\\hw2.txt&quot;);
+            InputStreamReader gbk = new InputStreamReader(fileInputStream, &quot;gbk&quot;);
+             bufferedReader = new BufferedReader(gbk);
+            String line=&quot;&quot;;
+            int cout=1;
+            while ((line=bufferedReader.readLine())!=null){
+                System.out.println(&quot;第&quot;+cout+&quot;内容&quot;+line);
+                cout++;
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (bufferedReader!=null){
+                bufferedReader.close();
+            }
+        }
+</code></pre>

@@ -1,0 +1,25 @@
+<hr>
+<p>title: 2-处理流<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-12-18 21:30:47</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>1.readLine方法</p>
+<pre><code class="java">Public String readLine(){
+}
+//返回一行的字符，为空时返回 null
+</code></pre>
+<p>BufferedReader.&#x3D;&#x3D;readLine方法&#x3D;&#x3D;在读取的时候不会读取&#x3D;&#x3D;换行符&#x3D;&#x3D;，所以在进行&#x3D;&#x3D;拷贝文件操作&#x3D;&#x3D;时，需要&#x3D;&#x3D;手动添加换行&#x3D;&#x3D;。</p>
+<pre><code class="java">bufferedReader.readLine()
+
+while ((line=bufferedReader.readLine())!=null){
+  //读取时不会读取换行符，所以如果想要换行需要进行换行操作
+    bufferedWriter.write(line);
+  =====  bufferedWriter.newLine();=======
+}
+</code></pre>
+<p>2.FileReader 和 File Writer 都只能处理 &#x3D;&#x3D;字符&#x3D;&#x3D;，即文本文件，不能处理二进制文件。</p>
+<p><img src="/2-%E5%A4%84%E7%90%86%E6%B5%81/image-20221218213805681.png" alt="image-20221218213805681"></p>

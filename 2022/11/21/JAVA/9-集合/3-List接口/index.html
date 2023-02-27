@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>3-List接口 | jhfuture</title>
+  <meta name="description" content="使用 System.out.println(arrayList); 打印 ArrayList 时，调用的也是 ArrayList 类的 &#x3D;&#x3D;toString&#x3D;&#x3D;方法  一、简要介绍  有序且可重复 支持索引，且&#x3D;&#x3D;索引从 0 开始&#x3D;&#x3D;,可以使用 索引读取指定数据。  二、常用方法 void add(int ind">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-List接口">
+<meta property="og:url" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="jhfuture">
+<meta property="og:description" content="使用 System.out.println(arrayList); 打印 ArrayList 时，调用的也是 ArrayList 类的 &#x3D;&#x3D;toString&#x3D;&#x3D;方法  一、简要介绍  有序且可重复 支持索引，且&#x3D;&#x3D;索引从 0 开始&#x3D;&#x3D;,可以使用 索引读取指定数据。  二、常用方法 void add(int ind">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121165104877.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121165501932.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121190010416.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121191931474.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121193141042.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195549894.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195648294.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195703567.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195742085.png">
+<meta property="og:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121221012765.png">
+<meta property="article:published_time" content="2022-11-21T08:45:34.000Z">
+<meta property="article:modified_time" content="2022-11-22T04:35:13.404Z">
+<meta property="article:author" content="jhfuture">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121165104877.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="jhfuture" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/jhfuture" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">jhfuture</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/TWRP/">TWRP</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDBC/">JDBC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JUnit/">JUnit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/Servlet/">Servlet</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/">Javaweb</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/Servlet/">Servlet</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring6/">Spring6</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Windows%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">Windows使用技巧</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/">前端三剑客</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/javascript%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/">javascript进阶知识</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%93%8D%E5%BA%94%E5%BC%8F/">响应式</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF-%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/">软/硬件知识</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBA/" rel="tag">DBA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Less/" rel="tag">Less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/" rel="tag">Servlet</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring6/" rel="tag">Spring6</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">String字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" rel="tag">Vue中的坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="tag">Vue中的技巧</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E6%96%B9%E6%B3%95/" rel="tag">Vue方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E7%BB%84%E4%BB%B6/" rel="tag">Vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/check/" rel="tag">check</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compile/" rel="tag">compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css%E6%89%A9%E5%B1%95/" rel="tag">css扩展</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/finalize/" rel="tag">finalize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95/" rel="tag">mysql索引</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" rel="tag">mysql索引失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" rel="tag">mysql索引的引出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rem%E9%80%82%E9%85%8D/" rel="tag">rem适配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/" rel="tag">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E7%BA%A6%E6%9D%9F/" rel="tag">sql约束</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E8%A7%86%E5%9B%BE/" rel="tag">sql视图</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/" rel="tag">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" rel="tag">this关键字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/toString/" rel="tag">toString</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/twrp/" rel="tag">twrp</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%84%E4%BB%B6/" rel="tag">vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" rel="tag">vue绑定样式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" rel="tag">像素比大小</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" rel="tag">前段三剑客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="tag">原型链</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" rel="tag">响应式开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" rel="tag">多态应用&#x2F;多态参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" rel="tag">多态数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" rel="tag">安装教程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" rel="tag">成员方法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag">数据类型转换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" rel="tag">本地储存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%9A%E4%B8%BE/" rel="tag">枚举</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" rel="tag">硬核知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">经典面试题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/DBA/" style="font-size: 13px;">DBA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JDBC/" style="font-size: 13px;">JDBC</a> <a href="/tags/Java/" style="font-size: 13.25px;">Java</a> <a href="/tags/Less/" style="font-size: 13px;">Less</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/Servlet/" style="font-size: 13.5px;">Servlet</a> <a href="/tags/Spring6/" style="font-size: 13.25px;">Spring6</a> <a href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 13px;">String字符串</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" style="font-size: 13.25px;">Vue中的坑</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" style="font-size: 13.25px;">Vue中的技巧</a> <a href="/tags/Vue%E6%96%B9%E6%B3%95/" style="font-size: 13.25px;">Vue方法</a> <a href="/tags/Vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">Vue组件</a> <a href="/tags/Windows/" style="font-size: 13.25px;">Windows</a> <a href="/tags/check/" style="font-size: 13px;">check</a> <a href="/tags/compile/" style="font-size: 13px;">compile</a> <a href="/tags/css%E6%89%A9%E5%B1%95/" style="font-size: 13px;">css扩展</a> <a href="/tags/finalize/" style="font-size: 13px;">finalize</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/mysql/" style="font-size: 13.5px;">mysql</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95/" style="font-size: 13px;">mysql索引</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" style="font-size: 13px;">mysql索引失效</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" style="font-size: 13px;">mysql索引的引出</a> <a href="/tags/rem%E9%80%82%E9%85%8D/" style="font-size: 13px;">rem适配</a> <a href="/tags/servlet/" style="font-size: 13.25px;">servlet</a> <a href="/tags/sql%E7%BA%A6%E6%9D%9F/" style="font-size: 13.25px;">sql约束</a> <a href="/tags/sql%E8%A7%86%E5%9B%BE/" style="font-size: 13px;">sql视图</a> <a href="/tags/super/" style="font-size: 13px;">super</a> <a href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 13px;">this关键字</a> <a href="/tags/toString/" style="font-size: 13px;">toString</a> <a href="/tags/twrp/" style="font-size: 13.25px;">twrp</a> <a href="/tags/vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">vue组件</a> <a href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">vue绑定样式</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13.5px;">个人博客</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.75px;">事务</a> <a href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" style="font-size: 13px;">像素比大小</a> <a href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" style="font-size: 13px;">前段三剑客</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13.75px;">前端</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" style="font-size: 13px;">原型链</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 13px;">反射</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" style="font-size: 13px;">响应式开发</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13px;">垃圾回收</a> <a href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" style="font-size: 13px;">多态应用/多态参数</a> <a href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" style="font-size: 13px;">多态数组</a> <a href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" style="font-size: 13.25px;">安装教程</a> <a href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" style="font-size: 13px;">成员方法</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" style="font-size: 13px;">抽象类</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" style="font-size: 13px;">数据类型转换</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" style="font-size: 13px;">本地储存</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 13px;">枚举</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">硬核知识</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 13px;">经典面试题</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 13px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">62</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">47</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">46</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/27/C/Array/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-27T13:18:37.735Z" itemprop="datePublished">2023-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE/%E9%85%8D%E7%BD%AEV2rayA/" class="title">配置V2rayA</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-26T13:34:12.000Z" itemprop="datePublished">2023-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/25/leetCode/1-%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">1-力扣刷题笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-25T06:45:14.000Z" itemprop="datePublished">2023-02-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/07/SSM/MyBatis/2-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" class="title">2-常用注解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-07T11:29:53.000Z" itemprop="datePublished">2023-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/05/SSM/MyBatis/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="title">1-MyBatis基本使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-05T14:00:21.000Z" itemprop="datePublished">2023-02-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">一、简要介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">二、常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BB%83%E4%B9%A0"><span class="toc-number">3.</span> <span class="toc-text">三、练习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#demo1"><span class="toc-number">3.1.</span> <span class="toc-text">demo1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#demo2"><span class="toc-number">3.2.</span> <span class="toc-text">demo2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F"><span class="toc-number">4.</span> <span class="toc-text">五、注意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%BA%95%E5%B1%82%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">六、底层分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-ArrayList"><span class="toc-number">5.1.</span> <span class="toc-text">1)ArrayList</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-vector"><span class="toc-number">5.2.</span> <span class="toc-text">2)vector</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%89%A9%E5%AE%B9"><span class="toc-number">5.2.1.</span> <span class="toc-text">自定义扩容</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86"><span class="toc-number">5.2.2.</span> <span class="toc-text">详细</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-ArrayList-%E5%92%8C-vector"><span class="toc-number">5.3.</span> <span class="toc-text">3)ArrayList 和 vector</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JAVA/9-集合/3-List接口" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      3-List接口
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/" class="article-date">
+	  <time datetime="2022-11-21T08:45:34.000Z" itemprop="datePublished">2022-11-21</time>
+	</a>
+</span>
+        
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.4k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 6(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+<blockquote>
+<p>使用 System.out.println(arrayList); 打印 ArrayList 时，调用的也是 ArrayList 类的 &#x3D;&#x3D;toString&#x3D;&#x3D;方法</p>
+</blockquote>
+<h3 id="一、简要介绍"><a href="#一、简要介绍" class="headerlink" title="一、简要介绍"></a>一、简要介绍</h3><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121165104877.png" alt="image-20221121165104877"></p>
+<ul>
+<li>有序且可重复</li>
+<li>支持索引，且&#x3D;&#x3D;索引从 0 开始&#x3D;&#x3D;,可以使用 索引读取指定数据。</li>
+</ul>
+<h3 id="二、常用方法"><a href="#二、常用方法" class="headerlink" title="二、常用方法"></a>二、常用方法</h3><ul>
+<li>void add(int index, Object ele):在 index 位置插入 ele 元素</li>
+<li>boolean addAll(int index, Collection eles):从 index 位置开始将 eles 中的所有元素添加进来</li>
+<li>Object get(int index):获取指定 index 位置的元素</li>
+<li>int indexOf(Object obj):返回 obj 在集合中&#x3D;&#x3D;首次&#x3D;&#x3D;出现的位置</li>
+<li>int lastIndexOf(Object obj):返回 obj 在当前集合中&#x3D;&#x3D;末次&#x3D;&#x3D;出现的位置</li>
+<li>Object remove(&#x3D;&#x3D;int index&#x3D;&#x3D;):移除指定 index 位置的元素，并&#x3D;&#x3D;返回此元素&#x3D;&#x3D;</li>
+<li>Object set(int index, Object ele):设置指定 index 位置的元素为 ele , 相当于是替换. list.set(1, “玛丽”);</li>
+<li>List subList(int fromIndex, int toIndex):返回从 fromIndex 到 toIndex 位置的子集合</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">ublic <span class="keyword">class</span> <span class="title class_">ListMethod</span> &#123;</span><br><span class="line"><span class="meta">@SuppressWarnings(&#123;&quot;all&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"><span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">list.add(<span class="string">&quot;张三丰&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;贾宝玉&quot;</span>);</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="comment">// void add(int index, Object ele):在 index 位置插入 ele 元素</span></span><br><span class="line"><span class="comment">//在 index = 1 的位置插入一个对象</span></span><br><span class="line">list.add(<span class="number">1</span>, <span class="string">&quot;韩顺平&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">// boolean addAll(int index, Collection eles):从 index 位置开始将 eles 中的所有元素添加进来</span></span><br><span class="line"><span class="type">List</span> <span class="variable">list2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">list2.add(<span class="string">&quot;jack&quot;</span>);</span><br><span class="line">list2.add(<span class="string">&quot;tom&quot;</span>);</span><br><span class="line">list.addAll(<span class="number">1</span>, list2);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">// Object get(int index):获取指定 index 位置的元素</span></span><br><span class="line"><span class="comment">//说过</span></span><br><span class="line"><span class="comment">// int indexOf(Object obj):返回 obj 在集合中首次出现的位置</span></span><br><span class="line">System.out.println(list.indexOf(<span class="string">&quot;tom&quot;</span>));<span class="comment">//2</span></span><br><span class="line"><span class="comment">// int lastIndexOf(Object obj):返回 obj 在当前集合中末次出现的位置</span></span><br><span class="line">list.add(<span class="string">&quot;韩顺平&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line">System.out.println(list.lastIndexOf(<span class="string">&quot;韩顺平&quot;</span>));</span><br><span class="line"><span class="comment">// Object remove(int index):移除指定 index 位置的元素，并返回此元素</span></span><br><span class="line">list.remove(<span class="number">0</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">// Object set(int index, Object ele):设置指定 index 位置的元素为 ele , 相当于是替换. list.set(1, &quot;玛丽&quot;);</span></span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">// List subList(int fromIndex, int toIndex):返回从 fromIndex 到 toIndex 位置的子集合</span></span><br><span class="line"><span class="comment">// 注意返回的子集合 fromIndex &lt;= subList &lt; toIndex</span></span><br><span class="line"><span class="type">List</span> <span class="variable">returnlist</span> <span class="operator">=</span> list.subList(<span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;returnlist=&quot;</span> + returnlist);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、练习"><a href="#三、练习" class="headerlink" title="三、练习"></a>三、练习</h3><h4 id="demo1"><a href="#demo1" class="headerlink" title="demo1"></a>demo1</h4><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121165501932.png" alt="image-20221121165501932"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListExercise</span> &#123;</span><br><span class="line"><span class="meta">@SuppressWarnings(&#123;&quot;all&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">添加 10 个以上的元素(比如 String &quot;hello&quot; )，在 2 号位插入一个元素&quot;韩顺平教育&quot;，</span></span><br><span class="line"><span class="comment">获得第 5 个元素，删除第 6 个元素，修改第 7 个元素，在使用迭代器遍历集合，</span></span><br><span class="line"><span class="comment">要求:使用 List 的实现类 ArrayList 完成。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">12</span>; i++) &#123;</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span> + i);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">//在 2 号位插入一个元素&quot;韩顺平教育&quot;</span></span><br><span class="line">list.add(<span class="number">1</span>, <span class="string">&quot;韩顺平教育&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">//获得第 5 个元素</span></span><br><span class="line">System.out.println(<span class="string">&quot;第五个元素=&quot;</span> + list.get(<span class="number">4</span>));</span><br><span class="line"><span class="comment">//删除第 6 个元素</span></span><br><span class="line">list.remove(<span class="number">5</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">//修改第 7 个元素</span></span><br><span class="line">list.set(<span class="number">6</span>, <span class="string">&quot;三国演义&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;list=&quot;</span> + list);</span><br><span class="line"><span class="comment">//在使用迭代器遍历集合</span></span><br><span class="line"><span class="type">Iterator</span> <span class="variable">iterator</span> <span class="operator">=</span> list.iterator();</span><br><span class="line"><span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> iterator.next();</span><br><span class="line">System.out.println(<span class="string">&quot;obj=&quot;</span> + obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="demo2"><a href="#demo2" class="headerlink" title="demo2"></a>demo2</h4><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121190010416.png" alt="image-20221121190010416"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 四、普通 <span class="keyword">for</span> 循环</span><br><span class="line"></span><br><span class="line">#### what?</span><br><span class="line"></span><br><span class="line">使用 get 方法</span><br><span class="line"></span><br><span class="line">#### how</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line"> <span class="title function_">for</span> <span class="params">(<span class="type">int</span> i = <span class="number">0</span>; i &lt;arrayList.size()</span> ; i++) &#123;</span><br><span class="line">            System.out.println(arrayList.get(i));</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="五、注意"><a href="#五、注意" class="headerlink" title="五、注意"></a>五、注意</h3><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121191931474.png" alt="image-20221121191931474"></p>
+<p>线程不安全</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> &#123;</span><br><span class="line">        ensureCapacityInternal(size + <span class="number">1</span>);  <span class="comment">// Increments modCount!!</span></span><br><span class="line">        elementData[size++] = e;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">没有 <span class="keyword">synchronized</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="六、底层分析"><a href="#六、底层分析" class="headerlink" title="六、底层分析"></a>六、底层分析</h3><h4 id="1-ArrayList"><a href="#1-ArrayList" class="headerlink" title="1)ArrayList"></a>1)ArrayList</h4><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121193141042.png" alt="image-20221121193141042"></p>
+<ol>
+<li>不会被序列化 维护一个elementData</li>
+<li>扩充<ol>
+<li>0(默认构造器)—&gt;10 —&gt;15 —&gt; 22</li>
+<li>8(指定)—&gt;14—-&gt;21</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>Arrays.copy(url  , int newlength)方法。且会保留原有的数据。</p>
+</blockquote>
+<p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195549894.png" alt="image-20221121195549894"></p>
+<p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195648294.png" alt="image-20221121195648294"></p>
+<p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195703567.png" alt="image-20221121195703567"></p>
+<blockquote>
+<p>一个利用移位扩容。<br><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121195742085.png" alt="image-20221121195742085"></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line">默认为空的调试代码</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">默认不为空的调试代码</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"><span class="comment">//老韩解读源码</span></span><br><span class="line"><span class="comment">//注意，注意，注意，Idea 默认情况下，Debug 显示的数据是简化后的，如果希望看到完整的数据</span></span><br><span class="line"><span class="comment">//需要做设置. //使用无参构造器创建 ArrayList 对象</span></span><br><span class="line"><span class="comment">//ArrayList list = new ArrayList();</span></span><br><span class="line"><span class="type">ArrayList</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>(<span class="number">8</span>);</span><br><span class="line"><span class="comment">//使用 for 给 list 集合添加 1-10 数据</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">list.add(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用 for 给 list 集合添加 11-15 数据</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">11</span>; i &lt;= <span class="number">15</span>; i++) &#123;</span><br><span class="line">list.add(i);</span><br><span class="line">&#125;</span><br><span class="line">list.add(<span class="number">100</span>);</span><br><span class="line">list.add(<span class="number">200</span>);</span><br><span class="line">list.add(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-vector"><a href="#2-vector" class="headerlink" title="2)vector"></a>2)vector</h4><h5 id="自定义扩容"><a href="#自定义扩容" class="headerlink" title="自定义扩容"></a>自定义扩容</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">newCapacity</span> <span class="operator">=</span> oldCapacity + ((capacityIncrement &gt; <span class="number">0</span>) ?capacityIncrement : oldCapacity);</span><br><span class="line">=================有构造器中可以设置 increment=========================</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">Vector</span><span class="params">(<span class="type">int</span> initialCapacity, <span class="type">int</span> capacityIncrement)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="built_in">this</span>.elementData = <span class="keyword">new</span> <span class="title class_">Object</span>[initialCapacity];</span><br><span class="line">        <span class="built_in">this</span>.capacityIncrement = capacityIncrement;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="详细"><a href="#详细" class="headerlink" title="详细"></a>详细</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SuppressWarnings(&#123;&quot;all&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Vector_</span> &#123;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"><span class="comment">//无参构造器</span></span><br><span class="line"><span class="comment">//有参数的构造</span></span><br><span class="line"><span class="type">Vector</span> <span class="variable">vector</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Vector</span>(<span class="number">8</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">vector.add(i);</span><br><span class="line">韩顺平循序渐进学 Java 零基础</span><br><span class="line">第 <span class="number">628</span>页</span><br><span class="line">&#125;</span><br><span class="line">vector.add(<span class="number">100</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;vector=&quot;</span> + vector);</span><br><span class="line"><span class="comment">//老韩解读源码</span></span><br><span class="line"><span class="comment">//1. new Vector() 底层</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">public Vector() &#123;</span></span><br><span class="line"><span class="comment">this(10);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">补充：如果是 Vector vector = new Vector(8);</span></span><br><span class="line"><span class="comment">走的方法:</span></span><br><span class="line"><span class="comment">public Vector(int initialCapacity) &#123;</span></span><br><span class="line"><span class="comment">this(initialCapacity, 0);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">2. vector.add(i)</span></span><br><span class="line"><span class="comment">2.1 //下面这个方法就添加数据到 vector 集合</span></span><br><span class="line"><span class="comment">public synchronized boolean add(E e) &#123;</span></span><br><span class="line"><span class="comment">modCount++;</span></span><br><span class="line"><span class="comment">ensureCapacityHelper(elementCount + 1);</span></span><br><span class="line"><span class="comment">elementData[elementCount++] = e;</span></span><br><span class="line"><span class="comment">return true;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">2.2 //确定是否需要扩容 条件 ： minCapacity - elementData.length&gt;0</span></span><br><span class="line"><span class="comment">private void ensureCapacityHelper(int minCapacity) &#123;</span></span><br><span class="line"><span class="comment">// overflow-conscious code</span></span><br><span class="line"><span class="comment">if (minCapacity - elementData.length &gt; 0)</span></span><br><span class="line"><span class="comment">韩顺平循序渐进学 Java 零基础</span></span><br><span class="line"><span class="comment">第 629页</span></span><br><span class="line"><span class="comment">grow(minCapacity);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">2.3 //如果 需要的数组大小 不够用，就扩容 , 扩容的算法</span></span><br><span class="line"><span class="comment">//newCapacity = oldCapacity + ((capacityIncrement &gt; 0) ?</span></span><br><span class="line"><span class="comment">// capacityIncrement : oldCapacity);</span></span><br><span class="line"><span class="comment">//就是扩容两倍. private void grow(int minCapacity) &#123;</span></span><br><span class="line"><span class="comment">// overflow-conscious code</span></span><br><span class="line"><span class="comment">int oldCapacity = elementData.length;</span></span><br><span class="line"><span class="comment">int newCapacity = oldCapacity + ((capacityIncrement &gt; 0) ?</span></span><br><span class="line"><span class="comment">capacityIncrement : oldCapacity);</span></span><br><span class="line"><span class="comment">if (newCapacity - minCapacity &lt; 0)</span></span><br><span class="line"><span class="comment">newCapacity = minCapacity;</span></span><br><span class="line"><span class="comment">if (newCapacity - MAX_ARRAY_SIZE &gt; 0)</span></span><br><span class="line"><span class="comment">newCapacity = hugeCapacity(minCapacity);</span></span><br><span class="line"><span class="comment">elementData = Arrays.copyOf(elementData, newCapacity);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-ArrayList-和-vector"><a href="#3-ArrayList-和-vector" class="headerlink" title="3)ArrayList 和 vector"></a>3)ArrayList 和 vector</h4><p><img src="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/image-20221121221012765.png" alt="image-20221121221012765"></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://jhfuture.github.io/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/3-List%E6%8E%A5%E5%8F%A3/" title="3-List接口" target="_blank" rel="external">https://jhfuture.github.io/2022/11/21/JAVA/9-集合/3-List接口/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/jhfuture" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/jhfuture" target="_blank"><span class="text-dark">jhfuture</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>一个记录技术分享的网站。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/4-LinkedList/" title="4-LinkedList"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/11/21/JAVA/9-%E9%9B%86%E5%90%88/2-%E9%9B%86%E5%90%88%E7%9A%84%E9%81%8D%E5%8E%86/" title="2-集合的遍历"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 jhfuture
+        
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        </div>
+            
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="/css/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

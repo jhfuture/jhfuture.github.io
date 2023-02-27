@@ -1,0 +1,44 @@
+<hr>
+<p>title: 1-内部类入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-13 12:46:20</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h3><h4 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h4><p>类的五大成员</p>
+<ul>
+<li>属性</li>
+<li>方法</li>
+<li>构造器</li>
+<li>方法块</li>
+<li>内部类</li>
+</ul>
+<h4 id="2-根据定义的位置分类："><a href="#2-根据定义的位置分类：" class="headerlink" title="2.根据定义的位置分类："></a>2.根据定义的位置分类：</h4><p>如果定义类在局部位置(方法中&#x2F;代码块) :</p>
+<p>(1) 局部内部类 &#x3D;&#x3D;(2) 匿名内部类&#x3D;&#x3D;</p>
+<p> 定义在成员位置</p>
+<p> (1) 成员内部类 (2) 静态内部类</p>
+<h4 id="3-基本使用"><a href="#3-基本使用" class="headerlink" title="3.基本使用"></a>3.基本使用</h4><p><img src="/0-%E5%86%85%E9%83%A8%E7%B1%BB%E5%85%A5%E9%97%A8/image-20221113140128260.png" alt="image-20221113140128260"></p>
+<pre><code class="java">package com.hspedu.innerclass;
+public class InnerClass01 { //外部其他类
+public static void main(String[] args) {
+}
+}
+class Outer { //外部类
+private int n1 = 100;//属性
+public Outer(int n1) {//构造器
+this.n1 = n1;
+}
+public void m1() {//方法
+System.out.println(&quot;m1()&quot;);
+}
+{//代码块
+System.out.println(&quot;代码块...&quot;);
+}
+class Inner { //内部类, 在 Outer 类的内部
+}
+}
+</code></pre>

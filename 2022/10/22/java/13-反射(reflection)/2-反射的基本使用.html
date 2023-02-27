@@ -1,0 +1,124 @@
+<hr>
+<p>title: 2-反射的基本使用<br>toc: true<br>tags:</p>
+<ul>
+<li>反射<br>categories:</li>
+<li>JAVA<br>date: 2022-12-17 21:20:54</li>
+</ul>
+<hr>
+<!--more-->
+
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>反射是一种动态依赖机制，其作为各种 java 框架的核心，在 java 中具有举足轻重的地位。集多身优点的它，也因为动态加载而会损耗一定的性能。</p>
+<h4 id="其基本使用步骤可分为"><a href="#其基本使用步骤可分为" class="headerlink" title="其基本使用步骤可分为"></a>其基本使用步骤可分为</h4><ul>
+<li>1.获取 Class 对象</li>
+<li>1.1使用 Class 对象获取 file(字段) 对象 对字段进行操作</li>
+<li>1.2使用 Class 对象获取 method(方法) 对象 对方法进行调用。</li>
+<li>1.3使用 Class 对象获取 constructor 对象对构造器进行调用。</li>
+</ul>
+<p>下面来详细说每个步骤的使用方法</p>
+<h2 id="一、获取-Class-对象"><a href="#一、获取-Class-对象" class="headerlink" title="一、获取 Class 对象"></a>一、获取 Class 对象</h2><p>从大维度上看，获取 Class 对象是从 4 个基本维度出发。</p>
+<p><img src="/2-%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221217213408966.png" alt="image-20221217213408966"></p>
+<ol>
+<li>代码阶段<ol>
+<li>&#x3D;&#x3D;Class.forName(“全路径”)&#x3D;&#x3D;</li>
+<li>前提：<ol>
+<li>已知一个类的全类名</li>
+</ol>
+</li>
+<li>类是否会被加载 –&gt;是</li>
+<li>场景<ol>
+<li>配置文件</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>类加载阶段<ol>
+<li>&#x3D;&#x3D;类名.class&#x3D;&#x3D;</li>
+<li>类是否会被加载 –&gt;否</li>
+<li>场景<ol>
+<li>传参</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>运行阶段<ol>
+<li>&#x3D;&#x3D;对象.class&#x3D;&#x3D;</li>
+</ol>
+</li>
+<li>使用加载器<ol>
+<li>对象.getClass.getClassLoader() –》使用类的加载器的load方法进行类的加载</li>
+</ol>
+</li>
+<li>基本数据类型获得 Class<ol>
+<li>基本数据类型.class</li>
+</ol>
+</li>
+<li>基本数据类型的&#x3D;&#x3D;包装类&#x3D;&#x3D;<ol>
+<li>包装类.TYPE</li>
+</ol>
+</li>
+</ol>
+<h2 id="二、常用方法"><a href="#二、常用方法" class="headerlink" title="二、常用方法"></a>二、常用方法</h2><h3 id="1-Class类"><a href="#1-Class类" class="headerlink" title="1.Class类"></a>1.Class类</h3><ul>
+<li>static Class forName(String name) <ul>
+<li>返回指定类名 name 的 Class 对象</li>
+</ul>
+</li>
+<li>Object newInstance<ul>
+<li>调用缺省构造函数，返回该 Class 对象的一个实例</li>
+</ul>
+</li>
+<li>String getName()<ul>
+<li>返回此 Class 对象所表示的实体（类、接口、数组类、基本数据类型等）名称</li>
+</ul>
+</li>
+<li>Class[] getInterfaces() <ul>
+<li>获取此 Class 对象的接口</li>
+</ul>
+</li>
+<li>ClassLoader getClassLoader() <ul>
+<li>获取该类的类构造器</li>
+</ul>
+</li>
+<li>Class getSuperclass()<ul>
+<li>返回表示此 Class 所表示的实体的类的 &#x3D;&#x3D;超类的Class&#x3D;&#x3D;</li>
+</ul>
+</li>
+<li>Constructor[] getConstructors()<ul>
+<li>返回一个包含本类构造器的数组</li>
+</ul>
+</li>
+<li>Field[] getDeclaredFields()<ul>
+<li>返回 Field 对象的一个数组</li>
+</ul>
+</li>
+<li>Method getMethod(String name, Class… paramTypes)<ul>
+<li>返回一个 Method 对象， name为方法名，方法的形参类型的 Class 对像</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-Method"><a href="#2-Method" class="headerlink" title="2.Method"></a>2.Method</h3><p><img src="/2-%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20221217221047646.png" alt="image-20221217221047646"></p>
+<h2 id="额外的补充"><a href="#额外的补充" class="headerlink" title="额外的补充"></a>额外的补充</h2><ol>
+<li><p>类名.class 获取 Class 对象时，该类是否加载的问题。</p>
+<p>使用 &#x3D;&#x3D;类名.class获取 Class&#x3D;&#x3D;不会使 该类被加载，jvm 只会对其进行校验。只有在代码中真正用到了类。比如通过反设调用方法或创建对象，那么在这种情况下该类就会被加载。<br>例如</p>
+<pre><code class="java">  System.out.println(nte.class);
+//        System.out.println(nte.age);
+  Class&lt;nte&gt; nteClass = nte.class;
+     Method hi = nteClass.getMethod(&quot;hi&quot;);
+    hi.invoke(null);
+class nte{
+    static int age=10;
+    static {
+        System.out.println(&quot;Helloworld&quot;);
+    }
+    public static void hi(){
+        System.out.println(&quot;hi&quot;);
+    }
+}
+输出结果
+    
+class com.reflection.homework.nte
+Helloworld
+hi
+    第一个nte.class 输出后，静态方法块中的打印才输出，说明 使用 类名.class 时类并不会被加载。
+</code></pre>
+</li>
+</ol>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>IoC注解式开发 | jhfuture</title>
+  <meta name="description" content="1 回顾注解注解的存在主要是为了简化XML的配置。Spring6倡导全注解开发。 我们来回顾一下：  第一：注解怎么定义，注解中的属性怎么定义？ 第二：注解怎么使用？ 第三：通过反射机制怎么读取注解？  1.1注解怎么定义，注解中的属性怎么定义？123456789101112package com.powernode.annotation;import java.lang.annotation.E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IoC注解式开发">
+<meta property="og:url" content="https://jhfuture.github.io/2023/01/07/SSM/Spring/6-Spring%20IoC%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="jhfuture">
+<meta property="og:description" content="1 回顾注解注解的存在主要是为了简化XML的配置。Spring6倡导全注解开发。 我们来回顾一下：  第一：注解怎么定义，注解中的属性怎么定义？ 第二：注解怎么使用？ 第三：通过反射机制怎么读取注解？  1.1注解怎么定义，注解中的属性怎么定义？123456789101112package com.powernode.annotation;import java.lang.annotation.E">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-07T15:44:02.000Z">
+<meta property="article:modified_time" content="2023-01-11T16:53:36.699Z">
+<meta property="article:author" content="jhfuture">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://jhfuture.github.io/2023/01/07/SSM/Spring/6-Spring%20IoC%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="jhfuture" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/jhfuture" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">jhfuture</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/TWRP/">TWRP</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDBC/">JDBC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JUnit/">JUnit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/Servlet/">Servlet</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/">Javaweb</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/Servlet/">Servlet</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring6/">Spring6</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Windows%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">Windows使用技巧</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/">前端三剑客</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/javascript%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/">javascript进阶知识</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%93%8D%E5%BA%94%E5%BC%8F/">响应式</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF-%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/">软/硬件知识</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBA/" rel="tag">DBA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Less/" rel="tag">Less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/" rel="tag">Servlet</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring6/" rel="tag">Spring6</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">String字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" rel="tag">Vue中的坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="tag">Vue中的技巧</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E6%96%B9%E6%B3%95/" rel="tag">Vue方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E7%BB%84%E4%BB%B6/" rel="tag">Vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/check/" rel="tag">check</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compile/" rel="tag">compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css%E6%89%A9%E5%B1%95/" rel="tag">css扩展</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/finalize/" rel="tag">finalize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95/" rel="tag">mysql索引</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" rel="tag">mysql索引失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" rel="tag">mysql索引的引出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rem%E9%80%82%E9%85%8D/" rel="tag">rem适配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/" rel="tag">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E7%BA%A6%E6%9D%9F/" rel="tag">sql约束</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E8%A7%86%E5%9B%BE/" rel="tag">sql视图</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/" rel="tag">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" rel="tag">this关键字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/toString/" rel="tag">toString</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/twrp/" rel="tag">twrp</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%84%E4%BB%B6/" rel="tag">vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" rel="tag">vue绑定样式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" rel="tag">像素比大小</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" rel="tag">前段三剑客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="tag">原型链</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" rel="tag">响应式开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" rel="tag">多态应用&#x2F;多态参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" rel="tag">多态数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" rel="tag">安装教程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" rel="tag">成员方法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag">数据类型转换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" rel="tag">本地储存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%9A%E4%B8%BE/" rel="tag">枚举</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" rel="tag">硬核知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">经典面试题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/DBA/" style="font-size: 13px;">DBA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JDBC/" style="font-size: 13px;">JDBC</a> <a href="/tags/Java/" style="font-size: 13.25px;">Java</a> <a href="/tags/Less/" style="font-size: 13px;">Less</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/Servlet/" style="font-size: 13.5px;">Servlet</a> <a href="/tags/Spring6/" style="font-size: 13.25px;">Spring6</a> <a href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 13px;">String字符串</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" style="font-size: 13.25px;">Vue中的坑</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" style="font-size: 13.25px;">Vue中的技巧</a> <a href="/tags/Vue%E6%96%B9%E6%B3%95/" style="font-size: 13.25px;">Vue方法</a> <a href="/tags/Vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">Vue组件</a> <a href="/tags/Windows/" style="font-size: 13.25px;">Windows</a> <a href="/tags/check/" style="font-size: 13px;">check</a> <a href="/tags/compile/" style="font-size: 13px;">compile</a> <a href="/tags/css%E6%89%A9%E5%B1%95/" style="font-size: 13px;">css扩展</a> <a href="/tags/finalize/" style="font-size: 13px;">finalize</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/mysql/" style="font-size: 13.5px;">mysql</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95/" style="font-size: 13px;">mysql索引</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" style="font-size: 13px;">mysql索引失效</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" style="font-size: 13px;">mysql索引的引出</a> <a href="/tags/rem%E9%80%82%E9%85%8D/" style="font-size: 13px;">rem适配</a> <a href="/tags/servlet/" style="font-size: 13.25px;">servlet</a> <a href="/tags/sql%E7%BA%A6%E6%9D%9F/" style="font-size: 13.25px;">sql约束</a> <a href="/tags/sql%E8%A7%86%E5%9B%BE/" style="font-size: 13px;">sql视图</a> <a href="/tags/super/" style="font-size: 13px;">super</a> <a href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 13px;">this关键字</a> <a href="/tags/toString/" style="font-size: 13px;">toString</a> <a href="/tags/twrp/" style="font-size: 13.25px;">twrp</a> <a href="/tags/vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">vue组件</a> <a href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">vue绑定样式</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13.5px;">个人博客</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.75px;">事务</a> <a href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" style="font-size: 13px;">像素比大小</a> <a href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" style="font-size: 13px;">前段三剑客</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13.75px;">前端</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" style="font-size: 13px;">原型链</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 13px;">反射</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" style="font-size: 13px;">响应式开发</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13px;">垃圾回收</a> <a href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" style="font-size: 13px;">多态应用/多态参数</a> <a href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" style="font-size: 13px;">多态数组</a> <a href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" style="font-size: 13.25px;">安装教程</a> <a href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" style="font-size: 13px;">成员方法</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" style="font-size: 13px;">抽象类</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" style="font-size: 13px;">数据类型转换</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" style="font-size: 13px;">本地储存</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 13px;">枚举</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">硬核知识</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 13px;">经典面试题</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 13px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">62</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">47</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">46</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/27/C/Array/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-27T13:18:37.735Z" itemprop="datePublished">2023-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE/%E9%85%8D%E7%BD%AEV2rayA/" class="title">配置V2rayA</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-26T13:34:12.000Z" itemprop="datePublished">2023-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/25/leetCode/1-%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">1-力扣刷题笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-25T06:45:14.000Z" itemprop="datePublished">2023-02-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/07/SSM/MyBatis/2-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" class="title">2-常用注解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-07T11:29:53.000Z" itemprop="datePublished">2023-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/05/SSM/MyBatis/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="title">1-MyBatis基本使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-05T14:00:21.000Z" itemprop="datePublished">2023-02-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="6-spring-SSM/Spring/6-Spring IoC注解式开发" class="article article-type-6-spring" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      IoC注解式开发
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/01/07/SSM/Spring/6-Spring%20IoC%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/" class="article-date">
+	  <time datetime="2023-01-07T15:44:02.000Z" itemprop="datePublished">2023-01-07</time>
+	</a>
+</span>
+        
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/01/07/SSM/Spring/6-Spring%20IoC%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 6.5k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 31(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="1-回顾注解"><a href="#1-回顾注解" class="headerlink" title="1 回顾注解"></a>1 回顾注解</h2><p>注解的存在主要是为了简化XML的配置。<strong>Spring6倡导全注解开发</strong>。</p>
+<p>我们来回顾一下：</p>
+<ul>
+<li>第一：注解怎么定义，注解中的属性怎么定义？</li>
+<li>第二：注解怎么使用？</li>
+<li>第三：通过反射机制怎么读取注解？</li>
+</ul>
+<h3 id="1-1注解怎么定义，注解中的属性怎么定义？"><a href="#1-1注解怎么定义，注解中的属性怎么定义？" class="headerlink" title="1.1注解怎么定义，注解中的属性怎么定义？"></a>1.1<strong>注解怎么定义，注解中的属性怎么定义？</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(value = &#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(value = RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Component &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上是自定义了一个注解：Component</p>
+<p>该注解上面修饰的注解包括：Target 注解和 Retention 注解，这两个注解被称为元注解。</p>
+<blockquote>
+<p>元注解：用来注解 注解 的注解。</p>
+</blockquote>
+<h4 id="两个重要的标签"><a href="#两个重要的标签" class="headerlink" title="两个重要的标签"></a>两个重要的标签</h4><ul>
+<li><p>Target 注解用来设置 Component 注解可以出现的位置，</p>
+<ul>
+<li>ElemtType.Type	<ul>
+<li>以上代表表示Component注解只能用在类和接口上。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Retention注解用来设置Component注解的保持性策略，</p>
+<ul>
+<li>RetetionPolicy.RUNTIME<ul>
+<li>以上代表Component注解可以被反射机制读取。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="定义的属性"><a href="#定义的属性" class="headerlink" title="定义的属性"></a>定义的属性</h4><ul>
+<li>String value(); 是Component注解中的一个属性。<ul>
+<li>该属性类型String，属性名是value。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-注解怎么使用？"><a href="#1-2-注解怎么使用？" class="headerlink" title="1.2.注解怎么使用？"></a><strong>1.2.注解怎么使用？</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.annotation.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(value = &quot;userBean&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>语法格式：</p>
+<ul>
+<li>@注解类型名(属性名&#x3D;属性值, 属性名&#x3D;属性值, 属性名&#x3D;属性值……)</li>
+</ul>
+<p>userBean为什么使用双引号括起来，因为value属性是String类型，字符串。</p>
+<blockquote>
+<p> 另外如果属性名是value，则在使用的时候可以省略属性名，例如：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.annotation.Component;</span><br><span class="line"></span><br><span class="line"><span class="comment">//@Component(value = &quot;userBean&quot;)</span></span><br><span class="line"><span class="meta">@Component(&quot;userBean&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>通过反射机制怎么读取注解？</strong></p>
+<blockquote>
+<p>—————–&gt;类的clazz对象.isAnnotationPresent(注解的class对象)</p>
+</blockquote>
+<p>接下来，我们来写一段程序，当Bean类上有Component注解时，则实例化Bean对象，如果没有，则不实例化对象。</p>
+<p>我们准备两个Bean，一个上面有注解，一个上面没有注解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.annotation.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(&quot;userBean&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Vip</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假设我们现在只知道包名：com.powernode.bean。至于这个包下有多少个Bean我们不知道。哪些Bean上有注解，哪些Bean上没有注解，这些我们都不知道，如何通过程序全自动化判断。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.annotation.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Enumeration;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 动力节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@className</span> Test</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.0</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 存放Bean的Map集合。key存储beanId。value存储Bean。</span></span><br><span class="line">        Map&lt;String,Object&gt; beanMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">packageName</span> <span class="operator">=</span> <span class="string">&quot;com.powernode.bean&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> packageName.replaceAll(<span class="string">&quot;\\.&quot;</span>, <span class="string">&quot;/&quot;</span>);</span><br><span class="line">        <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> ClassLoader.getSystemClassLoader().getResource(path);</span><br><span class="line">        <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(url.getPath());</span><br><span class="line">        File[] files = file.listFiles();</span><br><span class="line">        Arrays.stream(files).forEach(f -&gt; &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> packageName + <span class="string">&quot;.&quot;</span> + f.getName().split(<span class="string">&quot;\\.&quot;</span>)[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Class&lt;?&gt; clazz = Class.forName(className);</span><br><span class="line">                <span class="keyword">if</span> (clazz.isAnnotationPresent(Component.class)) &#123;</span><br><span class="line">                    <span class="type">Component</span> <span class="variable">component</span> <span class="operator">=</span> clazz.getAnnotation(Component.class);</span><br><span class="line">                    <span class="type">String</span> <span class="variable">beanId</span> <span class="operator">=</span> component.value();</span><br><span class="line">                    <span class="type">Object</span> <span class="variable">bean</span> <span class="operator">=</span> clazz.newInstance();</span><br><span class="line">                    beanMap.put(beanId, bean);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        System.out.println(beanMap);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665543007882-24036142-350b-4209-bb20-46a61e35716d.png)</p>
+<h2 id="2-声明Bean的注解"><a href="#2-声明Bean的注解" class="headerlink" title="2 声明Bean的注解"></a>2 声明Bean的注解</h2><p>负责声明Bean的注解，常见的包括四个：</p>
+<ul>
+<li>@Component  其余三个是第一个的别名。</li>
+<li>@Controller</li>
+<li>@Service</li>
+<li>@Repository</li>
+</ul>
+<p>源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(value = &#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(value = RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Component &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> org.springframework.stereotype;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.AliasFor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Controller &#123;</span><br><span class="line">    <span class="meta">@AliasFor(</span></span><br><span class="line"><span class="meta">        annotation = Component.class</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> org.springframework.stereotype;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.AliasFor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Service &#123;</span><br><span class="line">    <span class="meta">@AliasFor(</span></span><br><span class="line"><span class="meta">        annotation = Component.class</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> org.springframework.stereotype;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.AliasFor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Repository &#123;</span><br><span class="line">    <span class="meta">@AliasFor(</span></span><br><span class="line"><span class="meta">        annotation = Component.class</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过源码可以看到，@Controller、@Service、@Repository这三个注解都是@Component注解的别名。</p>
+<p>也就是说：这四个注解的功能都一样。用哪个都可以。</p>
+<p>只是为了增强程序的可读性，建议：</p>
+<ul>
+<li>控制器类上使用：Controller</li>
+<li>service类上使用：Service</li>
+<li>dao类上使用：Repository</li>
+</ul>
+<p>他们都是只有一个value属性。value属性用来指定bean的id，也就是bean的名字。</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545099269-ebd7e446-bc2f-4442-89b8-3f513e546a8b.png)</p>
+<h2 id="3-Spring注解的使用"><a href="#3-Spring注解的使用" class="headerlink" title="3 Spring注解的使用"></a>3 Spring注解的使用</h2><p>如何使用以上的注解呢？</p>
+<ul>
+<li>第一步：加入aop的依赖</li>
+<li>第二步：在配置文件中添加context命名空间</li>
+<li>第三步：在配置文件中指定扫描的包</li>
+<li>第四步：在Bean类上使用注解</li>
+</ul>
+<p><strong>第一步：加入aop的依赖</strong></p>
+<p>我们可以看到当加入spring-context依赖之后，会关联加入aop的依赖。所以这一步不用做。</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545268001-e3fb24f3-6688-4f52-a8c7-7c3084fa10a2.png)</p>
+<p><strong>第二步：在配置文件中添加context命名空间</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>第三步：在配置文件中指定要扫描的包</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6.bean&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>第四步：在Bean类上使用注解</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(value = &quot;userBean&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编写测试程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.bean.User;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testBean</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">User</span> <span class="variable">userBean</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;userBean&quot;</span>, User.class);</span><br><span class="line">        System.out.println(userBean);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545669944-c067eacb-f65b-45ab-b68b-2320647cdfb4.png)</p>
+<p><strong>如果注解的属性名是value，那么value是可以省略的。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(&quot;vipBean&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Vip</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.bean.Vip;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testBean</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">Vip</span> <span class="variable">vipBean</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;vipBean&quot;</span>, Vip.class);</span><br><span class="line">        System.out.println(vipBean);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665545860738-8bae2a45-efa8-40eb-9213-0dbd2ae1b54a.png)</p>
+<p><strong>如果把value属性彻底去掉，spring会被Bean自动取名吗？会的。并且默认名字的规律是：Bean类名首字母小写即可。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BankDao</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，这个BankDao的bean的名字为：bankDao</p>
+<p>测试一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.bean.BankDao;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testBean</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">BankDao</span> <span class="variable">bankDao</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;bankDao&quot;</span>, BankDao.class);</span><br><span class="line">        System.out.println(bankDao);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546100844-e0ffc213-8126-419a-ab67-7f433ad43105.png)</p>
+<p>我们将Component注解换成其它三个注解，看看是否可以用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BankDao</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546198246-f9d6adc1-ecc8-4e8c-babf-49f2ed7b87cd.png)</p>
+<p>剩下的两个注解大家可以测试一下。</p>
+<p><strong>如果是多个包怎么办？有两种解决方案：</strong></p>
+<ul>
+<li><strong>第一种：在配置文件中指定多个包，用逗号隔开。</strong></li>
+<li><strong>第二种：指定多个包的共同父包。</strong></li>
+</ul>
+<p>先来测试一下逗号（英文）的方式：</p>
+<p>创建一个新的包：bean2，定义一个Bean类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置文件修改：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6.bean,com.powernode.spring6.bean2&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>测试程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.bean.BankDao;</span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.bean2.Order;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testBean</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">BankDao</span> <span class="variable">bankDao</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;bankDao&quot;</span>, BankDao.class);</span><br><span class="line">        System.out.println(bankDao);</span><br><span class="line">        <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;order&quot;</span>, Order.class);</span><br><span class="line">        System.out.println(order);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546710304-8ebbe95d-1d1d-44fa-9605-9dad43e487b7.png)</p>
+<p>我们再来看看，指定共同的父包行不行：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665546777022-4eb8c5e3-22ed-4baf-8722-a5fa98df253d.png)</p>
+<h2 id="4-选择性实例化Bean"><a href="#4-选择性实例化Bean" class="headerlink" title="4 选择性实例化Bean"></a>4 选择性实例化Bean</h2><p>假设在某个包下有很多Bean，有的Bean上标注了Component，有的标注了Controller，有的标注了Service，有的标注了Repository，现在由于某种特殊业务的需要，只允许其中所有的Controller参与Bean管理，其他的都不实例化。这应该怎么办呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean3;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">A</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">B</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">C</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;C的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">D</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">D</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;D的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">E</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;E的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">F</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">F</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;F的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我只想实例化bean3包下的Controller。配置文件这样写：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6.bean3&quot;</span> <span class="attr">use-default-filters</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">context:include-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Controller&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>use-default-filters&#x3D;”true” 表示：使用spring默认的规则，只要有Component、Controller、Service、Repository中的任意一个注解标注，则进行实例化。</p>
+<p><strong>use-default-filters&#x3D;”false”</strong> 表示：不再spring默认实例化规则，即使有Component、Controller、Service、Repository这些注解标注，也不再实例化。</p>
+<p>&lt;context:include-filter type&#x3D;”annotation” expression&#x3D;”org.springframework.stereotype.Controller”&#x2F;&gt; 表示只有Controller进行实例化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testChoose</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring-choose.xml&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665556059297-de0d7dbc-aa37-46a3-9b1d-1d4c246b0ffc.png)</p>
+<p>也可以将use-default-filters设置为true（不写就是true），并且采用exclude-filter方式排出哪些注解标注的Bean不参与实例化：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6.bean3&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Repository&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Service&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Controller&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665556372417-14f2208c-4151-4bcd-9f22-80db5e3ed837.png)</p>
+<h2 id="5-负责注入的注解"><a href="#5-负责注入的注解" class="headerlink" title="5 负责注入的注解"></a>5 负责注入的注解</h2><p>@Component @Controller @Service @Repository 这四个注解是用来声明Bean的，声明后这些Bean将被实例化。接下来我们看一下，如何给Bean的属性赋值。给Bean属性赋值需要用到这些注解：</p>
+<ul>
+<li>@Value  —&gt;简单类型</li>
+<li>@Autowired  ——–&gt;根据类型注入</li>
+<li>@Qualifier  —-&gt;配合上面使用名字注入</li>
+<li>@Resource  —&gt;J</li>
+</ul>
+<h3 id="5-1-Value"><a href="#5-1-Value" class="headerlink" title="5.1 @Value"></a>5.1 @Value</h3><p>当属性的类型是简单类型时，可以使用@Value注解进行注入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean4;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="meta">@Value(value = &quot;zhangsan&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value(&quot;20&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;User&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>开启包扫描：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.powernode.spring6.bean4&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br><span class="line">@Test</span><br><span class="line">public void testValue()&#123;</span><br><span class="line">    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-injection.xml&quot;);</span><br><span class="line">    Object user = applicationContext.getBean(&quot;user&quot;);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557109935-e0300b67-fd35-4d66-99d1-dac41cb0f13d.png)</p>
+<p>通过以上代码可以发现，我们并没有给属性提供setter方法，但仍然可以完成属性赋值。</p>
+<p>如果提供setter方法，并且在setter方法上添加@Value注解，可以完成注入吗？尝试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean4;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;李四&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;30&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAge</span><span class="params">(<span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;User&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557275282-82ba995b-6395-4d32-b322-d976ac3299d1.png)</p>
+<p>通过测试可以得知，@Value注解可以直接使用在属性上，也可以使用在setter方法上。都是可以的。都可以完成属性的赋值。</p>
+<p>为了简化代码，以后我们一般不提供setter方法，直接在属性上使用@Value注解完成属性赋值。</p>
+<p>出于好奇，我们再来测试一下，是否能够通过构造方法完成注入：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.bean4;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">User</span><span class="params">(<span class="meta">@Value(&quot;隔壁老王&quot;)</span> String name, <span class="meta">@Value(&quot;33&quot;)</span> <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;User&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665557643220-1010bea9-5578-4388-8868-4beb11dfbe95.png)</p>
+<p>通过测试得知：@Value注解可以出现在属性上、setter方法上、以及构造方法的形参上。可见Spring给我们提供了多样化的注入。太灵活了。</p>
+<h3 id="5-2-Autowired与-Qualifier"><a href="#5-2-Autowired与-Qualifier" class="headerlink" title="5.2 @Autowired与@Qualifier"></a>5.2 @Autowired与@Qualifier</h3><p>@Autowired注解可以用来注入<strong>非简单类型</strong>。被翻译为：自动连线的，或者自动装配。</p>
+<p>单独使用@Autowired注解，<strong>默认根据类型装配</strong>。【默认是byType】</p>
+<p>看一下它的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.beans.factory.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Autowired &#123;</span><br><span class="line">	<span class="type">boolean</span> <span class="title function_">required</span><span class="params">()</span> <span class="keyword">default</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>源码中有两处需要注意：</p>
+<ul>
+<li><p>第一处：该注解可以标注在哪里？</p>
+</li>
+<li><ul>
+<li>构造方法上</li>
+<li>方法上</li>
+<li>形参上</li>
+<li>属性上</li>
+<li>注解上</li>
+</ul>
+</li>
+<li><p>第二处：该注解有一个required属性，默认值是true，表示在注入的时候要求被注入的Bean必须是存在的，如果不存在则报错。如果required属性设置为false，表示注入的Bean存在或者不存在都没关系，存在的话就注入，不存在的话，也不报错。</p>
+</li>
+</ul>
+<p><strong>我们先在属性上使用@Autowired注解：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserDao</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span> <span class="comment">//纳入bean管理</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDaoForMySQL</span> <span class="keyword">implements</span> <span class="title class_">UserDao</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;正在向mysql数据库插入User数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span> <span class="comment">// 纳入bean管理</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span> <span class="comment">// 在属性上注入</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 没有提供构造方法和setter方法。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="line">       xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="line">       xmlns:context=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span><br><span class="line"><span class="string">                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span><br><span class="line">    &lt;context:component-scan base-<span class="keyword">package</span>=<span class="string">&quot;com.powernode.spring6.dao,com.powernode.spring6.service&quot;</span>/&gt;</span><br><span class="line">&lt;/beans&gt;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testAutowired</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring-injection.xml&quot;</span>);</span><br><span class="line">    <span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;userService&quot;</span>, UserService.class);</span><br><span class="line">    userService.save();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665561365140-b0200308-0c25-4a29-96be-5a93594e2d2b.png)</p>
+<p>以上构造方法和setter方法都没有提供，经过测试，仍然可以注入成功。</p>
+<p><strong>接下来，再来测试一下@Autowired注解出现在setter方法上：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserDao</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665562770986-e19377a6-af3e-4082-9463-16c795742ad5.png)</p>
+<p><strong>我们再来看看能不能出现在构造方法上：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665562985700-7820d3d8-cf43-43af-8c81-46f301ea2835.png)</p>
+<p><strong>再来看看，这个注解能不能只标注在构造方法的形参上：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(<span class="meta">@Autowired</span> UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563225083-172d5675-cfcb-4f63-9b83-ce85b29b953e.png)</p>
+<p><strong>还有更劲爆的，当有参数的构造方法只有一个时，@Autowired注解可以省略。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563320900-df9e4cb3-c046-4f5c-b482-42951f18fb16.png)</p>
+<p><strong>当然，如果有多个构造方法，@Autowired肯定是不能省略的。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">()</span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563410134-267b2484-54a3-4204-8e02-a9499ecbe614.png)</p>
+<p>到此为止，我们已经清楚@Autowired注解可以出现在哪些位置了。</p>
+<p>@Autowired注解默认是byType进行注入的，也就是说根据类型注入的，如果以上程序中，UserDao接口还有另外一个实现类，会出现问题吗？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span> <span class="comment">//纳入bean管理</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDaoForOracle</span> <span class="keyword">implements</span> <span class="title class_">UserDao</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;正在向Oracle数据库插入User数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当你写完这个新的实现类之后，此时IDEA工具已经提示错误信息了：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665563729880-0421bc02-19ca-4353-8a10-5b0ef9972b90.png)</p>
+<p>错误信息中说：不能装配，UserDao这个Bean的数量大于1.</p>
+<p>怎么解决这个问题呢？<strong>当然要byName，根据名称进行装配了。</strong></p>
+<p>@Autowired注解和@Qualifier注解联合起来才可以根据名称进行装配，在@Qualifier注解中指定Bean名称。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span> <span class="comment">// 这里没有给bean起名，默认名字是：userDaoForOracle</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDaoForOracle</span> <span class="keyword">implements</span> <span class="title class_">UserDao</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;正在向Oracle数据库插入User数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier(&quot;userDaoForOracle&quot;)</span> <span class="comment">// 这个是bean的名字。</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserDao</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665564055076-ffda3ad0-f957-4216-bf6c-957d62724d5f.png)</p>
+<p>总结：</p>
+<ul>
+<li>@Autowired注解可以出现在：属性上、构造方法上、构造方法的参数上、setter方法上。</li>
+<li>当带参数的构造方法只有一个，@Autowired注解可以省略。</li>
+<li>@Autowired注解默认根据类型注入。如果要根据名称注入的话，需要配合@Qualifier注解一起使用。</li>
+</ul>
+<h3 id="5-3-Resource"><a href="#5-3-Resource" class="headerlink" title="5.3 @Resource"></a>5.3 @Resource</h3><p>@Resource注解也可以完成非简单类型注入。那它和@Autowired注解有什么区别？</p>
+<ul>
+<li>@Resource注解是JDK扩展包中的，也就是说属于JDK的一部分。所以该注解是标准注解，更加具有通用性。(JSR-250标准中制定的注解类型。JSR是Java规范提案。)</li>
+<li>@Autowired注解是Spring框架自己的。</li>
+<li><strong>@Resource注解默认根据名称装配byName，未指定name时，使用属性名作为name。通过name找不到的话会自动启动通过类型byType装配。</strong></li>
+<li><strong>@Autowired注解默认根据类型装配byType，如果想根据名称装配，需要配合@Qualifier注解一起用。</strong></li>
+<li>@Resource注解用在属性上、setter方法上。</li>
+<li>@Autowired注解用在属性上、setter方法上、构造方法上、构造方法参数上。</li>
+</ul>
+<p>@Resource注解属于JDK扩展包，所以不在JDK当中，需要额外引入以下依赖：【<strong>如果是JDK8的话不需要额外引入依赖。高于JDK11或低于JDK8需要引入以下依赖。</strong>】</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.annotation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.annotation-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>一定要注意：<strong>如果你用Spring6，要知道Spring6不再支持JavaEE，它支持的是JakartaEE9。（Oracle把JavaEE贡献给Apache了，Apache把JavaEE的名字改成JakartaEE了，大家之前所接触的所有的  javax.*  包名统一修改为  jakarta.*包名了。）</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.annotation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javax.annotation-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>@Resource注解的源码如下：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665565515435-2ad5614a-8572-4c6f-80c1-efa236dbe35f.png)</p>
+<p>测试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository(&quot;xyz&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDaoForOracle</span> <span class="keyword">implements</span> <span class="title class_">UserDao</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;正在向Oracle数据库插入User数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> jakarta.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource(name = &quot;xyz&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665622877352-0ae69e3c-e7f3-452d-a405-392901612465.png)</p>
+<p><strong>我们把UserDaoForOracle的名字xyz修改为userDao，让这个Bean的名字和UserService类中的UserDao属性名一致：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository(&quot;userDao&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDaoForOracle</span> <span class="keyword">implements</span> <span class="title class_">UserDao</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;正在向Oracle数据库插入User数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> jakarta.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行测试程序：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623044796-c4051a04-c56b-4ce9-b627-333ab7ca7b6a.png)</p>
+<p>通过测试得知，当@Resource注解使用时没有指定name的时候，还是根据name进行查找，这个name是属性名。</p>
+<p>接下来把UserService类中的属性名修改一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> jakarta.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao2.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623273523-aff8ef45-b484-4462-bacc-fba7e14c8fee.png)</p>
+<p>根据异常信息得知：显然当通过name找不到的时候，自然会启动byType进行注入。以上的错误是因为UserDao接口下有两个实现类导致的。所以根据类型注入就会报错。</p>
+<p>我们再来看@Resource注解使用在setter方法上可以吗？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> jakarta.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserDao</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意这个setter方法的方法名，setUserDao去掉set之后，将首字母变小写userDao，userDao就是name</p>
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623530366-79b8e09d-2559-4657-83eb-0b722261045f.png)</p>
+<p>当然，也可以指定name：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.powernode.spring6.dao.UserDao;</span><br><span class="line"><span class="keyword">import</span> jakarta.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource(name = &quot;userDaoForMySQL&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserDao</span><span class="params">(UserDao userDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        userDao.insert();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665623611980-a66591e7-bd29-4327-a43c-6c6492c8612f.png)</p>
+<p>一句话总结@Resource注解：默认byName注入，没有指定name时把属性名当做name，根据name找不到时，才会byType注入。byType注入时，某种类型的Bean只能有一个。</p>
+<h2 id="6-全注解式开发"><a href="#6-全注解式开发" class="headerlink" title="6 全注解式开发"></a>6 全注解式开发</h2><p>所谓的全注解开发就是不再使用spring配置文件了。写一个配置类来代替配置文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.powernode.spring6.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.ComponentScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.ComponentScans;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&#123;&quot;com.powernode.spring6.dao&quot;, &quot;com.powernode.spring6.service&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Spring6Configuration</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编写测试程序：不再new ClassPathXmlApplicationContext()对象了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testNoXml</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">ApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigApplicationContext</span>(Spring6Configuration.class);</span><br><span class="line">    <span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;userService&quot;</span>, UserService.class);</span><br><span class="line">    userService.save();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p>![img](6-Spring IoC注解式开发&#x2F;1665624710824-61ee0ae9-ae96-49bf-b189-4a1f358e084a.png)</p>
+<h1 id><a href="#" class="headerlink" title></a></h1>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://jhfuture.github.io/2023/01/07/SSM/Spring/6-Spring%20IoC%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/" title="IoC注解式开发" target="_blank" rel="external">https://jhfuture.github.io/2023/01/07/SSM/Spring/6-Spring IoC注解式开发/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/jhfuture" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/jhfuture" target="_blank"><span class="text-dark">jhfuture</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>一个记录技术分享的网站。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/01/10/SSM/Spring/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" title="8-AOP切面编程"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/01/05/SSM/Spring/5-Bean%E7%9A%84%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/" title="5-Bean的循环依赖问题"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 jhfuture
+        
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        </div>
+            
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="/css/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

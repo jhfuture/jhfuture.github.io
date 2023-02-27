@@ -1,0 +1,70 @@
+<hr>
+<p>title: 1-文件操作入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-28 19:18:36</li>
+</ul>
+<hr>
+<!--more-->
+
+<p>—————————————————！！！注意！！！——————————————————————————————–</p>
+<blockquote>
+<p>无论使用什么文件流，最后一定要记得 close 或者 flush</p>
+</blockquote>
+<p>—————————&#x3D;&#x3D;否则不会保存！！！！！！！！&#x3D;&#x3D;———————————————————————————————–</p>
+<h3 id="一、文件操作"><a href="#一、文件操作" class="headerlink" title="一、文件操作"></a>一、文件操作</h3><p><img src="/1-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%85%A5%E9%97%A8/image-20221128191853345.png" alt="image-20221128191853345"></p>
+<p>流？</p>
+<p>—&gt;数据从硬盘通过内存流到java程序。</p>
+<pre><code>File file = new File(filePath);
+file.createNewFile();
+//为什么需要第一部已经创建了对象，还要调用第二个方法
+因为第一个创建的文件对象 ---&gt;存在于内存中
+----&gt;调用第二个将其写进 硬盘
+</code></pre>
+<p><img src="/1-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%85%A5%E9%97%A8/image-20221128193428179.png" alt="image-20221128193428179"></p>
+<h3 id="二、创建文件"><a href="#二、创建文件" class="headerlink" title="二、创建文件"></a>二、创建文件</h3><p><img src="/1-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%85%A5%E9%97%A8/image-20221128195320327.png" alt="image-20221128195320327"></p>
+<pre><code class="java">//方式 1 new File(String pathname)
+@Test
+public void create01() {
+String filePath = &quot;e:\\news1.txt&quot;;
+File file = new File(filePath);
+try {
+file.createNewFile();
+System.out.println(&quot;文件创建成功&quot;);
+} catch (IOException e) {
+e.printStackTrace();
+}
+}
+//方式 2 new File(File parent,String child) //根据父目录文件+子路径构建
+//e:\\news2.txt
+@Test
+public void create02() {
+File parentFile = new File(&quot;e:\\&quot;);
+String fileName = &quot;news2.txt&quot;;
+//这里的 file 对象，在 java 程序中，只是一个对象
+//只有执行了 createNewFile 方法，才会真正的，在磁盘创建该文件
+File file = new File(parentFile, fileName);
+韩顺平循序渐进学 Java 零基础
+第 819页
+try {
+file.createNewFile();
+System.out.println(&quot;创建成功~&quot;);
+} catch (IOException e) {
+e.printStackTrace();
+}
+}
+//方式 3 new File(String parent,String child) //根据父目录+子路径构建
+@Test
+public void create03() {
+//String parentPath = &quot;e:\\&quot;;
+String parentPath = &quot;e:\\&quot;;
+String fileName = &quot;news4.txt&quot;;
+File file = new File(parentPath, fileName);
+try {
+file.createNewFile();
+System.out.println(&quot;创建成功~&quot;);
+} catch (IOException e) {
+e.printStackTrace();
+}
+}
+</code></pre>

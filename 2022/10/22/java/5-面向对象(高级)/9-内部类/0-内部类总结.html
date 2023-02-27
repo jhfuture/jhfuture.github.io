@@ -1,0 +1,48 @@
+<hr>
+<p>title: 2-内部类总结<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-15 21:44:45</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h3 id="一、简要"><a href="#一、简要" class="headerlink" title="一、简要"></a>一、简要</h3><h4 id="一、类型"><a href="#一、类型" class="headerlink" title="一、类型"></a>一、类型</h4><p>（1）内部类有四种</p>
+<ul>
+<li>局部内部类</li>
+<li>匿名内部类！！！！<ul>
+<li>new 类&#x2F;接口(参数列表){|<br>}</li>
+<li></li>
+</ul>
+</li>
+<li>成员内部类</li>
+<li>静态内部类</li>
+</ul>
+<h4 id="二、自我总结要点"><a href="#二、自我总结要点" class="headerlink" title="二、自我总结要点"></a>二、自我总结要点</h4><ol>
+<li><p>成员内部类和静态内部类 都是放在外部类的&#x3D;&#x3D;成员位置&#x3D;&#x3D;，本质上就是一个成员</p>
+<ol>
+<li>可以使用修饰符进行修饰</li>
+<li>静态类拥有 static 的属性。<ol>
+<li>只能访问 外部类中 static  修饰的静态属性。</li>
+<li>使用 &#x3D;&#x3D;外部类.成员名&#x3D;&#x3D; 访问内外同名成员（本内部类中和外部类同名的属性&#x2F;方法）</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>当 外部类和子类的成员重名时。!!!!! 不重名就直接&#x3D;&#x3D;就近原则&#x3D;&#x3D;</p>
+<ol>
+<li>outerClss.&#x3D;&#x3D;this&#x3D;&#x3D;.memberName<ol>
+<li>局部内部类</li>
+<li>成员内部类</li>
+<li>匿名内部类</li>
+</ol>
+</li>
+<li>outerClass.memberName<ol>
+<li>静态成员内部类，因为 静态属性可以直接使用 &#x3D;&#x3D;类名.xxx&#x3D;&#x3D;。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>

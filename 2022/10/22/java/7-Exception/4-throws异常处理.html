@@ -1,0 +1,88 @@
+<hr>
+<p>title: 4-throws异常处理<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-19 13:33:23</li>
+</ul>
+<hr>
+<!--more-->
+
+<p><img src="/4-throws%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/image-20221119133344040.png" alt="image-20221119133344040"></p>
+<p>3.<img src="/4-throws%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/image-20221119133335191.png" alt="image-20221119133335191"></p>
+<p>案例</p>
+<ol>
+<li>编译异常一定要进行处理。—&gt;必须进行显示处理<ol>
+<li>throws 给调用此方法的方法<ol>
+<li>调用此方法的方法进行处理<ol>
+<li>throws</li>
+<li>try catch</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>try catch</li>
+</ol>
+</li>
+<li>运行异常 —&gt; java 中具有默认处理 —&gt;throws<ol>
+<li>显示处理<ol>
+<li>try cathch</li>
+<li>throws</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code class="java">package com.hspedu.throws_;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+public class ThrowsDetail {
+public static void main(String[] args) {
+f2();
+}
+public static void f2() /*throws ArithmeticException*/ {
+//1.对于编译异常，程序中必须处理，比如 try-catch 或者 throws
+//2.对于运行时异常，程序中如果没有处理，默认就是 throws 的方式处理
+int n1 = 10;
+int n2 = 0;
+double res = n1 / n2;
+}
+public static void f1() throws FileNotFoundException {
+//这里大家思考问题 调用 f3() 报错
+//老韩解读
+//1. 因为 f3() 方法抛出的是一个编译异常
+//2. 即这时，就要 f1() 必须处理这个编译异常
+//3. 在 f1() 中，要么 try-catch-finally ,或者继续 throws 这个编译异常
+f3(); // 抛出异常
+}
+public static void f3() throws FileNotFoundException {
+FileInputStream fis = new FileInputStream(&quot;d://aa.txt&quot;);
+}
+public static void f4() {
+//老韩解读:
+//1. 在 f4()中调用方法 f5() 是 OK
+//2. 原因是 f5() 抛出的是运行异常
+//3. 而 java 中，并不要求程序员显示处理,因为有默认处理机制
+f5();
+}
+public static void f5() throws ArithmeticException {
+}
+}
+韩顺平循序渐进学 Java 零基础
+第 528页
+class Father { //父类
+public void method() throws RuntimeException {
+}
+}
+class Son extends Father {//子类
+//3. 子类重写父类的方法时，对抛出异常的规定:子类重写的方法，
+// 所抛出的异常类型要么和父类抛出的异常一致，要么为父类抛出的异常类型的子类型
+//4. 在 throws 过程中，如果有方法 try-catch , 就相当于处理异常，就可以不必 throws
+@Override
+public void method() throws ArithmeticException {
+}
+}
+</code></pre>

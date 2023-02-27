@@ -1,0 +1,22 @@
+<hr>
+<p>title: 2-Bean的作用域<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2023-01-04 19:38:53</li>
+</ul>
+<hr>
+<!--more-->
+
+<pre><code class="java"> &lt;bean id=&quot;collection&quot; class=&quot;com.jhfuture.spring6.bean.Collection&quot; scope=&quot;prototype&quot;&gt;
+</code></pre>
+<p>scope</p>
+<ul>
+<li>prototype（原型）多例 —–&gt; &#x3D;&#x3D;default&#x3D;&#x3D;<ul>
+<li>类的构造方法只会在 getBeans时执行，并且每次都是返回不同的对象</li>
+</ul>
+</li>
+<li>singleton 单例<ul>
+<li>类的构造方法在使用 &#x3D;&#x3D;new ClassPathXmlApplicationContext&#x3D;&#x3D;就已经被调用，每次调用 getBean 都是返回同一个 对象</li>
+</ul>
+</li>
+</ul>

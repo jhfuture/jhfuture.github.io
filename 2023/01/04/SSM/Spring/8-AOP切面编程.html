@@ -1,0 +1,671 @@
+<hr>
+<p>title: 8-AOP切面编程<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2023-01-10 19:30:04</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h1 id="十五、面向切面编程AOP"><a href="#十五、面向切面编程AOP" class="headerlink" title="十五、面向切面编程AOP"></a>十五、面向切面编程AOP</h1><p>写着写着代码就要想一下， 我们要不要面向切面 啊？ 我们要不要面向切面啊？</p>
+<p>IoC使软件组件松耦合。AOP让你能够捕捉系统中经常使用的功能，把它转化成组件。</p>
+<p>AOP（Aspect Oriented Programming）：面向切面编程，面向方面编程。（AOP是一种编程技术）</p>
+<p>AOP是对OOP的补充延伸。</p>
+<p>AOP底层使用的就是动态代理来实现的。</p>
+<h3 id="Spring的AOP使用的动态代理"><a href="#Spring的AOP使用的动态代理" class="headerlink" title="Spring的AOP使用的动态代理"></a>Spring的AOP使用的动态代理</h3><p>JDK动态代理 + CGLIB动态代理技术。&#x3D;&#x3D;Spring在这两种动态代理中灵活切换&#x3D;&#x3D;，如果是代理接口，会默认使用JDK动态代理，如果要代理某个类，这个类没有实现接口，就会切换使用CGLIB。当然，你也可以强制通过一些配置让Spring只使用CGLIB。</p>
+<p>1.切面</p>
+<p> 与业务逻辑不挂钩的业务代码。</p>
+<h2 id="15-1-AOP介绍"><a href="#15-1-AOP介绍" class="headerlink" title="15.1 AOP介绍"></a>15.1 AOP介绍</h2><p>一般一个系统当中都会有一些系统服务，例如：日志、事务管理、安全等。这些系统服务被称为：**&#x3D;&#x3D;交叉业务&#x3D;&#x3D;**</p>
+<p>这些&#x3D;&#x3D;**交叉业务&#x3D;&#x3D;**几乎是通用的，不管你是做银行账户转账，还是删除用户数据。日志、事务管理、安全，这些都是需要做的。</p>
+<p>如果在每一个业务处理过程当中，都掺杂这些交叉业务代码进去的话，存在两方面问题：</p>
+<ul>
+<li>第一：交叉业务代码在多个业务流程中反复出现，显然这个交叉业务代码没有得到复用。并且修改这些交叉业务代码的话，需要修改多处。</li>
+<li>第二：程序员无法专注核心业务代码的编写，在编写核心业务代码的同时还需要处理这些交叉业务。</li>
+</ul>
+<p>使用AOP可以很轻松的解决以上问题。</p>
+<p>请看下图，可以帮助你快速理解AOP的思想：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665732609757-d8ae52ba-915e-49cf-9ef4-c7bcada0d601.png" alt="img"></p>
+<p><strong>用一句话总结AOP：将与核心业务无关的代码独立的抽取出来，形成一个独立的组件，然后以横向交叉的方式应用到业务流程当中的过程被称为AOP。</strong></p>
+<p><strong>AOP的优点：</strong></p>
+<ul>
+<li><strong>第一：代码复用性增强。</strong></li>
+<li><strong>第二：代码易维护。</strong></li>
+<li><strong>第三：使开发者更关注业务逻辑。</strong></li>
+</ul>
+<h2 id="15-2-AOP的七大术语"><a href="#15-2-AOP的七大术语" class="headerlink" title="15.2 AOP的七大术语"></a>15.2 AOP的七大术语</h2><pre><code class="java">public class UserService{
+    public void do1(){
+        System.out.println(&quot;do 1&quot;);
+    }
+    public void do2(){
+        System.out.println(&quot;do 2&quot;);
+    }
+    public void do3(){
+        System.out.println(&quot;do 3&quot;);
+    }
+    public void do4(){
+        System.out.println(&quot;do 4&quot;);
+    }
+    public void do5(){
+        System.out.println(&quot;do 5&quot;);
+    }
+    // 核心业务方法
+    public void service(){
+        try{
+            //joinpoint连接点
+        do1(); // pointcuy切点
+        do2();
+        do3();
+        do5();
+        }catch(Exection e){
+            throw new Exection(e);
+            //异常通知
+        }finally{
+            //最终通知
+        }
+        
+    }
+}
+</code></pre>
+<ul>
+<li><p><strong>连接点 Joinpoint</strong></p>
+</li>
+<li><ul>
+<li>在程序的整个执行流程中，<strong>可以织入</strong>切面的位置。方法的执行前后，异常抛出之后等位置。</li>
+</ul>
+</li>
+<li><p><strong>切点 Pointcut</strong></p>
+</li>
+<li><ul>
+<li>在程序执行流程中，<strong>真正织入</strong>切面的方法。（一个切点对应多个连接点）</li>
+</ul>
+</li>
+<li><p><strong>通知 Advice</strong></p>
+</li>
+<li><ul>
+<li>通知又叫增强，就是具体你要织入的代码。</li>
+<li>通知包括：</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>前置通知 —&gt;放在切点前</li>
+<li>后置通知—&gt;切点后</li>
+<li>环绕通知 –&gt;切点前后都有</li>
+<li>异常通知 —&gt;在 catch 异常中</li>
+<li>最终通知 –&gt;在 finally 中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>切面 Aspect</strong></p>
+</li>
+<li><ul>
+<li><strong>切点 + 通知就是切面。</strong></li>
+</ul>
+</li>
+<li><p>织入 Weaving</p>
+</li>
+<li><ul>
+<li>把通知应用到目标对象上的过程。</li>
+</ul>
+</li>
+<li><p>代理对象 Proxy</p>
+</li>
+<li><ul>
+<li>一个目标对象被织入通知后产生的新对象。</li>
+</ul>
+</li>
+<li><p>目标对象 Target</p>
+</li>
+<li><ul>
+<li>被织入通知的对象。</li>
+</ul>
+</li>
+</ul>
+<p>通过下图，大家可以很好的理解AOP的相关术语：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665735638342-44194599-66e2-4c02-a843-8a8b3ba5b0c8.png" alt="img"></p>
+<h2 id="15-3-切点表达式"><a href="#15-3-切点表达式" class="headerlink" title="15.3 切点表达式"></a>15.3 切点表达式</h2><p>切点表达式用来定义通知（Advice）往哪些方法上切入。</p>
+<p>切入点表达式语法格式：</p>
+<pre><code class="spring">execution([访问控制权限修饰符] 返回值类型 [全限定类名]方法名(形式参数列表) [异常])
+
+带 [] 都是可选项。
+全限定类名：带包名的类名，不填则为全部含有该方法的类。
+
+</code></pre>
+<p>访问控制权限修饰符：</p>
+<ul>
+<li>可选项。</li>
+<li>没写，就是4个权限都包括。</li>
+<li>写public就表示只包括公开的方法。</li>
+</ul>
+<p>返回值类型：</p>
+<ul>
+<li>必填项。</li>
+<li>* 表示返回值类型任意。</li>
+</ul>
+<p>全限定类名：</p>
+<ul>
+<li>可选项。</li>
+<li>两个点“..”代表当前包以及子包下的所有类。</li>
+<li>省略时表示所有的类。</li>
+</ul>
+<p>方法名：</p>
+<ul>
+<li>必填项。</li>
+<li>*表示所有方法。</li>
+<li>set*表示所有的set方法。</li>
+</ul>
+<p>形式参数列表：</p>
+<ul>
+<li><p>必填项</p>
+</li>
+<li><p>() 表示没有参数的方法</p>
+</li>
+<li><p>(..) 参数类型和个数随意的方法</p>
+</li>
+<li><p>(*) 只有一个参数的方法</p>
+</li>
+<li><p>(*, String) 第一个参数类型随意，第二个参数是String的。</p>
+</li>
+</ul>
+<p>异常：</p>
+<ul>
+<li>可选项。</li>
+<li>省略时表示任意异常类型。</li>
+</ul>
+<p>理解以下的切点表达式：</p>
+<pre><code class="java">execution(public * com.powernode.mall.service.*.delete*(..))
+    访问控制符为 public 返回类型为任意， 全类名为com.powernode.mall.service.下所有的类 ，方法名为 delete 形参列表为 任意
+execution(* com.powernode.mall..*(..))
+    
+execution(* *(..))
+</code></pre>
+<h2 id="15-4-使用Spring的AOP"><a href="#15-4-使用Spring的AOP" class="headerlink" title="15.4 使用Spring的AOP"></a>15.4 使用Spring的AOP</h2><p>Spring对AOP的实现包括以下3种方式：</p>
+<ul>
+<li><strong>第一种方式：Spring框架结合AspectJ框架实现的AOP，基于注解方式。</strong></li>
+<li><strong>第二种方式：Spring框架结合AspectJ框架实现的AOP，基于XML方式。</strong></li>
+<li>第三种方式：Spring框架自己实现的AOP，基于XML配置方式。</li>
+</ul>
+<p>实际开发中，都是Spring+AspectJ来实现AOP。所以我们重点学习第一种和第二种方式。</p>
+<p>什么是AspectJ？（Eclipse组织的一个支持AOP的框架。AspectJ框架是独立于Spring框架之外的一个框架，Spring框架用了AspectJ） </p>
+<p>AspectJ项目起源于帕洛阿尔托（Palo Alto）研究中心（缩写为PARC）。该中心由Xerox集团资助，Gregor Kiczales领导，从1997年开始致力于AspectJ的开发，1998年第一次发布给外部用户，2001年发布1.0 release。为了推动AspectJ技术和社团的发展，PARC在2003年3月正式将AspectJ项目移交给了Eclipse组织，因为AspectJ的发展和受关注程度大大超出了PARC的预期，他们已经无力继续维持它的发展。</p>
+<h3 id="15-4-1-准备工作"><a href="#15-4-1-准备工作" class="headerlink" title="15.4.1 准备工作"></a>15.4.1 准备工作</h3><p>使用Spring+AspectJ的AOP需要引入的依赖如下：</p>
+<pre><code class="xml">&lt;!--spring context依赖--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+  &lt;version&gt;6.0.0-M2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--spring aop依赖--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+  &lt;version&gt;6.0.0-M2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--spring aspects依赖--&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;
+  &lt;version&gt;6.0.0-M2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Spring配置文件中添加context命名空间和aop命名空间</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd&quot;&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<h3 id="15-4-2-基于AspectJ的AOP注解式开发"><a href="#15-4-2-基于AspectJ的AOP注解式开发" class="headerlink" title="15.4.2 基于AspectJ的AOP注解式开发"></a>15.4.2 基于AspectJ的AOP注解式开发</h3><h4 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h4><p>第一步：定义目标类以及目标方法</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+// 目标类
+public class OrderService {
+    // 目标方法
+    public void generate(){
+        System.out.println(&quot;订单已生成！&quot;);
+    }
+}
+</code></pre>
+<p>第二步：定义切面类</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.annotation.Aspect;
+
+// 切面类
+@Aspect
+public class MyAspect {
+}
+</code></pre>
+<p>第三步：目标类和切面类都纳入spring bean管理</p>
+<p>在目标类OrderService上添加**@Component**注解。</p>
+<p>在切面类MyAspect类上添加**@Component**注解。</p>
+<p>第四步：在spring配置文件中添加组建扫描</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd&quot;&gt;
+    &lt;!--开启组件扫描--&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.service&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>第五步：在切面类中添加通知</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.springframework.stereotype.Component;
+import org.aspectj.lang.annotation.Aspect;
+
+// 切面类
+@Aspect
+@Component
+public class MyAspect {
+    // 这就是需要增强的代码（通知）
+    public void advice(){
+        System.out.println(&quot;我是一个通知&quot;);
+    }
+}
+</code></pre>
+<p>第六步：在通知上添加切点表达式</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+import org.aspectj.lang.annotation.Aspect;
+
+// 切面类
+@Aspect
+@Component
+public class MyAspect {
+    
+    // 切点表达式
+    @Before(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    // 这就是需要增强的代码（通知）
+    public void advice(){
+        System.out.println(&quot;我是一个通知&quot;);
+    }
+}
+</code></pre>
+<p><strong>注解@Before表示前置通知。</strong></p>
+<p>第七步：在spring配置文件中启用自动代理</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd&quot;&gt;
+    &lt;!--开启组件扫描--&gt;
+    &lt;context:component-scan base-package=&quot;com.powernode.spring6.service&quot;/&gt;
+    &lt;!--开启自动代理--&gt;
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>&lt;aop:aspectj-autoproxy  proxy-target-class&#x3D;”true”&#x2F;&gt; 开启自动代理之后，凡事带有@Aspect注解的bean都会生成代理对象。</p>
+<p>proxy-target-class&#x3D;”true” 表示采用cglib动态代理。</p>
+<p>proxy-target-class&#x3D;”false” 表示采用jdk动态代理。默认值是false。即使写成false，当没有接口的时候，也会自动选择cglib生成代理类。</p>
+<p>测试程序：</p>
+<pre><code class="java">package com.powernode.spring6.test;
+
+import com.powernode.spring6.service.OrderService;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AOPTest {
+    @Test
+    public void testAOP(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-aspectj-aop-annotation.xml&quot;);
+        OrderService orderService = applicationContext.getBean(&quot;orderService&quot;, OrderService.class);
+        orderService.generate();
+    }
+}
+</code></pre>
+<p>运行结果：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665843923087-e1116f09-2470-46cb-b21a-1526f62cab50.png" alt="img"></p>
+<h4 id="通知类型"><a href="#通知类型" class="headerlink" title="通知类型"></a>通知类型</h4><p>通知类型包括：</p>
+<ul>
+<li>前置通知：@Before 目标方法执行之前的通知</li>
+<li>后置通知：@AfterReturning 目标方法执行之后的通知</li>
+<li>环绕通知：@Around 目标方法之前添加通知，同时目标方法执行之后添加通知。</li>
+<li>异常通知：@AfterThrowing 发生异常之后执行的通知</li>
+<li>最终通知：@After 放在finally语句块中的通知</li>
+</ul>
+<p>接下来，编写程序来测试这几个通知的执行顺序：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+
+// 切面类
+@Component
+@Aspect
+public class MyAspect {
+
+    @Around(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println(&quot;环绕通知开始&quot;);
+        // 执行目标方法。
+        proceedingJoinPoint.proceed();
+        System.out.println(&quot;环绕通知结束&quot;);
+    }
+
+    @Before(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void beforeAdvice(){
+        System.out.println(&quot;前置通知&quot;);
+    }
+
+    @AfterReturning(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterReturningAdvice(){
+        System.out.println(&quot;后置通知&quot;);
+    }
+
+    @AfterThrowing(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterThrowingAdvice(){
+        System.out.println(&quot;异常通知&quot;);
+    }
+
+    @After(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterAdvice(){
+        System.out.println(&quot;最终通知&quot;);
+    }
+
+}
+package com.powernode.spring6.service;
+
+import org.springframework.stereotype.Component;
+
+// 目标类
+@Component
+public class OrderService {
+    // 目标方法
+    public void generate(){
+        System.out.println(&quot;订单已生成！&quot;);
+    }
+}
+package com.powernode.spring6.test;
+
+import com.powernode.spring6.service.OrderService;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class AOPTest {
+    @Test
+    public void testAOP(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;spring-aspectj-aop-annotation.xml&quot;);
+        OrderService orderService = applicationContext.getBean(&quot;orderService&quot;, OrderService.class);
+        orderService.generate();
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665892617792-22cc74a2-6876-4cd1-bb17-87d3b5211cae.png" alt="img"></p>
+<p>通过上面的执行结果就可以判断他们的执行顺序了，这里不再赘述。</p>
+<p>结果中没有异常通知，这是因为目标程序执行过程中没有发生异常。我们尝试让目标方法发生异常：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.springframework.stereotype.Component;
+
+// 目标类
+@Component
+public class OrderService {
+    // 目标方法
+    public void generate(){
+        System.out.println(&quot;订单已生成！&quot;);
+        if (1 == 1) {
+            throw new RuntimeException(&quot;模拟异常发生&quot;);
+        }
+    }
+}
+</code></pre>
+<p>再次执行测试程序，结果如下：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665892847715-75045cd0-63b1-47f9-a77e-05911dc72339.png" alt="img"></p>
+<p>通过测试得知，当发生异常之后，最终通知也会执行，因为最终通知@After会出现在finally语句块中。</p>
+<p>出现异常之后，<strong>后置通知</strong>和<strong>环绕通知的结束部分</strong>不会执行。</p>
+<h4 id="切面的先后顺序"><a href="#切面的先后顺序" class="headerlink" title="切面的先后顺序"></a>切面的先后顺序</h4><p>我们知道，业务流程当中不一定只有一个切面，可能有的切面控制事务，有的记录日志，有的进行安全控制，如果多个切面的话，顺序如何控制：<strong>可以使用@Order注解来标识切面类，为@Order注解的value指定一个整数型的数字，数字越小，优先级越高</strong>。</p>
+<p>再定义一个切面类，如下：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+@Order(1) //设置优先级
+public class YourAspect {
+
+    @Around(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println(&quot;YourAspect环绕通知开始&quot;);
+        // 执行目标方法。
+        proceedingJoinPoint.proceed();
+        System.out.println(&quot;YourAspect环绕通知结束&quot;);
+    }
+
+    @Before(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void beforeAdvice(){
+        System.out.println(&quot;YourAspect前置通知&quot;);
+    }
+
+    @AfterReturning(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterReturningAdvice(){
+        System.out.println(&quot;YourAspect后置通知&quot;);
+    }
+
+    @AfterThrowing(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterThrowingAdvice(){
+        System.out.println(&quot;YourAspect异常通知&quot;);
+    }
+
+    @After(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterAdvice(){
+        System.out.println(&quot;YourAspect最终通知&quot;);
+    }
+}
+package com.powernode.spring6.service;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+// 切面类
+@Component
+@Aspect
+@Order(2) //设置优先级
+public class MyAspect {
+
+    @Around(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println(&quot;环绕通知开始&quot;);
+        // 执行目标方法。
+        proceedingJoinPoint.proceed();
+        System.out.println(&quot;环绕通知结束&quot;);
+    }
+
+    @Before(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void beforeAdvice(){
+        System.out.println(&quot;前置通知&quot;);
+    }
+
+    @AfterReturning(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterReturningAdvice(){
+        System.out.println(&quot;后置通知&quot;);
+    }
+
+    @AfterThrowing(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterThrowingAdvice(){
+        System.out.println(&quot;异常通知&quot;);
+    }
+
+    @After(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterAdvice(){
+        System.out.println(&quot;最终通知&quot;);
+    }
+
+}
+</code></pre>
+<p>执行测试程序：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665893738167-b3c55a19-6129-4615-813f-9b8dc0f17f40.png" alt="img"></p>
+<p>通过修改@Order注解的整数值来切换顺序，执行测试程序：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665893833282-2cbc59cc-15a5-44c4-bb20-cbdac65a750d.png" alt="img"></p>
+<h4 id="优化使用切点表达式"><a href="#优化使用切点表达式" class="headerlink" title="优化使用切点表达式"></a>优化使用切点表达式</h4><p>观看以下代码中的切点表达式：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+// 切面类
+@Component
+@Aspect
+@Order(2)
+public class MyAspect {
+
+    @Around(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println(&quot;环绕通知开始&quot;);
+        // 执行目标方法。
+        proceedingJoinPoint.proceed();
+        System.out.println(&quot;环绕通知结束&quot;);
+    }
+
+    @Before(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void beforeAdvice(){
+        System.out.println(&quot;前置通知&quot;);
+    }
+
+    @AfterReturning(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterReturningAdvice(){
+        System.out.println(&quot;后置通知&quot;);
+    }
+
+    @AfterThrowing(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterThrowingAdvice(){
+        System.out.println(&quot;异常通知&quot;);
+    }
+
+    @After(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void afterAdvice(){
+        System.out.println(&quot;最终通知&quot;);
+    }
+
+}
+</code></pre>
+<p>缺点是：</p>
+<ul>
+<li>第一：切点表达式重复写了多次，没有得到复用。</li>
+<li>第二：如果要修改切点表达式，需要修改多处，难维护。</li>
+</ul>
+<p>可以这样做：将切点表达式单独的定义出来，在需要的位置引入即可。如下：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+// 切面类
+@Component
+@Aspect
+@Order(2)
+public class MyAspect {
+    
+    @Pointcut(&quot;execution(* com.powernode.spring6.service.OrderService.*(..))&quot;)
+    public void pointcut(){}
+
+    @Around(&quot;pointcut()&quot;)
+    public void aroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println(&quot;环绕通知开始&quot;);
+        // 执行目标方法。
+        proceedingJoinPoint.proceed();
+        System.out.println(&quot;环绕通知结束&quot;);
+    }
+
+    @Before(&quot;pointcut()&quot;)
+    public void beforeAdvice(){
+        System.out.println(&quot;前置通知&quot;);
+    }
+
+    @AfterReturning(&quot;pointcut()&quot;)
+    public void afterReturningAdvice(){
+        System.out.println(&quot;后置通知&quot;);
+    }
+
+    @AfterThrowing(&quot;pointcut()&quot;)
+    public void afterThrowingAdvice(){
+        System.out.println(&quot;异常通知&quot;);
+    }
+
+    @After(&quot;pointcut()&quot;)
+    public void afterAdvice(){
+        System.out.println(&quot;最终通知&quot;);
+    }
+
+}
+</code></pre>
+<p>使用@Pointcut注解来定义独立的切点表达式。</p>
+<p>注意这个@Pointcut注解标注的方法随意，只是起到一个能够让@Pointcut注解编写的位置。</p>
+<p>执行测试程序：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665893833282-2cbc59cc-15a5-44c4-bb20-cbdac65a750d.png" alt="img"></p>
+<h5 id="1-切点一个小细节"><a href="#1-切点一个小细节" class="headerlink" title="1.切点一个小细节"></a>1.切点一个小细节</h5><blockquote>
+<p>ProceedingJoinPoint 是专门使用在环绕方法(环绕切面)中的切点，</p>
+<p>而 JoinPoint 可以使用在任意的切面中。（spring在调用 切面的方法时会自动传递一个 joinpoint 参数）</p>
+</blockquote>
+<p>可以通过切点获得目标方法的签名。</p>
+<h5 id="a-ProceedingJoinPoint"><a href="#a-ProceedingJoinPoint" class="headerlink" title="a.ProceedingJoinPoint"></a>a.ProceedingJoinPoint</h5><pre><code class="java">@Around(&quot;commonCut()&quot;)
+    public void Arround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    System.out.println(&quot;环绕通知开始&quot;);
+    proceedingJoinPoint.proceed();
+    System.out.println(&quot;环绕通知结束&quot;);
+
+}
+</code></pre>
+<h6 id="b-JoinPoint"><a href="#b-JoinPoint" class="headerlink" title="b.JoinPoint"></a>b.JoinPoint</h6><pre><code class="java">public void before(JoinPoint joinPoint){
+    Signature signature = joinPoint.getSignature();
+    System.out.println(&quot;目标方法的方法名&quot;+signature.getName());
+    System.out.println(&quot;前置通知&quot;);
+}
+</code></pre>
+<p>目标方法的签名是什么？ —-&gt;从修饰符开始，一直到方法名字。</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20230111125313541.png" alt="image-20230111125313541"></p>
+<h4 id="全注解式开发AOP"><a href="#全注解式开发AOP" class="headerlink" title="全注解式开发AOP"></a>全注解式开发AOP</h4><p>就是编写一个类，在这个类上面使用大量注解来代替spring的配置文件，spring配置文件消失了，如下：</p>
+<pre><code class="java">package com.powernode.spring6.service;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@Configuration
+@ComponentScan(&quot;com.powernode.spring6.service&quot;)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+public class Spring6Configuration {
+}
+</code></pre>
+<p>测试程序也变化了：</p>
+<pre><code class="java">@Test
+public void testAOPWithAllAnnotation(){
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(Spring6Configuration.class);
+    OrderService orderService = applicationContext.getBean(&quot;orderService&quot;, OrderService.class);
+    orderService.generate();
+}
+</code></pre>
+<p>执行结果如下：</p>
+<p><img src="/8-AOP%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/1665893833282-2cbc59cc-15a5-44c4-bb20-cbdac65a750d.png" alt="img"></p>
+<h3 id="15-4-3-基于XML配置方式的AOP（了解）"><a href="#15-4-3-基于XML配置方式的AOP（了解）" class="headerlink" title="15.4.3 基于XML配置方式的AOP（了解）"></a>15.4.3 基于XML配置方式的AOP（了解）</h3>

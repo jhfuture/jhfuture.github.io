@@ -36,5 +36,30 @@
 </code></pre>
 <p>老韩推荐的学习方法：</p>
 <p><img src="/Java%E5%BC%80%E5%8F%91%E7%BB%86%E8%8A%82/image-20220921204316192.png" alt="image-20220921204316192"></p>
-<p>3.可变参数一定要写在形参的第一个位置。</p>
-<p>4· 在构造器中使用this调用另一个构造器时，一定要把把把this调用语句放在第一位。0</p>
+<ol start="3">
+<li><p>可变参数一定要写在形参的第一个位置。</p>
+</li>
+<li><p>在构造器中使用this调用另一个构造器时，一定要把把把this调用语句放在第一位。0</p>
+</li>
+<li><p>使用 System.out.println(对象名) ,的时候，默认会调用 对象的 &#x3D;&#x3D;toString方法&#x3D;&#x3D;，使用其返回值进行输出</p>
+</li>
+<li><p>三元操作符必须要返回一个数据。而且类型要确定，不可能条件为真时返回int类型，条件为假时返回float类型，编译器是不允许如此的，所以它就会进行类型转换了. 会根据运算符的精确度类型进行自动类型转换。</p>
+<pre><code class="java">Object object1=true? new Integer(1):new Double(2.0);
+    System.out.println(object1); ----&gt;1.0?
+        A：为什么是1.0 而不是1？
+        Q；三元运算符需要==看成一个整体==，它会返回一个数据，而且类型要确定，不可能条件为真时返回int ，条件为假时为 double，和其他运算符相同，会自动进行 ==类型转换==,根据运算符的精确度进行==自动类型转换==，--&gt;最高级
+</code></pre>
+<p><img src="/Java%E5%BC%80%E5%8F%91%E7%BB%86%E8%8A%82/image-20221119151901581.png" alt="image-20221119151901581"></p>
+</li>
+</ol>
+<h4 id="7-x3D-x3D-和-equal"><a href="#7-x3D-x3D-和-equal" class="headerlink" title="7.&#x3D;&#x3D; 和 equal"></a>7.&#x3D;&#x3D; 和 equal</h4><ol>
+<li>&#x3D;&#x3D;<ol>
+<li>基本数据类型 —&gt;比较值</li>
+<li>对象 —-&gt;比较地址</li>
+</ol>
+</li>
+<li>equal<ol>
+<li>部分类中进行了重写。</li>
+</ol>
+</li>
+</ol>

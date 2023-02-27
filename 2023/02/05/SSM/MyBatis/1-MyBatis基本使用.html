@@ -1,0 +1,468 @@
+<hr>
+<p>title: 1-MyBatis基本使用<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2023-02-05 22:00:21</li>
+</ul>
+<hr>
+<!--more-->
+
+<p>学习思路</p>
+<hr>
+<ol>
+<li>学会怎么用</li>
+<li>为什么这样用</li>
+</ol>
+<hr>
+<p>使用步骤</p>
+<ol>
+<li>创建 “mybatis-config.xml” 配置文件</li>
+<li>创建好 “mapper.xml映射文件”，并在 “mybatis-config.xml”配置文件中配置好 mapper.xml 的路径</li>
+<li>使用  SqlSessionFactoryBuilder创建—-&gt;sqlSessionFactory—-&gt; sqlSession</li>
+<li>调用 sqlSession(“mapper.xml中的id,如果有 namespace 则使用 namespace.id。”,”需要传递的参数“) 进行 CRUD</li>
+</ol>
+<p>基本使用例子</p>
+<pre><code class="java">try {
+// 1.创建SqlSessionFactoryBuilder对象
+     SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new 			SqlSessionFactoryBuilder();
+// 2.创建SqlSessionFactory对象
+    SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;));
+// 3.创建SqlSession对象
+    SqlSession  sqlSession = sqlSessionFactory.openSession();
+// 4.执行SQL
+    
+    
+    int count = sqlSession.insert(&quot;insertCar&quot;);
+    
+    
+    
+    System.out.println(&quot;更新了几条记录：&quot; + count);
+// 5.提交
+    sqlSession.commit();
+    
+    
+} catch (Exception e) {
+            // 回滚
+if (sqlSession != null) {
+sqlSession.rollback();
+}
+            e.printStackTrace();
+} finally {
+            // 6.关闭
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="①、一些基本使用方法"><a href="#①、一些基本使用方法" class="headerlink" title="①、一些基本使用方法"></a>①、一些基本使用方法</h3><p>1.切换环境</p>
+<p><strong>sqlSessionFactoryBuilder.build(Resources.getResourceAsStream(“mybatis-config.xml”), &#x3D;&#x3D;”environmentID”&#x3D;&#x3D;);</strong></p>
+<pre><code class="java">// 使用指定数据库
+        SqlSessionFactory sqlSessionFactory1 = sqlSessionFactoryBuilder.build(Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;), &quot;dev&quot;);
+        SqlSession sqlSession1 = sqlSessionFactory1.openSession(true);
+        int count1 = sqlSession1.insert(&quot;insertCar&quot;, car);
+        System.out.println(&quot;插入了几条记录：&quot; + count1);
+</code></pre>
+<h2 id="②、各个环节详细解释"><a href="#②、各个环节详细解释" class="headerlink" title="②、各个环节详细解释"></a>②、各个环节详细解释</h2><h4 id="1-mybatis-config-xml-配置文件"><a href="#1-mybatis-config-xml-配置文件" class="headerlink" title="1.mybatis-config.xml 配置文件"></a>1.mybatis-config.xml 配置文件</h4><pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration
+        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+&lt;configuration&gt;
+    &lt;!--默认使用开发环境--&gt;
+    &lt;!--&lt;environments default=&quot;dev&quot;&gt;--&gt;
+    &lt;!--默认使用生产环境--&gt;
+    &lt;environments default=&quot;production&quot;&gt;
+        &lt;!-- --&gt;
+        &lt;!--开发环境--&gt;
+        &lt;environment id=&quot;dev&quot;&gt;
+==========================================
+            &lt;!--配置事务管理--&gt;
+            &lt;transactionManager type=&quot;JDBC&quot;/&gt;
+===========================================     
+             &lt;!--配置dataSoure数据源--&gt;
+            &lt;dataSource type=&quot;POOLED&quot;&gt;
+                &lt;property name=&quot;driver&quot; value=&quot;com.mysql.cj.jdbc.Driver&quot;/&gt;
+                &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/powernode&quot;/&gt;
+                &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
+                &lt;property name=&quot;password&quot; value=&quot;root&quot;/&gt;
+            &lt;/dataSource&gt;
+        &lt;/environment&gt;
+        &lt;!--生产环境--&gt;
+        &lt;environment id=&quot;production&quot;&gt;
+            &lt;transactionManager type=&quot;JDBC&quot; /&gt;
+            &lt;dataSource type=&quot;POOLED&quot;&gt;
+                &lt;property name=&quot;driver&quot; value=&quot;com.mysql.cj.jdbc.Driver&quot;/&gt;
+                &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/mybatis&quot;/&gt;
+                &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
+                &lt;property name=&quot;password&quot; value=&quot;root&quot;/&gt;
+            &lt;/dataSource&gt;
+        &lt;/environment&gt;
+    &lt;/environments&gt;
+==========================================
+     &lt;!--配置 mapper.xml文件--&gt;
+    &lt;mappers&gt;
+        &lt;mapper resource=&quot;CarMapper.xml&quot;/&gt;
+    &lt;/mappers&gt;
+&lt;/configuration&gt;
+</code></pre>
+<blockquote>
+<p>注意</p>
+<ol>
+<li><p><environments default="production"> default 配置默认的 environment id</p>
+</li>
+<li><p><transactionManager type="JDBC"/> 事务管理器</p>
+<ol>
+<li><p>采用JDBC的原生事务机制：</p>
+</li>
+<li><ul>
+<li>开启事务：conn.setAutoCommit(false);</li>
+<li>处理业务……</li>
+<li>提交事务：conn.commit();</li>
+</ul>
+</li>
+<li><p>MANAGED 交给容器去管理事务 —&gt;一般可以交给 spring 或者 springboot 去管理，当 mybatis 找不到容器支持时:也是没有事务。</p>
+</li>
+<li><p>不区分大小写</p>
+</li>
+</ol>
+</li>
+<li><p>可以 使用 properties 外部文件</p>
+<ol>
+<li><p>导入文件</p>
+<pre><code class="xml"> &lt;!--引入外部属性资源文件--&gt;
+    &lt;properties resource=&quot;jdbc.properties&quot;&gt;
+        &lt;property name=&quot;jdbc.username&quot; value=&quot;root&quot;/&gt;
+        &lt;property name=&quot;jdbc.password&quot; value=&quot;root&quot;/&gt;
+    &lt;/properties
+</code></pre>
+<ol>
+<li>properties 有两个属性 resource 和 url<ol>
+<li>resource 从类的根路径开始找</li>
+<li>url 则<strong>从指定的url加载，假设文件放在d:&#x2F;jdbc.properties，这个url可以写成：file:&#x2F;&#x2F;&#x2F;d:&#x2F;jdbc.properties。注意是三个斜杠哦。</strong></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>使用 变量</p>
+<pre><code class="xml">${parametersName}
+&lt;dataSource type=&quot;POOLED&quot;&gt;
+&lt;!--${key}使用--&gt;
+&lt;property name=&quot;driver&quot; value=&quot;${jdbc.driver}&quot;/&gt;
+&lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot;/&gt;
+&lt;property name=&quot;username&quot; value=&quot;${jdbc.username}&quot;/&gt;
+&lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+            &lt;/dataSource&gt;
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>mappers 也有两个属性 与 properties 相同。</p>
+<ol>
+<li>resource 从类的根路径开始找</li>
+<li>url 则**从指定的url加载</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<h4 id="1-1重要-修改数据源"><a href="#1-1重要-修改数据源" class="headerlink" title="1.1重要 修改数据源"></a>1.1重要 修改数据源</h4><blockquote>
+<p>但凡为 程序提供 Connection 对象的都叫做数据源</p>
+</blockquote>
+<pre><code class="xml">&lt;dataSource type=&quot;POOLED&quot;&gt;
+   
+</code></pre>
+<p>type 设置类别三选一 type&#x3D;”[UNPOOLED|POOLED|JNDI</p>
+<ul>
+<li><strong>UNPOOLED</strong><ul>
+<li>不使用连接池。</li>
+</ul>
+</li>
+<li><strong>POOLED</strong><ul>
+<li>使用 mybatis 自己实现的数据库连接池</li>
+</ul>
+</li>
+<li><strong>JNDI</strong> – 这个数据源实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的数据源引用。这种数据源配置只需要两个属性：<ul>
+<li><code>initial_context</code> – 这个属性用来在 InitialContext 中寻找上下文（即，initialContext.lookup(initial_context)）。这是个可选属性，如果忽略，那么将会直接从 InitialContext 中寻找 data_source 属性。</li>
+<li><code>data_source</code> – 这是引用数据源实例位置的上下文路径。提供了 initial_context 配置时会在其返回的上下文中进行查找，没有提供时则直接在 InitialContext 中查找。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-mapper-xml-文件配置-与使用-配置传入参数"><a href="#2-mapper-xml-文件配置-与使用-配置传入参数" class="headerlink" title="2.mapper.xml 文件配置 与使用 配置传入参数"></a>2.mapper.xml 文件配置 与使用 配置传入参数</h4><hr>
+<p>使用步骤</p>
+<ul>
+<li>1.配置扫描路径<ul>
+<li>1.可以在 mybatis-config.xml 或 直接在 springboot 的配置文件中进行配置</li>
+</ul>
+</li>
+<li>2.编写 sql语句</li>
+<li>3.调用并<strong>传参</strong>。</li>
+</ul>
+<hr>
+<p><strong>传参</strong></p>
+<p>类别</p>
+<p>按数量划分</p>
+<hr>
+<h5 id="一、多参数"><a href="#一、多参数" class="headerlink" title="一、多参数"></a>一、<strong>多参数</strong></h5><h6 id="方案：一、直接传参"><a href="#方案：一、直接传参" class="headerlink" title="方案：一、直接传参"></a>方案：一、直接传参</h6><p>​	底层原理:</p>
+<blockquote>
+<p>在多个参数的情况下，mybatis 会在底层创建一个 mapper 集合。</p>
+<p>将传入的参数 封装为 arg0&#x2F;param0 为key的集合。</p>
+<p>#{xxx}</p>
+<p>xxx应该写 arg0 按传入参数的下表开始。</p>
+<pre><code class="xml">select * from t_student where name = #{arg0} and sex = #{arg1}
+</code></pre>
+<p>是好处也是痛处 —-&gt;解决方案 @Param 注解 来写名字</p>
+</blockquote>
+<p>案例分析</p>
+<p>需求：通过name和sex查询。</p>
+<pre><code class="java">    /**
+     * 根据name和sex查询
+     * @param name
+     * @param sex
+     * @return
+     */
+    List&lt;Student&gt; selectByNameAndSex(String name, Character sex);
+@Test
+public void testSelectByNameAndSex(){
+    List&lt;Student&gt; students = mapper.selectByNameAndSex(&quot;张三&quot;, &#39;女&#39;);
+    students.forEach(student -&gt; System.out.println(student));
+}
+&lt;select id=&quot;selectByNameAndSex&quot; resultType=&quot;student&quot;&gt;
+  select * from t_student where name = #{name} and sex = #{sex}
+&lt;/select&gt;
+</code></pre>
+<p>执行结果：</p>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660641021618-ce3ac913-fe10-45f5-9760-3e51ef2dd864.png" alt="img"></p>
+<p>异常信息描述了：name参数找不到，可用的参数包括[arg1, arg0, param1, param2]</p>
+<p>修改StudentMapper.xml配置文件：尝试使用[arg1, arg0, param1, param2]去参数</p>
+<pre><code class="xml">&lt;select id=&quot;selectByNameAndSex&quot; resultType=&quot;student&quot;&gt;
+  &lt;!--select * from t_student where name = #{name} and sex = #{sex}--&gt;
+  select * from t_student where name = #{arg0} and sex = #{arg1}
+&lt;/select&gt;
+</code></pre>
+<p>运行结果：</p>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660641284279-64a7312a-d036-448f-aaef-a1bcde8abba2.png" alt="img"></p>
+<p>再次尝试修改StudentMapper.xml文件</p>
+<pre><code class="xml">&lt;select id=&quot;selectByNameAndSex&quot; resultType=&quot;student&quot;&gt;
+  &lt;!--select * from t_student where name = #{name} and sex = #{sex}--&gt;
+  &lt;!--select * from t_student where name = #{arg0} and sex = #{arg1}--&gt;
+  &lt;!--select * from t_student where name = #{param1} and sex = #{param2}--&gt;
+  select * from t_student where name = #{arg0} and sex = #{param2}
+&lt;/select&gt;
+</code></pre>
+<p>通过测试可以看到：</p>
+<ul>
+<li>arg0 是第一个参数</li>
+<li>param1是第一个参数</li>
+<li>arg1 是第二个参数</li>
+<li>param2是第二个参数</li>
+</ul>
+<p>实现原理：<strong>实际上在mybatis底层会创建一个map集合，以arg0&#x2F;param1为key，以方法上的参数为value</strong>，例如以下代码：</p>
+<pre><code class="java">Map&lt;String,Object&gt; map = new HashMap&lt;&gt;();
+map.put(&quot;arg0&quot;, name);
+map.put(&quot;arg1&quot;, sex);
+map.put(&quot;param1&quot;, name);
+map.put(&quot;param2&quot;, sex);
+
+// 所以可以这样取值：#{arg0} #{arg1} #{param1} #{param2}
+// 其本质就是#{map集合的key}
+</code></pre>
+<p>注意：<strong>使用mybatis****3.4.2之前的版本时：要用#{0}和#{1}这种形式。</strong></p>
+<h5 id="Param注解—–-gt-解决方案一的痛点"><a href="#Param注解—–-gt-解决方案一的痛点" class="headerlink" title="@Param注解—–&gt;解决方案一的痛点"></a>@Param注解—–&gt;解决方案一的痛点</h5><p>可以不用arg0 arg1 param1 param2吗？这个map集合的key我们自定义可以吗？当然可以。使用@Param注解即可。这样可以增强可读性。</p>
+<hr>
+<p>实际上在mybatis底层会创建一个map集合，以arg0&#x2F;param1为key，以方法上的参数为value.</p>
+<hr>
+<p>可以通过 @Param 指定 传入参数 在 mybatis 底层创建 的mapper 对应的 keyName。</p>
+<p>​	使用方法</p>
+<pre><code class="java">@Param(&quot;keyName&quot;)
+</code></pre>
+<p>使用案例</p>
+<pre><code class="java">List&lt;Student&gt; selectByNameAndAge(@Param(value=&quot;name&quot;) String name, @Param(&quot;age&quot;) int age);
+</code></pre>
+<p><strong>注意</strong></p>
+<p>使用 @param 直接后，arg0 和 argxxx 会失效，但 param0 和 param1 还可以使用。</p>
+<p>注解的原理。</p>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230206235943191.png" alt="image-20230206235943191"></p>
+<h6 id="方案：二、使用mapper集合"><a href="#方案：二、使用mapper集合" class="headerlink" title="方案：二、使用mapper集合"></a>方案：二、使用mapper集合</h6><h6 id="方案：三、使用-pojo-domain-类"><a href="#方案：三、使用-pojo-domain-类" class="headerlink" title="方案：三、使用 pojo(domain) 类"></a>方案：三、使用 pojo(domain) 类</h6><h5 id="二、单参数"><a href="#二、单参数" class="headerlink" title="二、单参数"></a>二、<strong>单参数</strong></h5><p>直接传入参数即可，mybatis 会直接将传入的值添加到 对应的地方。</p>
+<blockquote>
+<p>底层是 将占位符 #{xxx} 直接转换为 ？然后调用 selectOne 方法。即xxx里填什么都没关系。</p>
+</blockquote>
+<h2 id="③、一些技巧"><a href="#③、一些技巧" class="headerlink" title="③、一些技巧"></a>③、一些技巧</h2><h3 id="1-使用-sql-自动生成的主键，并将其保存到一个地方。"><a href="#1-使用-sql-自动生成的主键，并将其保存到一个地方。" class="headerlink" title="1.使用 sql 自动生成的主键，并将其保存到一个地方。"></a>1.使用 sql 自动生成的主键，并将其保存到一个地方。</h3><blockquote>
+<p>前提是：主键是自动生成的。</p>
+<p>业务背景：一个用户有多个角色。</p>
+</blockquote>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660808179627-69b14158-fbd4-4189-83cf-aa944fe26fa1.png" alt="E9F189EB-F5E2-465f-828C-127DB34968FE.png"></p>
+<p>插入一条新的记录之后，自动生成了主键，而这个主键需要在其他表中使用时。</p>
+<p>插入一个用户数据的同时需要给该用户分配角色：需要将生成的用户的id插入到角色表的user_id字段上。</p>
+<hr>
+<p>第一种方式：可以先插入用户数据，再写一条查询语句获取id，然后再插入user_id字段。【比较麻烦】</p>
+<p>第二种方式：mybatis提供了一种方式更加便捷。</p>
+<p>方法步骤</p>
+<ul>
+<li><p>在 mapper.xml 映射文件中</p>
+<ul>
+<li><p>1.配置   useGeneratedKeys&#x3D;”true”<br>             keyProperty&#x3D;”储存主键的字段名。” </p>
+<pre><code class="xml">例如
+&lt;insert id=&quot;insertUseGeneratedKeys&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;id&quot;&gt;
+  insert into t_car(id,car_num,brand,guide_price,produce_time,car_type) values(null,#{carNum},#{brand},#{guidePrice},#{produceTime},#{carType})
+&lt;/insert&gt;
+
+即可在传入的 对象中使用 对象.id 得到
+</code></pre>
+<pre><code class="java">@Test
+public void testInsertUseGeneratedKeys(){
+    CarMapper mapper = SqlSessionUtil.openSession().getMapper(CarMapper.class);
+    Car car = new Car();
+    car.setCarNum(&quot;5262&quot;);
+    car.setBrand(&quot;BYD汉&quot;);
+    car.setGuidePrice(30.3);
+    car.setProduceTime(&quot;2020-10-11&quot;);
+    car.setCarType(&quot;新能源&quot;);
+    mapper.insertUseGeneratedKeys(car);
+    SqlSessionUtil.openSession().commit();
+    ====================
+    System.out.println(car.getId());
+}
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-结果映射"><a href="#2-结果映射" class="headerlink" title="2.结果映射"></a>2.结果映射</h3><hr>
+<h4 id="1-使用-resultmapper"><a href="#1-使用-resultmapper" class="headerlink" title="1).使用 resultmapper"></a>1).使用 resultmapper</h4><h4 id="②-使用驼峰命名自动映射。、"><a href="#②-使用驼峰命名自动映射。、" class="headerlink" title="② 使用驼峰命名自动映射。、"></a>② 使用驼峰命名自动映射。、</h4><p>使用这种方式的前提是：属性名遵循Java的命名规范，数据库表的列名遵循SQL的命名规范。</p>
+<p>Java命名规范：首字母小写，后面每个单词首字母大写，遵循驼峰命名方式。</p>
+<p>SQL命名规范：全部小写，单词之间采用下划线分割。</p>
+<p>比如以下的对应关系：</p>
+<table>
+<thead>
+<tr>
+<th><strong>实体类中的属性名</strong></th>
+<th><strong>数据库表的列名</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>carNum</td>
+<td>car_num</td>
+</tr>
+<tr>
+<td>carType</td>
+<td>car_type</td>
+</tr>
+<tr>
+<td>produceTime</td>
+<td>produce_time</td>
+</tr>
+</tbody></table>
+<h3 id="3-创建-大-maper"><a href="#3-创建-大-maper" class="headerlink" title="3.创建 大 maper"></a>3.创建 大 maper</h3><h3 id="4-模糊查询"><a href="#4-模糊查询" class="headerlink" title="4.模糊查询"></a>4.模糊查询</h3><hr>
+<p>两种拼接方法</p>
+<pre><code class="xml">1.双引号大法  ---&gt; 单引号不行，已经试过了。
+&quot;%&quot;#{} &quot;#&quot;
+2.concat 拼接大法
+concat(&#39;#&#39;,#{band},&#39;%&#39;)
+</code></pre>
+<hr>
+<p>需求：查询奔驰系列的汽车。【只要品牌brand中含有奔驰两个字的都查询出来。】</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用${}"></a>使用${}</h4><pre><code class="java">/**
+     * 根据品牌进行模糊查询
+     * @param likeBrank
+     * @return
+     */
+List&lt;Car&gt; selectLikeByBrand(String likeBrank);
+&lt;select id=&quot;selectLikeByBrand&quot; resultType=&quot;Car&quot;&gt;
+  select
+  id,car_num as carNum,brand,guide_price as guidePrice,produce_time as produceTime,car_type as carType
+  from
+  t_car
+  where
+  brand like &#39;%${brand}%&#39;
+&lt;/select&gt;
+@Test
+public void testSelectLikeByBrand(){
+    CarMapper mapper = SqlSessionUtil.openSession().getMapper(CarMapper.class);
+    List&lt;Car&gt; cars = mapper.selectLikeByBrand(&quot;奔驰&quot;);
+    cars.forEach(car -&gt; System.out.println(car));
+}
+</code></pre>
+<p>执行结果：</p>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660804429027-895f9a7b-5a1d-4ecd-b5b4-81dbca8ee101.png" alt="img"></p>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用#{}"></a>使用#{}</h4><p>第一种：concat函数</p>
+<pre><code class="xml">&lt;select id=&quot;selectLikeByBrand&quot; resultType=&quot;Car&quot;&gt;
+  select
+  id,car_num as carNum,brand,guide_price as guidePrice,produce_time as produceTime,car_type as carType
+  from
+  t_car
+  where
+  brand like concat(&#39;%&#39;,#{brand},&#39;%&#39;)
+&lt;/select&gt;
+</code></pre>
+<p>执行结果：</p>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660804562331-8febb980-24d8-4e18-8e4b-6416f28aa251.png" alt="img"></p>
+<p>第二种：双引号方式</p>
+<pre><code class="xml">&lt;select id=&quot;selectLikeByBrand&quot; resultType=&quot;Car&quot;&gt;
+  select
+  id,car_num as carNum,brand,guide_price as guidePrice,produce_time as produceTime,car_type as carType
+  from
+  t_car
+  where
+  brand like &quot;%&quot;#{brand}&quot;%&quot;
+&lt;/select&gt;
+</code></pre>
+<p><img src="/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1660804873326-12cbff35-f4fe-4019-90a4-7b758d7c4e39.png" alt="img"></p>
+<h2 id="④、底层原理"><a href="#④、底层原理" class="headerlink" title="④、底层原理"></a>④、底层原理</h2><h3 id="一、getMapper-的原理"><a href="#一、getMapper-的原理" class="headerlink" title="一、getMapper 的原理"></a>一、getMapper 的原理</h3><hr>
+<p>简要描述:</p>
+<p>​		通过 javassit 生成 dao 接口的代理类。然后 使用字符拼接的方式实现 dao 接口 要实现的方法体。 </p>
+<hr>
+<p>细节。</p>
+<pre><code class="java">mybatis基本程序
+// 1.创建SqlSessionFactoryBuilder对象
+SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
+// 2.创建SqlSessionFactory对象
+SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;));
+// 3.创建SqlSession对象           
+SqlSession sqlSession = sqlSessionFactory.openSession();
+// 4.执行SQL
+int count = sqlSession.insert(&quot;insertCar&quot;);
+
+抽离核心
+SqlSession sqlSession = sqlSessionFactory.openSession();
+int count = sqlSession.insert(&quot;insertCar&quot;);
+这两部每一个都不一样，其他1 2部相同。
+    
+// 获取sqlId（这里非常重要：因为这行代码导致以后namespace必须是接口的全限定接口名，sqlId必须是接口中方法的方法名。）
+
+String sqlId = daoInterface.getName() + &quot;.&quot; + methodName;
+// 获取SqlCommondType
+String sqlCommondTypeName = sqlSession.getConfiguration().getMappedStatement(sqlId).getSqlCommandType().name();
+if (&quot;SELECT&quot;.equals(sqlCommondTypeName)) {
+methodStr.append(&quot;org.apache.ibatis.session.SqlSession sqlSession = com.powernode.bank.utils.SqlSessionUtil.openSession();&quot;);
+methodStr.append(&quot;Object obj = sqlSession.selectOne(\&quot;&quot; + sqlId + &quot;\&quot;, arg0);&quot;);
+methodStr.append(&quot;return (&quot; + returnTypeName + &quot;)obj;&quot;);
+} else if (&quot;UPDATE&quot;.equals(sqlCommondTypeName)) {
+    methodStr.append(&quot;org.apache.ibatis.session.SqlSession sqlSession = com.powernode.bank.utils.SqlSessionUtil.openSession();&quot;);
+methodStr.append(&quot;int count = sqlSession.update(\&quot;&quot; + sqlId + &quot;\&quot;, arg0);&quot;);
+methodStr.append(&quot;return count;&quot;);
+            }    
+</code></pre>
+<blockquote>
+<p>String sqlId &#x3D; daoInterface.getName() + “.” + methodName; </p>
+<ul>
+<li>daointerface.getName() 获取了接口的全类名</li>
+<li>methodName 前面获取了 daointerface 中对应的方法名</li>
+</ul>
+<p>&#x3D;&#x3D;这一步 限定了 mapper 文件里 的namespacce必须为接口的全类名，id为方法名。&#x3D;&#x3D;</p>
+<p>eg:</p>
+<pre><code class="xml">&lt;mapper namespace=&quot;mapper.salgradeMapper&quot;&gt; --&gt;接口的全类名
+    &lt;insert id=&quot;insert&quot;→方法名 &lt;/insert&gt; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;grade&quot; &gt;
+      insert into
+          salgrade(grade,losal,hisal)
+        values
+            (null,#{losal},#{hisal})
+
+    &lt;/insert&gt;
+   
+&lt;/mapper&gt;
+</code></pre>
+</blockquote>
+<h2 id="⑤动态-SQL"><a href="#⑤动态-SQL" class="headerlink" title="⑤动态 SQL"></a>⑤动态 SQL</h2><h3 id="1-拼接-where"><a href="#1-拼接-where" class="headerlink" title="1.拼接 where"></a>1.拼接 where</h3><hr>
+<p>一个技巧</p>
+<p>where 1&#x3D;1 不会影响条件</p>
+<hr>

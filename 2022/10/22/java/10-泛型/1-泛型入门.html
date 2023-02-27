@@ -1,0 +1,189 @@
+<hr>
+<p>title: 1-泛型入门<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-28 14:32:08</li>
+</ul>
+<hr>
+<!--more-->
+
+
+
+<h2 id="一、泛型"><a href="#一、泛型" class="headerlink" title="一、泛型"></a>一、泛型</h2><p>what？</p>
+<p>泛型是  ——–&gt; 可以 接受 数据类型 的一种 数据类型 。</p>
+<p>why?</p>
+<p><img src="/1-%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8/image-20221128162337746.png" alt="image-20221128162337746"></p>
+<p>how?</p>
+<h3 id="1-类的自定义泛型"><a href="#1-类的自定义泛型" class="headerlink" title="1.类的自定义泛型"></a>1.类的自定义泛型</h3><p><img src="/1-%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8/image-20221128143251963.png" alt="image-20221128143251963"></p>
+<h3 id="2-接口的自定义类型"><a href="#2-接口的自定义类型" class="headerlink" title="2.接口的自定义类型"></a>2.接口的自定义类型</h3><p><img src="/1-%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8/image-20221128151020067.png" alt="image-20221128151020067"></p>
+<blockquote>
+<p>接口中有泛型时，</p>
+<p>最好不要 class xxx implements Iusb{</p>
+<p>}</p>
+<p>这样写</p>
+<p>而是</p>
+<p>class xxx implements Iusb &lt;Object,Object &gt;{</p>
+<p>}</p>
+</blockquote>
+<h2 id="二、注意的点"><a href="#二、注意的点" class="headerlink" title="二、注意的点"></a>二、注意的点</h2><ol>
+<li>泛型 只能是 &#x3D;&#x3D;引用类型&#x3D;&#x3D;。 —<E></li>
+<li>不指定类型 ，默认类型 为 &#x3D;&#x3D;object&#x3D;&#x3D;</li>
+<li>使用泛型的数组不能初始化。<br>因为 new 的时候会为 数组分配内存空间，而 此刻不能确定其类型，就无法开空间。</li>
+<li>静态成员(属性、方法、方法快)都不能使用 泛型，因为泛型只有在类被创建实例时才被指定 类型 ，而 静态成员在 &#x3D;&#x3D;类加载&#x3D;&#x3D;时，就被初始化。</li>
+</ol>
+<pre><code class="java">package com.hspedu.customgeneric;
+import java.util.Arrays;
+/**
+* @author 韩顺平
+* @version 1.0
+*/
+@SuppressWarnings({&quot;all&quot;})
+public class CustomGeneric_ {
+public static void main(String[] args) {
+//T=Double, R=String, M=Integer
+Tiger&lt;Double,String,Integer&gt; g = new Tiger&lt;&gt;(&quot;john&quot;);
+g.setT(10.9); //OK
+//g.setT(&quot;yy&quot;); //错误，类型不对
+System.out.println(g);
+Tiger g2 = new Tiger(&quot;john~~&quot;);//OK T=Object R=Object M=Object
+g2.setT(&quot;yy&quot;); //OK ,因为 T=Object &quot;yy&quot;=String 是 Object 子类
+System.out.println(&quot;g2=&quot; + g2);
+}
+}
+//老韩解读
+//1. Tiger 后面泛型，所以我们把 Tiger 就称为自定义泛型类
+//2, T, R, M 泛型的标识符, 一般是单个大写字母
+//3. 泛型标识符可以有多个. //4. 普通成员可以使用泛型 (属性、方法)
+//5. 使用泛型的数组，不能初始化
+//6. 静态方法中不能使用类的泛型
+class Tiger&lt;T, R, M&gt; {
+String name;
+R r; //属性使用到泛型
+M m;
+T t;
+//因为数组在 new 不能确定 T 的类型，就无法在内存开空间
+T[] ts;
+public Tiger(String name) {
+this.name = name;
+}
+public Tiger(R r, M m, T t) {//构造器使用泛型
+this.r = r;
+this.m = m;
+this.t = t;
+}
+public Tiger(String name, R r, M m, T t) {//构造器使用泛型
+this.name = name;
+this.r = r;
+this.m = m;
+this.t = t;
+}
+//因为静态是和类相关的，在类加载时，对象还没有创建
+//所以，如果静态方法和静态属性使用了泛型，JVM 就无法完成初始化
+// static R r2;
+// public static void m1(M m) {
+//
+// }
+//方法使用泛型
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public R getR() {
+return r;
+}
+public void setR(R r) {//方法使用到泛型
+this.r = r;
+}
+public M getM() {//返回类型可以使用泛型. return m;
+}
+public void setM(M m) {
+this.m = m;
+}
+public T getT() {
+return t;
+}
+public void setT(T t) {
+this.t = t;
+}
+@Override
+public String toString() {
+return &quot;Tiger{&quot; +
+&quot;name=&#39;&quot; + name + &#39;\&#39;&#39; +
+&quot;, r=&quot; + r +
+&quot;, m=&quot; + m +
+&quot;, t=&quot; + t +
+&quot;, ts=&quot; + Arrays.toString(ts) +
+&#39;}&#39;;
+}
+}
+</code></pre>
+<p>2. </p>
+<h2 id="x3D-三、通配符与继承"><a href="#x3D-三、通配符与继承" class="headerlink" title="&#x3D;# 三、通配符与继承"></a>&#x3D;# 三、通配符与继承</h2><p><img src="/1-%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8/image-20221128162641294.png" alt="image-20221128162641294"></p>
+<pre><code class="java">public class GenericExtends {
+public static void main(String[] args) {
+Object o = new String(&quot;xx&quot;);
+//泛型没有继承性
+//List&lt;Object&gt; list = new ArrayList&lt;String&gt;();
+//举例说明下面三个方法的使用
+List&lt;Object&gt; list1 = new ArrayList&lt;&gt;();
+List&lt;String&gt; list2 = new ArrayList&lt;&gt;();
+List&lt;AA&gt; list3 = new ArrayList&lt;&gt;();
+List&lt;BB&gt; list4 = new ArrayList&lt;&gt;();
+List&lt;CC&gt; list5 = new ArrayList&lt;&gt;();
+//如果是 List&lt;?&gt; c ，可以接受任意的泛型类型
+printCollection1(list1);
+printCollection1(list2);
+韩顺平循序渐进学 Java 零基础
+第 737页
+printCollection1(list3);
+printCollection1(list4);
+printCollection1(list5);
+//List&lt;? extends AA&gt; c： 表示 上限，可以接受 AA 或者 AA 子类
+// printCollection2(list1);//×
+// printCollection2(list2);//×
+printCollection2(list3);//√
+printCollection2(list4);//√
+printCollection2(list5);//√
+//List&lt;? super AA&gt; c: 支持 AA 类以及 AA 类的父类，不限于直接父类
+printCollection3(list1);//√
+//printCollection3(list2);//×
+printCollection3(list3);//√
+//printCollection3(list4);//×
+//printCollection3(list5);//×
+//冒泡排序
+//插入排序
+//....
+韩顺平循序渐进学 Java 零基础
+第 738页
+}
+// ? extends AA 表示 上限，可以接受 AA 或者 AA 子类
+public static void printCollection2(List&lt;? extends AA&gt; c) {
+for (Object object : c) {
+System.out.println(object);
+}
+}
+//说明: List&lt;?&gt; 表示 任意的泛型类型都可以接受
+public static void printCollection1(List&lt;?&gt; c) {
+for (Object object : c) { // 通配符，取出时，就是 Object
+System.out.println(object);
+}
+}
+// ? super 子类类名 AA:支持 AA 类以及 AA 类的父类，不限于直接父类，
+//规定了泛型的下限
+public static void printCollection3(List&lt;? super AA&gt; c) {
+for (Object object : c) {
+System.out.println(object);
+}
+}
+}
+韩顺平循序渐进学 Java 零基础
+第 739页
+class AA {
+}
+class BB extends AA {
+}
+class CC extends BB {
+}
+</code></pre>

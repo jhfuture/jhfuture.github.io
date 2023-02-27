@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>1-数据库三范式基本介绍 | jhfuture</title>
+  <meta name="description" content="用 时间 换 空间  几亿。 数据量可能是几个T，但是你如果数据库设计的得当，这个储存量是可以减少，可能只有几百G 1000G&#x3D;1T  硬盘产商计算。 操作系统计算 1024G&#x3D;1T 很多东西 sql里面有一个概念叫  笛卡尔积。 n* n * n 第一张表里有100条数据，我只相查一条 。 那100遍。 分数&#x3D;90分。    学生名字 分数    小">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-数据库三范式基本介绍">
+<meta property="og:url" content="https://jhfuture.github.io/2022/11/14/MySQL/11-%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E8%8C%83%E5%BC%8F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="jhfuture">
+<meta property="og:description" content="用 时间 换 空间  几亿。 数据量可能是几个T，但是你如果数据库设计的得当，这个储存量是可以减少，可能只有几百G 1000G&#x3D;1T  硬盘产商计算。 操作系统计算 1024G&#x3D;1T 很多东西 sql里面有一个概念叫  笛卡尔积。 n* n * n 第一张表里有100条数据，我只相查一条 。 那100遍。 分数&#x3D;90分。    学生名字 分数    小">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-14T07:21:31.000Z">
+<meta property="article:modified_time" content="2023-01-16T15:34:33.017Z">
+<meta property="article:author" content="jhfuture">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://jhfuture.github.io/2022/11/14/MySQL/11-%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E8%8C%83%E5%BC%8F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="jhfuture" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/jhfuture" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">jhfuture</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> GuangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/TWRP/">TWRP</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDBC/">JDBC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JUnit/">JUnit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/Servlet/">Servlet</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/">Javaweb</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Javaweb/Servlet/">Servlet</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring6/">Spring6</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Windows%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">Windows使用技巧</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/">前端三剑客</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E4%B8%89%E5%89%91%E5%AE%A2/javascript%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/">javascript进阶知识</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%93%8D%E5%BA%94%E5%BC%8F/">响应式</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF-%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/">软/硬件知识</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBA/" rel="tag">DBA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Less/" rel="tag">Less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Servlet/" rel="tag">Servlet</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring6/" rel="tag">Spring6</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">String字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" rel="tag">Vue中的坑</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="tag">Vue中的技巧</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E6%96%B9%E6%B3%95/" rel="tag">Vue方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue%E7%BB%84%E4%BB%B6/" rel="tag">Vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/check/" rel="tag">check</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compile/" rel="tag">compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css%E6%89%A9%E5%B1%95/" rel="tag">css扩展</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/finalize/" rel="tag">finalize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95/" rel="tag">mysql索引</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" rel="tag">mysql索引失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" rel="tag">mysql索引的引出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rem%E9%80%82%E9%85%8D/" rel="tag">rem适配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/" rel="tag">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E7%BA%A6%E6%9D%9F/" rel="tag">sql约束</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql%E8%A7%86%E5%9B%BE/" rel="tag">sql视图</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/" rel="tag">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" rel="tag">this关键字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/toString/" rel="tag">toString</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/twrp/" rel="tag">twrp</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%84%E4%BB%B6/" rel="tag">vue组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" rel="tag">vue绑定样式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag">事务</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" rel="tag">像素比大小</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" rel="tag">前段三剑客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="tag">原型链</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" rel="tag">响应式开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" rel="tag">多态应用&#x2F;多态参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" rel="tag">多态数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" rel="tag">安装教程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" rel="tag">成员方法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag">数据类型转换</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" rel="tag">本地储存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%9A%E4%B8%BE/" rel="tag">枚举</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" rel="tag">硬核知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">经典面试题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/DBA/" style="font-size: 13px;">DBA</a> <a href="/tags/JAVA/" style="font-size: 13px;">JAVA</a> <a href="/tags/JDBC/" style="font-size: 13px;">JDBC</a> <a href="/tags/Java/" style="font-size: 13.25px;">Java</a> <a href="/tags/Less/" style="font-size: 13px;">Less</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/Servlet/" style="font-size: 13.5px;">Servlet</a> <a href="/tags/Spring6/" style="font-size: 13.25px;">Spring6</a> <a href="/tags/String%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 13px;">String字符串</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E5%9D%91/" style="font-size: 13.25px;">Vue中的坑</a> <a href="/tags/Vue%E4%B8%AD%E7%9A%84%E6%8A%80%E5%B7%A7/" style="font-size: 13.25px;">Vue中的技巧</a> <a href="/tags/Vue%E6%96%B9%E6%B3%95/" style="font-size: 13.25px;">Vue方法</a> <a href="/tags/Vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">Vue组件</a> <a href="/tags/Windows/" style="font-size: 13.25px;">Windows</a> <a href="/tags/check/" style="font-size: 13px;">check</a> <a href="/tags/compile/" style="font-size: 13px;">compile</a> <a href="/tags/css%E6%89%A9%E5%B1%95/" style="font-size: 13px;">css扩展</a> <a href="/tags/finalize/" style="font-size: 13px;">finalize</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/mysql/" style="font-size: 13.5px;">mysql</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95/" style="font-size: 13px;">mysql索引</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" style="font-size: 13px;">mysql索引失效</a> <a href="/tags/mysql%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BC%95%E5%87%BA/" style="font-size: 13px;">mysql索引的引出</a> <a href="/tags/rem%E9%80%82%E9%85%8D/" style="font-size: 13px;">rem适配</a> <a href="/tags/servlet/" style="font-size: 13.25px;">servlet</a> <a href="/tags/sql%E7%BA%A6%E6%9D%9F/" style="font-size: 13.25px;">sql约束</a> <a href="/tags/sql%E8%A7%86%E5%9B%BE/" style="font-size: 13px;">sql视图</a> <a href="/tags/super/" style="font-size: 13px;">super</a> <a href="/tags/this%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 13px;">this关键字</a> <a href="/tags/toString/" style="font-size: 13px;">toString</a> <a href="/tags/twrp/" style="font-size: 13.25px;">twrp</a> <a href="/tags/vue%E7%BB%84%E4%BB%B6/" style="font-size: 13px;">vue组件</a> <a href="/tags/vue%E7%BB%91%E5%AE%9A%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">vue绑定样式</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13.5px;">个人博客</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 13.75px;">事务</a> <a href="/tags/%E5%83%8F%E7%B4%A0%E6%AF%94%E5%A4%A7%E5%B0%8F/" style="font-size: 13px;">像素比大小</a> <a href="/tags/%E5%89%8D%E6%AE%B5%E4%B8%89%E5%89%91%E5%AE%A2/" style="font-size: 13px;">前段三剑客</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 13.75px;">前端</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/" style="font-size: 13px;">原型链</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 13px;">反射</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BC%80%E5%8F%91/" style="font-size: 13px;">响应式开发</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13px;">垃圾回收</a> <a href="/tags/%E5%A4%9A%E6%80%81%E5%BA%94%E7%94%A8-%E5%A4%9A%E6%80%81%E5%8F%82%E6%95%B0/" style="font-size: 13px;">多态应用/多态参数</a> <a href="/tags/%E5%A4%9A%E6%80%81%E6%95%B0%E7%BB%84/" style="font-size: 13px;">多态数组</a> <a href="/tags/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" style="font-size: 13.25px;">安装教程</a> <a href="/tags/%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95/" style="font-size: 13px;">成员方法</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" style="font-size: 13px;">抽象类</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" style="font-size: 13px;">数据类型转换</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E5%82%A8%E5%AD%98/" style="font-size: 13px;">本地储存</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 13px;">枚举</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E7%A1%AC%E6%A0%B8%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">硬核知识</a> <a href="/tags/%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 13px;">经典面试题</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 13px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">62</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">47</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">46</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/27/C/Array/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-27T13:18:37.735Z" itemprop="datePublished">2023-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/26/%E6%A0%91%E8%8E%93%E6%B4%BE/%E9%85%8D%E7%BD%AEV2rayA/" class="title">配置V2rayA</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-26T13:34:12.000Z" itemprop="datePublished">2023-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/25/leetCode/1-%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">1-力扣刷题笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-25T06:45:14.000Z" itemprop="datePublished">2023-02-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/07/SSM/MyBatis/2-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" class="title">2-常用注解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-07T11:29:53.000Z" itemprop="datePublished">2023-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/05/SSM/MyBatis/1-MyBatis%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="title">1-MyBatis基本使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-05T14:00:21.000Z" itemprop="datePublished">2023-02-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">Catalogue</h3>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%80%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">一、一览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%80%90%E4%B8%AA%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">二、逐个分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F-%EF%BC%881NF%EF%BC%89%EF%BC%9A%E5%8E%9F%E5%AD%90%E6%80%A7%EF%BC%88%E5%AD%98%E5%82%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%94%E8%AF%A5%E5%85%B7%E6%9C%89%E2%80%9C%E4%B8%8D%E5%8F%AF%E5%86%8D%E5%88%86%E6%80%A7%E2%80%9D%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">1、第一范式 （1NF）：原子性（存储的数据应该具有“不可再分性”）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F-%E5%94%AF%E4%B8%80%E6%80%A7-%E6%B6%88%E9%99%A4%E9%9D%9E%E4%B8%BB%E9%94%AE%E9%83%A8%E5%88%86%E4%BE%9D%E8%B5%96%E8%81%94%E5%90%88%E4%B8%BB%E9%94%AE%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E5%AD%97%E6%AE%B5-%EF%BC%88%E4%B8%80%E5%AE%9A%E8%A6%81%E5%9C%A8%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F%E5%B7%B2%E7%BB%8F%E6%BB%A1%E8%B6%B3%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">2、第二范式 唯一性 (消除非主键部分依赖联合主键中的部分字段)（一定要在第一范式已经满足的情况下）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%AC%AC%E4%B8%89%E8%8C%83%E5%BC%8F-%EF%BC%88%E7%8B%AC%E7%AB%8B%E6%80%A7%EF%BC%8C%E6%B6%88%E9%99%A4%E4%BC%A0%E9%80%92%E4%BE%9D%E8%B5%96%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">3.第三范式 （独立性，消除传递依赖）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">三、总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%80%81%E6%9D%9C%E4%B8%80%E4%BA%9B%E5%98%B1%E5%92%90%E7%9A%84%E8%AF%9D"><span class="toc-number">4.</span> <span class="toc-text">四、老杜一些嘱咐的话</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-MySQL/11-设计三范式/1-数据库三范式基本介绍" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      1-数据库三范式基本介绍
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/11/14/MySQL/11-%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E8%8C%83%E5%BC%8F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-date">
+	  <time datetime="2022-11-14T07:21:31.000Z" itemprop="datePublished">2022-11-14</time>
+	</a>
+</span>
+        
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/11/14/MySQL/11-%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E8%8C%83%E5%BC%8F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.7k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 10(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+
+
+
+
+
+
+<p>用 时间 换 空间 </p>
+<p>几亿。 数据量可能是几个T，但是你如果数据库设计的得当，这个储存量是可以减少，可能只有几百G</p>
+<p>1000G&#x3D;1T  硬盘产商计算。</p>
+<p>操作系统计算 1024G&#x3D;1T</p>
+<p>很多东西</p>
+<p>sql里面有一个概念叫  笛卡尔积。 n* n * n</p>
+<p>第一张表里有100条数据，我只相查一条 。</p>
+<p>那100遍。</p>
+<p>分数&#x3D;90分。</p>
+<table>
+<thead>
+<tr>
+<th>学生名字</th>
+<th>分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小名</td>
+<td>12</td>
+</tr>
+<tr>
+<td>小华</td>
+<td>50</td>
+</tr>
+<tr>
+<td>李华</td>
+<td>60</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>12</td>
+</tr>
+</tbody></table>
+<p>第一条开始，  假如说我要的数据在第50条，计算机认为你后面50条至100条可能还会有符合条件的数据。</p>
+<p>我要查两个表，并且，我要用第一张表查到的数据，再去查第二张表。</p>
+<p>n * n&#x3D;n²</p>
+<p>我一开始的数据，用一张表，储存很多数据，会造成数据的冗余，—&gt;n </p>
+<p>优化后，用多张表储存，避免了数据的冗余，但是我原来只需要查一张表，那我现在就要查多张表。 时间就变成了 n²</p>
+<h3 id="一、一览"><a href="#一、一览" class="headerlink" title="一、一览"></a>一、一览</h3><p>第一范式：要求任何一张表必须有主键，每一个字段原子性不可再分。</p>
+<p>第二范式：建立在第一范式的基础上，要求所有非主键字段完全依赖主键，不要产生部分依赖。</p>
+<p>第三范式：建立在第二范式基础，要求所有非主键字段直接依赖主键，不要产生传递依赖。</p>
+<blockquote>
+<p>避免数据的冗余，空间的浪费。</p>
+</blockquote>
+<blockquote>
+<p>什么叫依赖：</p>
+<p>如果确定一个表中的某个数据（A），则就可以确定该表中的其他另一个数据（B），则我们说：B依赖于A。</p>
+<p>实际上，一个表只要有主键，则其他非主键一定是依赖于主键的。</p>
+<p>什么叫“部分依赖”：</p>
+<p>如果确定一个表中的某个数据组合（A，B），则就可以确定该表中的其他另一个数据（C），则我们说：C依赖于（A，B）（此时A，B通常就是做出主键）。</p>
+<p>但：如果某个数据D，它只依赖于数据A，或者说，A一确定，则D也可以确定，此时我们就称为“数据D部分依赖于数据A——可见部分依赖是指某个非主键字段，依赖于联合主键字段的其中部分字段。</p>
+</blockquote>
+<p>依赖—————&gt;  一种关系</p>
+<h3 id="二、逐个分析"><a href="#二、逐个分析" class="headerlink" title="二、逐个分析"></a>二、逐个分析</h3><h4 id="1、第一范式-（1NF）：原子性（存储的数据应该具有“不可再分性”）"><a href="#1、第一范式-（1NF）：原子性（存储的数据应该具有“不可再分性”）" class="headerlink" title="1、第一范式 （1NF）：原子性（存储的数据应该具有“不可再分性”）"></a>1、第一范式 （1NF）：原子性（存储的数据应该具有“不可再分性”）</h4><p>1必须有<strong>主键</strong>，且2.每个字段是原子性的不能再分。</p>
+<p>不符合第一范式的示例 </p>
+<blockquote>
+<p>主键：主键是唯一的。可以为一个字段，也可以为多个字段一起组合成一个主键—&gt;复合主键。</p>
+</blockquote>
+<p>学生编号 学生姓名	联系方式</p>
+<p>1001 		张三				 <a href="mailto:&#122;&#115;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#122;&#115;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;</a>,1359999999  </p>
+<p>1002 		李四 				<a href="mailto:&#108;&#x73;&#64;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#108;&#x73;&#64;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a>,13699999999 </p>
+<p>1001 		王五				 <a href="mailto:&#119;&#119;&#x40;&#49;&#54;&#x33;&#46;&#110;&#x65;&#x74;">&#119;&#119;&#x40;&#49;&#54;&#x33;&#46;&#110;&#x65;&#x74;</a>,13488888888</p>
+<p> 存在问题： </p>
+<ul>
+<li>最后一条记录和第一条重复（不唯一，没有主键） </li>
+<li>联系方式字段可以再分，不是原子性的</li>
+</ul>
+<p>解决方案：</p>
+<p>学生编号(pk) 学生姓名	 email 		联系电话 </p>
+<p>1001 张三			 <a href="mailto:&#x7a;&#115;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#x7a;&#115;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a> 1359999999 </p>
+<p>1002 李四 <a href="mailto:&#x6c;&#x73;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#x6c;&#x73;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a> 13699999999 </p>
+<p>1003 王五 <a href="mailto:&#119;&#119;&#x40;&#x31;&#54;&#51;&#x2e;&#110;&#x65;&#116;">&#119;&#119;&#x40;&#x31;&#54;&#51;&#x2e;&#110;&#x65;&#116;</a> 13488888888 </p>
+<p>关于第一范式:</p>
+<p>每一行必须唯一，也就是每个表必须有主键，这是我们数据库设计的最基本要求，主要通常采用数值 型或定长字符串表示，关于列不可再分，应该根据具体的情况来决定。如联系方式，为了开发上的便利可能就采用 一个字段了。</p>
+<h4 id="2、第二范式-唯一性-消除非主键部分依赖联合主键中的部分字段-（一定要在第一范式已经满足的情况下）"><a href="#2、第二范式-唯一性-消除非主键部分依赖联合主键中的部分字段-（一定要在第一范式已经满足的情况下）" class="headerlink" title="2、第二范式 唯一性 (消除非主键部分依赖联合主键中的部分字段)（一定要在第一范式已经满足的情况下）"></a>2、第二范式 唯一性 (消除非主键部分依赖联合主键中的部分字段)（一定要在第一范式已经满足的情况下）</h4><p>二范式是建立在第一范式基础上的，另外要求所有非主键字段<strong>完全依赖</strong>主键，不能产生&#x3D;&#x3D;部分依赖&#x3D;&#x3D;。</p>
+<p>1.学生和教师的表 </p>
+<p>示例： </p>
+<p>这里涉及到一个关系  &#x3D;&#x3D;多对多&#x3D;&#x3D;</p>
+<p>学生编号	 学生姓名 		教师编号 		教师姓名 </p>
+<p>1001 			张三 				001	 		王老师 </p>
+<p>1002 			李四	 			002 			赵老师 </p>
+<p>1003 			王五				 001	 		王老师 </p>
+<p>1001			张三				 002	 		赵老师 </p>
+<p>1001 			张三 				003			陈老师</p>
+<p>2个中文字符一个中文字符对应3个字节，1Byte&#x3D;8bit</p>
+<p>分析以上的表满足第一范式吗？不满足，没有主键</p>
+<p>情况一</p>
+<p>修改建议</p>
+<p>确定主键： —&gt;使用复合主键</p>
+<p>学生编号 教师姓名  学生姓名 		教师编号</p>
+<p>1001王老师 			张三 				001	</p>
+<p>1002赵老师 			李四	 			002 </p>
+<p>1003王老师 			王五				 001</p>
+<p>1001赵老师 			 张三				 002</p>
+<p>情况二、</p>
+<p>修改建议</p>
+<p>确定主键： —&gt;使用复合主键  依赖于一部分。</p>
+<p><strong>考虑—&gt;数据冗余</strong></p>
+<p>原来的作用</p>
+<p>这张表是要描述一个 </p>
+<p>学生 与老师的关系对应。</p>
+<p><strong>学生与老师的对应关系。</strong></p>
+<p>Final</p>
+<p>假如</p>
+<p>一、我想确定这个老师跟这个学生是否有关系？</p>
+<p>我有学生的编号和教师的编号。</p>
+<p> 学生编号(PK) 	教师编号(PK) 	学生姓名 教师姓名 </p>
+<p>1001 001 									张三 		王老师 </p>
+<p>1002 002 									李四 		赵老师 </p>
+<p>1003 001 									王五 		王老师 </p>
+<p>1001 002 									张三 		赵老师 </p>
+<p>SQL例子。</p>
+<p>SELECT stuName FROM test_table WHERE  StuID&#x3D;1001;</p>
+<p>这张表描述了学生和老师的关系：一个学生可能有多个老师，一个老师有多个学生。</p>
+<p>张三依赖1001 王老师依赖001 产生了部分依赖。</p>
+<p>有什么缺点？数据冗余，空间浪费。<strong>大量的冗余</strong>，</p>
+<p>主要涉及到的冗余字段为“学生姓名”和“教师姓名”。</p>
+<p>出现冗余的原因在于：</p>
+<p>学生姓名部分依赖了主键的一个字段学生编号，而没有依赖教师编号，而教师姓名部门依赖了主键的一个 字段教师编号，这就是第二范式部分依赖。</p>
+<p>学生姓名依赖于学生编号，老师名字依赖于教师编号，都是&#x3D;&#x3D;主键的一部分&#x3D;&#x3D;，——&gt;部分依赖。</p>
+<p>即&#x3D;&#x3D;多对多的问题&#x3D;&#x3D;</p>
+<p>how ？</p>
+<p>建立多张表</p>
+<p>一个学生表、一个教师表、一个学生关系关系表。</p>
+<p>学生信息表</p>
+<table>
+<thead>
+<tr>
+<th>学生编号</th>
+<th>学生姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李四</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王五</td>
+</tr>
+</tbody></table>
+<p>学生名字和一个教师名字</p>
+<p> 次数n1* n2* *n3 —&gt; 时间复杂度的问题。</p>
+<p>n1 用空间换时间。</p>
+<p>SQL 有索引进制。</p>
+<p>教师信息表</p>
+<table>
+<thead>
+<tr>
+<th>教师编号</th>
+<th>教师姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>001</td>
+<td>王老师</td>
+</tr>
+<tr>
+<td>002</td>
+<td>赵老师</td>
+</tr>
+<tr>
+<td>003</td>
+<td>陈老师</td>
+</tr>
+</tbody></table>
+<p>教师学生关系表</p>
+<table>
+<thead>
+<tr>
+<th>id(fk)</th>
+<th>学生编号(fk) –&gt;学生表的学生编号 教师编号(PK)</th>
+<th>教师编号(fk) –&gt;教师表的教师编号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1001</td>
+<td>001</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1002</td>
+<td>002</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1001</td>
+<td>003</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>多对多，三张表，关系表两个外键。</p>
+</blockquote>
+<p>小练习</p>
+<p>看另一个案例 student_course</p>
+<table>
+<thead>
+<tr>
+<th>student_number</th>
+<th>student_name</th>
+<th>course_name</th>
+<th>credit（课程代码）</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100</td>
+<td>小明</td>
+<td>马克思</td>
+<td>1aaa</td>
+<td></td>
+</tr>
+<tr>
+<td>102</td>
+<td>小花</td>
+<td>马克思</td>
+<td>1aaa</td>
+<td></td>
+</tr>
+<tr>
+<td>100</td>
+<td>小明</td>
+<td>毛泽东思想</td>
+<td>2bbbb</td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>多对多，三张表，关系表两个外键。</p>
+</blockquote>
+<h4 id="3-第三范式-（独立性，消除传递依赖）"><a href="#3-第三范式-（独立性，消除传递依赖）" class="headerlink" title="3.第三范式 （独立性，消除传递依赖）"></a>3.第三范式 （独立性，消除传递依赖）</h4><p>第三范式建立在第二范式的基础上。</p>
+<p>​	要求非主键字段必须直接依赖主键，不要产生传递依赖。</p>
+<blockquote>
+<p>在一个具有主键的表中，假设主键为A，其必然其他非主键都依赖于该主键，比如：B依赖于A，C依赖于A，D依赖于A。。。。。。</p>
+<p><strong>但同时：如果该表中的某个字段B的值一确定，就能够确定另一个字段的值C，则我们称为C依赖于B。</strong></p>
+<p>那么，就出现了：</p>
+<p>C依赖B，B依赖A——这就是传递依赖。</p>
+<p>则消除该传递依赖的的通常做法，就是将C依赖于B的数据，分离到另一个表中。</p>
+</blockquote>
+<p>学生班级对应表</p>
+<p><strong>一对多。</strong>一个班级可以包含多个学生，一个学生只能对应一个班级。</p>
+<p>学生与班级。</p>
+<table>
+<thead>
+<tr>
+<th>学生编号</th>
+<th>学生姓名</th>
+<th>班级编号</th>
+<th>班级名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+<td>01</td>
+<td>一年级一班</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李四</td>
+<td>01</td>
+<td>一年级一班</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王五</td>
+<td>03</td>
+<td>一年级三班</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>六</td>
+<td>03</td>
+<td>一年级三班</td>
+</tr>
+</tbody></table>
+<p>一个教室中有多个学生。 —-&gt;一对多。</p>
+<p>A1:符合第一范式吗？</p>
+<p>​		Q:符合，只有一个外键。</p>
+<p>A2:符合第二范式吗？</p>
+<p>​		Q:没有部分依赖。符合</p>
+<p>A3:符合第三范式吗？</p>
+<p>​		Q：班级名称依赖于班级编号，班级编号依赖于学生编号—&gt;存在&#x3D;&#x3D;传递依赖&#x3D;&#x3D;</p>
+<p>解决方法</p>
+<blockquote>
+<p>一对多，两张表，多的表加外键。</p>
+</blockquote>
+<p>一、学生表</p>
+<table>
+<thead>
+<tr>
+<th>学生编号（pk）</th>
+<th>学生姓名</th>
+<th>班级编号(fk)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+<td>01</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李四</td>
+<td>02</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王五</td>
+<td>03</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>老六</td>
+<td>03</td>
+</tr>
+</tbody></table>
+<p>二、班级信息表</p>
+<table>
+<thead>
+<tr>
+<th>班级编号(pk)</th>
+<th>班级名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>一年级一班</td>
+</tr>
+<tr>
+<td>02</td>
+<td>一年级二班</td>
+</tr>
+<tr>
+<td>03</td>
+<td>一年级三班</td>
+</tr>
+</tbody></table>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>学生与班级 ，</p>
+<p>一对多：</p>
+<p>​			两张表，多的表加外键。</p>
+<p>学生与课程。一个学生可能有多门课程，一门课程会有多个学生。</p>
+<p>多对多：</p>
+<p>​			三张表，关系表两个外键。</p>
+<p>一对一：</p>
+<p>​			一对一、拆分表，外键唯一！</p>
+<p>​			在实际开发中，可能存在一张表字段太多，太庞大，这个时候要拆分表。</p>
+<p>一对一怎么设计？</p>
+<p>没有查分表之前：一张表</p>
+<table>
+<thead>
+<tr>
+<th>id(pk)</th>
+<th>account</th>
+<th>password</th>
+<th>email</th>
+<th>realname</th>
+<th>address</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>zhangsang</td>
+<td>123</td>
+<td><a href="mailto:&#49;&#x34;&#49;&#x32;&#x38;&#52;&#x32;&#51;&#x32;&#51;&#x34;&#57;&#49;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#109;">&#49;&#x34;&#49;&#x32;&#x38;&#52;&#x32;&#51;&#x32;&#51;&#x34;&#57;&#49;&#x40;&#113;&#113;&#46;&#99;&#x6f;&#109;</a></td>
+<td>张三</td>
+<td>广东省xxx</td>
+</tr>
+<tr>
+<td>2</td>
+<td>lisi</td>
+<td>123</td>
+<td><a href="mailto:&#49;&#x34;&#49;&#x32;&#56;&#50;&#x31;&#x33;&#50;&#x39;&#x31;&#x40;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;">&#49;&#x34;&#49;&#x32;&#56;&#50;&#x31;&#x33;&#50;&#x39;&#x31;&#x40;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td>李四</td>
+<td>广东省xxx</td>
+</tr>
+</tbody></table>
+<p>这种庞大的表建议拆分为两张：</p>
+<p>t_login 登录表</p>
+<table>
+<thead>
+<tr>
+<th>id(pk)</th>
+<th>account</th>
+<th>password</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1235</td>
+<td>123</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1234</td>
+<td>123</td>
+</tr>
+</tbody></table>
+<p>t_user 用户信息表</p>
+<table>
+<thead>
+<tr>
+<th>id(pk)</th>
+<th>realname</th>
+<th>email</th>
+<th>address</th>
+<th>loginid(fk) unique –&gt;以t_login表中的id为外键</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+<td><a href="mailto:&#x31;&#x34;&#49;&#50;&#56;&#52;&#50;&#x33;&#x32;&#51;&#x34;&#x39;&#49;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#x6d;">&#x31;&#x34;&#49;&#50;&#56;&#52;&#50;&#x33;&#x32;&#51;&#x34;&#x39;&#49;&#x40;&#x71;&#x71;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td>广东省</td>
+<td>1</td>
+<td>1235</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李四</td>
+<td><a href="mailto:&#49;&#x34;&#x31;&#x32;&#56;&#x32;&#x31;&#x33;&#50;&#x39;&#49;&#x40;&#113;&#113;&#46;&#x63;&#x6f;&#109;">&#49;&#x34;&#x31;&#x32;&#56;&#x32;&#x31;&#x33;&#50;&#x39;&#49;&#x40;&#113;&#113;&#46;&#x63;&#x6f;&#109;</a></td>
+<td>广东省</td>
+<td>2</td>
+<td>1234</td>
+</tr>
+</tbody></table>
+<h3 id="四、老杜一些嘱咐的话"><a href="#四、老杜一些嘱咐的话" class="headerlink" title="四、老杜一些嘱咐的话"></a>四、老杜一些嘱咐的话</h3><p>数据库设计尽量遵循三范式，但是还是根据实际情况进行取舍，有时可能会拿冗余换速度，最终用目的要满足客户需 求。</p>
+<p>因为在 sql 当中，表和表之间链接次数越多，效率越低（笛卡尔积）</p>
+<p>有的时候可能会存在冗余，但为了减少表的连接次数，这样子做也是合理的，并且对于开发人员来说，sql 语句的编写难度也会降低。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://jhfuture.github.io/2022/11/14/MySQL/11-%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E8%8C%83%E5%BC%8F%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" title="1-数据库三范式基本介绍" target="_blank" rel="external">https://jhfuture.github.io/2022/11/14/MySQL/11-设计三范式/1-数据库三范式基本介绍/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/jhfuture" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/jhfuture" target="_blank"><span class="text-dark">jhfuture</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>一个记录技术分享的网站。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/11/14/MySQL-JDBC-2-JDBC%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1-md/" title="MySQL\JDBC\2-JDBC中的事务.md"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/11/14/MySQL/10-DBA/1-DBA%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" title="1-DBA基本介绍"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="Catalogue" role="button">    <span>[&nbsp;</span><span>Catalogue</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/jhfuture" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-Github"></i></a></li>
+        
+        <li><a href="https://gitee.com/jh-future" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-Gitee"></i></a></li>
+        
+        <li><a href="https://www.cnblogs.com/jhfuture/" target="_blank" title="Cnblog" data-toggle=tooltip data-placement=top><i class="icon icon-cnblog"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 jhfuture
+        
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <div>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        </div>
+            
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="/css/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

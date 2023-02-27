@@ -1,0 +1,52 @@
+<hr>
+<p>title: 3-String结构剖析<br>toc: true<br>tags:</p>
+<ul>
+<li>null<br>categories:</li>
+<li>null<br>date: 2022-11-19 16:44:18</li>
+</ul>
+<hr>
+<!--more-->
+
+<h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h3><p><img src="/3-String%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/image-20221119164435119.png" alt="image-20221119164435119"></p>
+<p>serializable:网络传输</p>
+<p>comparable：比较</p>
+<p>charsequence: 字符序列</p>
+<p>String</p>
+<ol>
+<li><p>String 对象用于保存字符串，也就是一组字符序列 </p>
+</li>
+<li><p>“jack” 字符串常量, 双引号括起的字符序列 &#x2F;&#x2F;</p>
+</li>
+<li><p>字符串的字符使用 Unicode 字符编码，一个字符(不区分字母还是汉字)占两个字节 &#x2F;&#x2F;</p>
+</li>
+<li><p>String 类有&#x3D;&#x3D;很多构造器&#x3D;&#x3D;，构造器的重载</p>
+<ol>
+<li>&#x2F;常用的有 String s1 &#x3D; new String(); &#x2F;&#x2F; &#x2F;&#x2F;</li>
+<li>String s2 &#x3D; new String(String original); &#x2F;&#x2F;</li>
+<li>String s3 &#x3D; new String(char[] a); &#x2F;&#x2F;</li>
+<li>String s4 &#x3D; new String(char[] a,int startIndex,int count) &#x2F;&#x2F;</li>
+<li>String s5 &#x3D; new String(byte[] b) &#x2F;&#x2F;</li>
+</ol>
+</li>
+<li><p>String 类实现了接口 Serializable【String 可以串行化:可以在网络传输】 &#x2F;&#x2F; </p>
+</li>
+<li><p>接口 Comparable [String 对象可以比较大小] &#x2F;&#x2F;6.</p>
+</li>
+<li><p>String 是 final 类，不能被其他的类继承 &#x2F;&#x2F;7. </p>
+</li>
+<li><p>！！！！！！！！String 有属性 private final char value[]; 用于存放字符串内容 ！！！！！！！！！！！！！！！<br><img src="/3-String%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/image-20221119165336796.png" alt="image-20221119165336796"></p>
+<ol>
+<li><p>&#x3D;&#x3D;一定要注意：value 是一个 final 类型， 不可以修改(需要功力)：即 value 不能指向 &#x2F;&#x2F; 新的地址，但是单个字符内容是可以变化&#x3D;&#x3D;</p>
+<pre><code class="java">String name = &quot;jack&quot;;
+name = &quot;tom&quot;;
+final char[] value = {&#39;a&#39;,&#39;b&#39;,&#39;c&#39;};
+char[] v2 = {&#39;t&#39;,&#39;o&#39;,&#39;m&#39;};
+value[0] = &#39;H&#39;; √
+    value=v2 × 不可以修改 value 地址
+//value = v2; 不可以修改 value 地址
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="how？"><a href="#how？" class="headerlink" title="how？"></a>how？</h4><p><img src="/3-String%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/image-20221119170341507.png" alt="image-20221119170341507"></p>
